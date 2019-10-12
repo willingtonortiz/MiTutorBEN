@@ -1,4 +1,4 @@
-namespace MiTutorBEN.Entities
+namespace MiTutorBEN.Models
 {
 	public class TutorCourse
 	{

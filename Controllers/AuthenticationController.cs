@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MiTutorBEN.DTOs;
-using MiTutorBEN.Entities;
+using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 
 namespace MiTutorBEN.Controllers

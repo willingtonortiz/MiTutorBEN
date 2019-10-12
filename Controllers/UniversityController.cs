@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MiTutorBEN.Converters;
 using MiTutorBEN.DTOs;
-using MiTutorBEN.Entities;
+using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 
 namespace MiTutorBEN.Controllers
@@ -53,10 +53,11 @@ namespace MiTutorBEN.Controllers
 
 			if (created == null)
 			{
-				return BadRequest(new { message = "Ya existe una universidad con ese nombre" });
+				return Created("", new { message = "Ya existe una universidad con ese nombre" });
 			}
+			return Created($"", _universityConverter.FromEntity(created));
 
-			return _universityConverter.FromEntity(created);
+			// return _universityConverter.FromEntity(created);
 		}
 
 		[HttpDelete("{universityId}")]

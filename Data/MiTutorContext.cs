@@ -1,6 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
-using MiTutorBEN.Entities;
+using MiTutorBEN.Models;
 
 namespace MiTutorBEN.Data
 {

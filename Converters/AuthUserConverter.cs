@@ -1,5 +1,5 @@
 using MiTutorBEN.DTOs;
-using MiTutorBEN.Entities;
+using MiTutorBEN.Models;
 
 namespace MiTutorBEN.Converters
 {

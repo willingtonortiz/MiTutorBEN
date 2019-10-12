@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MiTutorBEN.Entities;
+using MiTutorBEN.Models;
 using MiTutorBEN.Helpers;
 using MiTutorBEN.DTOs;
 using MiTutorBEN.Services;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace MiTutorBEN.Entities
+namespace MiTutorBEN.Models
 {
     public class StudentTutoringSession
     {

@@ -1,4 +1,4 @@
-using MiTutorBEN.Entities;
+using MiTutorBEN.Models;
 
 namespace MiTutorBEN.Services
 {

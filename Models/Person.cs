@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using MiTutorBEN.Entities;
 
-namespace MiTutorBEN.Entities
+namespace MiTutorBEN.Models
 
 {
 	public class Person
