@@ -63,5 +63,24 @@ namespace MiTutorBEN.ServicesImpl
 			user.Password = null;
 			return authUser;
 		}
+
+		public User RegisterUser(User user){
+			_context.Users.Add(user);
+			_context.SaveChanges();
+			
+			
+			return user;
+		}
+
+		public void RegisterPerson(Person person, Student student){
+			_context.Persons.Add(person);
+			_context.SaveChanges();
+			
+			_context.Students.Add(student);
+			_context.SaveChanges();
+			// return person;
+		}
+
+		
 	}
 }

@@ -58,7 +58,7 @@ namespace MiTutorBEN
 			services.AddScoped<IAuthService, AuthServiceImpl>();
 			services.AddScoped<IUniversityService, UniversityServiceImpl>();
 			services.AddScoped<UniversityConverter>();
-
+			services.AddScoped<IUserService,UserServiceImpl>();
 			services.AddDbContext<MiTutorContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection")));
 		}
 

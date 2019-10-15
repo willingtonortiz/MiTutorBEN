@@ -16,6 +16,7 @@ namespace MiTutorBEN.Models
 		[DataType(DataType.Text)]
 		public string Role { get; set; }
 
+		public string Email { get; set; }
 
 		public Person Person { get; set; }
 
