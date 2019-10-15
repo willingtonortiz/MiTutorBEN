@@ -9,8 +9,14 @@ namespace MiTutorBEN.Models
     {
         [Key]
         public int PlanId { get; set; }
+
+        [DataType(DataType.Text)]
         public string Name { get; set; }
+
+        [DataType(DataType.Text)]
         public string Description { get; set; }
+
+        [DataType(DataType.Currency)]
         public double Price { get; set; }
         public int Duration { get; set; }
 

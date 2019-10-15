@@ -121,7 +121,7 @@ namespace MiTutorBEN.Data
                 .ToTable("topics");
 
             modelBuilder.Entity<AvailabilityDay>()
-                .ToTable("availabilitydays");
+                .ToTable("availability_days");
 
             modelBuilder.Entity<Person>()
                 .ToTable("people");
@@ -136,10 +136,10 @@ namespace MiTutorBEN.Data
                 .ToTable("students");
 
             modelBuilder.Entity<TutoringOffer>()
-                .ToTable("tutoringoffers");
+                .ToTable("tutoring_offers");
 
             modelBuilder.Entity<TutoringSession>()
-                .ToTable("tutoringsessions");
+                .ToTable("tutoring_sessions");
 
             modelBuilder.Entity<University>()
                 .ToTable("universities");
@@ -152,6 +152,22 @@ namespace MiTutorBEN.Data
 
 			modelBuilder.Entity<Suscription>()
                 .ToTable("suscriptions");
+
+            modelBuilder.Entity<StudentTutoringSession>()
+                .ToTable("student_tutoring_sessions");
+
+            modelBuilder.Entity<StudentCourse>()
+                .ToTable("student_courses");
+
+            modelBuilder.Entity<TopicTutoringOffer>()
+                .ToTable("topic_tutoring_offers");
+
+            modelBuilder.Entity<TopicTutoringSession>()
+                .ToTable("topic_tutoring_sessions");
+            
+            modelBuilder.Entity<TutorCourse>()
+                .ToTable("tutor_courses");
+
 
         }
     }

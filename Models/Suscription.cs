@@ -9,7 +9,11 @@ namespace MiTutorBEN.Models
     {
         [Key]
         public int SuscriptionId { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime StartTime { get; set; }
+
+        [DataType(DataType.DateTime)]
         public DateTime EndTime { get; set; }
         
         
@@ -19,9 +23,6 @@ namespace MiTutorBEN.Models
 
         public int PlanId {get; set;}
         public Plan Plan {get; set;}
-
-
-        
 
 
 
