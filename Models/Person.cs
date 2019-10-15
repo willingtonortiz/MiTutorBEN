@@ -39,7 +39,10 @@ namespace MiTutorBEN.Models
 
 		public List<Qualification> QualificationsGiven { get; set; } = new List<Qualification>();
 
+		
+		public List<Suscription> Suscriptions {get; set;} = new List<Suscription>();
 
+		
 		public Person() { }
 
 
