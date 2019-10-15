@@ -22,16 +22,18 @@ namespace MiTutorBEN.Models
 
 		public Course Course { get; set; }
 
-		public List<TopicTutoringOffer> TopicTutoringOffers { get; set; }
-
+		
 		public int TutorId { get; set; }
 		public Tutor Tutor { get; set; }
 
 
-		// sdasd
-		public List<Qualification> Qualifications { get; set; } = new List<Qualification>();
-		public List<StudentTutoringSession> StudentTutoringSessions { get; set; } = new List<StudentTutoringSession>();
 		public List<TopicTutoringSession> TopicTutoringSessions { get; set; } = new List<TopicTutoringSession>();
+
+
+		public List<Qualification> Qualifications { get; set; } = new List<Qualification>();
+
+
+		public List<StudentTutoringSession> StudentTutoringSessions { get; set; } = new List<StudentTutoringSession>();
 
 
 		public TutoringSession() { }
