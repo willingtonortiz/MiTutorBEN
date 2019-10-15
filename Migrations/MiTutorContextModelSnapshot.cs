@@ -19,33 +19,12 @@ namespace MiTutorBEN.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Availability", b =>
-                {
-                    b.Property<int>("AvailabilityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("TutorId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AvailabilityId");
-
-                    b.HasIndex("TutorId")
-                        .IsUnique();
-
-                    b.ToTable("Availability");
-                });
-
-            modelBuilder.Entity("MiTutorBEN.Entities.AvailabilityDay", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.AvailabilityDay", b =>
                 {
                     b.Property<int>("AvailabilityDayId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AvailabilityId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Day")
                         .HasColumnType("text");
@@ -56,14 +35,17 @@ namespace MiTutorBEN.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<int>("TutorId")
+                        .HasColumnType("integer");
+
                     b.HasKey("AvailabilityDayId");
 
-                    b.HasIndex("AvailabilityId");
+                    b.HasIndex("TutorId");
 
-                    b.ToTable("AvailabilityDay");
+                    b.ToTable("availabilitydays");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Course", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Course", b =>
                 {
                     b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd()
@@ -73,12 +55,17 @@ namespace MiTutorBEN.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int>("UniversityId")
+                        .HasColumnType("integer");
+
                     b.HasKey("CourseId");
 
-                    b.ToTable("Course");
+                    b.HasIndex("UniversityId");
+
+                    b.ToTable("courses");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Person", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Person", b =>
                 {
                     b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd()
@@ -97,20 +84,38 @@ namespace MiTutorBEN.Migrations
                     b.Property<int>("UniversityId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("PersonId");
 
                     b.HasIndex("UniversityId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Person");
+                    b.ToTable("people");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Qualification", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Plan", b =>
+                {
+                    b.Property<int>("PlanId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("PlanId");
+
+                    b.ToTable("plans");
+                });
+
+            modelBuilder.Entity("MiTutorBEN.Models.Qualification", b =>
                 {
                     b.Property<int>("QualificationId")
                         .ValueGeneratedOnAdd()
@@ -143,23 +148,26 @@ namespace MiTutorBEN.Migrations
 
                     b.HasIndex("TutoringSessionId");
 
-                    b.ToTable("Qualification");
+                    b.ToTable("qualifications");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Student", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Student", b =>
                 {
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Points")
+                    b.Property<double>("Points")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("QualificationCount")
                         .HasColumnType("integer");
 
                     b.HasKey("StudentId");
 
-                    b.ToTable("Student");
+                    b.ToTable("students");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.StudentCourse", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.StudentCourse", b =>
                 {
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
@@ -174,7 +182,7 @@ namespace MiTutorBEN.Migrations
                     b.ToTable("StudentCourse");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.StudentTutoringSession", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.StudentTutoringSession", b =>
                 {
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
@@ -189,7 +197,33 @@ namespace MiTutorBEN.Migrations
                     b.ToTable("StudentTutoringSession");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Topic", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Suscription", b =>
+                {
+                    b.Property<int>("PersonId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PlanId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("SuscriptionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("PersonId", "PlanId");
+
+                    b.HasAlternateKey("SuscriptionId");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("suscriptions");
+                });
+
+            modelBuilder.Entity("MiTutorBEN.Models.Topic", b =>
                 {
                     b.Property<int>("TopicId")
                         .ValueGeneratedOnAdd()
@@ -206,10 +240,10 @@ namespace MiTutorBEN.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Topic");
+                    b.ToTable("topics");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TopicTutoringOffer", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.TopicTutoringOffer", b =>
                 {
                     b.Property<int>("TopicId")
                         .HasColumnType("integer");
@@ -217,19 +251,14 @@ namespace MiTutorBEN.Migrations
                     b.Property<int>("TutoringOfferId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("TutoringSessionId")
-                        .HasColumnType("integer");
-
                     b.HasKey("TopicId", "TutoringOfferId");
 
                     b.HasIndex("TutoringOfferId");
 
-                    b.HasIndex("TutoringSessionId");
-
                     b.ToTable("TopicTutoringOffer");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TopicTutoringSession", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.TopicTutoringSession", b =>
                 {
                     b.Property<int>("TopicId")
                         .HasColumnType("integer");
@@ -244,7 +273,7 @@ namespace MiTutorBEN.Migrations
                     b.ToTable("TopicTutoringSession");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Tutor", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Tutor", b =>
                 {
                     b.Property<int>("TutorId")
                         .HasColumnType("integer");
@@ -252,15 +281,18 @@ namespace MiTutorBEN.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int>("Points")
+                    b.Property<double>("Points")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("QualificationCount")
                         .HasColumnType("integer");
 
                     b.HasKey("TutorId");
 
-                    b.ToTable("Tutor");
+                    b.ToTable("tutors");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TutorCourse", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.TutorCourse", b =>
                 {
                     b.Property<int>("TutorId")
                         .HasColumnType("integer");
@@ -275,7 +307,7 @@ namespace MiTutorBEN.Migrations
                     b.ToTable("TutorCourse");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TutoringOffer", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.TutoringOffer", b =>
                 {
                     b.Property<int>("TutoringOfferId")
                         .ValueGeneratedOnAdd()
@@ -300,16 +332,21 @@ namespace MiTutorBEN.Migrations
                     b.Property<int>("TutorId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("UniversityId")
+                        .HasColumnType("integer");
+
                     b.HasKey("TutoringOfferId");
 
                     b.HasIndex("CourseId");
 
                     b.HasIndex("TutorId");
 
-                    b.ToTable("TutoringOffer");
+                    b.HasIndex("UniversityId");
+
+                    b.ToTable("tutoringoffers");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TutoringSession", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.TutoringSession", b =>
                 {
                     b.Property<int>("TutoringSessionId")
                         .ValueGeneratedOnAdd()
@@ -340,10 +377,10 @@ namespace MiTutorBEN.Migrations
 
                     b.HasIndex("TutorId");
 
-                    b.ToTable("TutoringSession");
+                    b.ToTable("tutoringsessions");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.University", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.University", b =>
                 {
                     b.Property<int>("UniversityId")
                         .ValueGeneratedOnAdd()
@@ -355,15 +392,16 @@ namespace MiTutorBEN.Migrations
 
                     b.HasKey("UniversityId");
 
-                    b.ToTable("University");
+                    b.ToTable("universities");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.User", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.User", b =>
                 {
                     b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
 
                     b.Property<string>("Password")
                         .HasColumnType("text");
@@ -376,191 +414,209 @@ namespace MiTutorBEN.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("User");
+                    b.ToTable("users");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Availability", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.AvailabilityDay", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Tutor", "Tutor")
-                        .WithOne("Availability")
-                        .HasForeignKey("MiTutorBEN.Entities.Availability", "TutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MiTutorBEN.Entities.AvailabilityDay", b =>
-                {
-                    b.HasOne("MiTutorBEN.Entities.Availability", "Availability")
+                    b.HasOne("MiTutorBEN.Models.Tutor", "Tutor")
                         .WithMany("AvailabilityDays")
-                        .HasForeignKey("AvailabilityId")
+                        .HasForeignKey("TutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Person", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Course", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.University", "University")
+                    b.HasOne("MiTutorBEN.Models.University", "University")
+                        .WithMany()
+                        .HasForeignKey("UniversityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MiTutorBEN.Models.Person", b =>
+                {
+                    b.HasOne("MiTutorBEN.Models.University", "University")
                         .WithMany("Persons")
                         .HasForeignKey("UniversityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("MiTutorBEN.Entities.User", "User")
-                        .WithOne("Person")
-                        .HasForeignKey("MiTutorBEN.Entities.Person", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Qualification", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Qualification", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Person", "Adressee")
+                    b.HasOne("MiTutorBEN.Models.Person", "Adressee")
                         .WithMany("QualificationsGiven")
                         .HasForeignKey("AdresseeId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.HasOne("MiTutorBEN.Entities.Person", "Adresser")
+                    b.HasOne("MiTutorBEN.Models.Person", "Adresser")
                         .WithMany("QualificationsReceived")
                         .HasForeignKey("AdresserId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.HasOne("MiTutorBEN.Entities.TutoringSession", "TutoringSession")
+                    b.HasOne("MiTutorBEN.Models.TutoringSession", "TutoringSession")
                         .WithMany("Qualifications")
                         .HasForeignKey("TutoringSessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Student", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Student", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Person", "Person")
+                    b.HasOne("MiTutorBEN.Models.Person", "Person")
                         .WithOne("Student")
-                        .HasForeignKey("MiTutorBEN.Entities.Student", "StudentId")
+                        .HasForeignKey("MiTutorBEN.Models.Student", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.StudentCourse", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.StudentCourse", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Course", "Course")
+                    b.HasOne("MiTutorBEN.Models.Course", "Course")
                         .WithMany("StudentCourses")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MiTutorBEN.Entities.Student", "Student")
+                    b.HasOne("MiTutorBEN.Models.Student", "Student")
                         .WithMany("StudentCourses")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.StudentTutoringSession", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.StudentTutoringSession", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Student", "Student")
+                    b.HasOne("MiTutorBEN.Models.Student", "Student")
                         .WithMany("StudentTutoringSessions")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MiTutorBEN.Entities.TutoringSession", "TutoringSession")
+                    b.HasOne("MiTutorBEN.Models.TutoringSession", "TutoringSession")
                         .WithMany("StudentTutoringSessions")
                         .HasForeignKey("TutoringSessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Topic", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Suscription", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Course", "Course")
+                    b.HasOne("MiTutorBEN.Models.Person", "Person")
+                        .WithMany("Suscriptions")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MiTutorBEN.Models.Plan", "Plan")
+                        .WithMany("Suscriptions")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MiTutorBEN.Models.Topic", b =>
+                {
+                    b.HasOne("MiTutorBEN.Models.Course", "Course")
                         .WithMany("Topics")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TopicTutoringOffer", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.TopicTutoringOffer", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Topic", "Topic")
+                    b.HasOne("MiTutorBEN.Models.Topic", "Topic")
                         .WithMany("TopicTutoringOffers")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MiTutorBEN.Entities.TutoringOffer", "TutoringOffer")
+                    b.HasOne("MiTutorBEN.Models.TutoringOffer", "TutoringOffer")
                         .WithMany("TopicTutoringOffers")
                         .HasForeignKey("TutoringOfferId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("MiTutorBEN.Entities.TutoringSession", null)
-                        .WithMany("TopicTutoringOffers")
-                        .HasForeignKey("TutoringSessionId");
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TopicTutoringSession", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.TopicTutoringSession", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Topic", "Topic")
+                    b.HasOne("MiTutorBEN.Models.Topic", "Topic")
                         .WithMany("TopicTutoringSessions")
                         .HasForeignKey("TopicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MiTutorBEN.Entities.TutoringSession", "TutoringSession")
+                    b.HasOne("MiTutorBEN.Models.TutoringSession", "TutoringSession")
                         .WithMany("TopicTutoringSessions")
                         .HasForeignKey("TutoringSessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.Tutor", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.Tutor", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Person", "Person")
+                    b.HasOne("MiTutorBEN.Models.Person", "Person")
                         .WithOne("Tutor")
-                        .HasForeignKey("MiTutorBEN.Entities.Tutor", "TutorId")
+                        .HasForeignKey("MiTutorBEN.Models.Tutor", "TutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TutorCourse", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.TutorCourse", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Course", "Course")
+                    b.HasOne("MiTutorBEN.Models.Course", "Course")
                         .WithMany("TutorCourses")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MiTutorBEN.Entities.Tutor", "Tutor")
+                    b.HasOne("MiTutorBEN.Models.Tutor", "Tutor")
                         .WithMany("TutorCourses")
                         .HasForeignKey("TutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TutoringOffer", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.TutoringOffer", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Course", "Course")
+                    b.HasOne("MiTutorBEN.Models.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId");
 
-                    b.HasOne("MiTutorBEN.Entities.Tutor", "Tutor")
+                    b.HasOne("MiTutorBEN.Models.Tutor", "Tutor")
                         .WithMany("TutoringOffers")
+                        .HasForeignKey("TutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MiTutorBEN.Models.University", "University")
+                        .WithMany()
+                        .HasForeignKey("UniversityId");
+                });
+
+            modelBuilder.Entity("MiTutorBEN.Models.TutoringSession", b =>
+                {
+                    b.HasOne("MiTutorBEN.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("MiTutorBEN.Models.Tutor", "Tutor")
+                        .WithMany("TutoringSessions")
                         .HasForeignKey("TutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MiTutorBEN.Entities.TutoringSession", b =>
+            modelBuilder.Entity("MiTutorBEN.Models.User", b =>
                 {
-                    b.HasOne("MiTutorBEN.Entities.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId");
-
-                    b.HasOne("MiTutorBEN.Entities.Tutor", "Tutor")
-                        .WithMany("TutoringSessions")
-                        .HasForeignKey("TutorId")
+                    b.HasOne("MiTutorBEN.Models.Person", "Person")
+                        .WithOne("User")
+                        .HasForeignKey("MiTutorBEN.Models.User", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

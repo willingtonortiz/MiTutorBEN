@@ -9,20 +9,23 @@ namespace MiTutorBEN.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Course",
+                name: "plans",
                 columns: table => new
                 {
-                    CourseId = table.Column<int>(nullable: false)
+                    PlanId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Price = table.Column<double>(nullable: false),
+                    Duration = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Course", x => x.CourseId);
+                    table.PrimaryKey("PK_plans", x => x.PlanId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "University",
+                name: "universities",
                 columns: table => new
                 {
                     UniversityId = table.Column<int>(nullable: false)
@@ -31,26 +34,53 @@ namespace MiTutorBEN.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_University", x => x.UniversityId);
+                    table.PrimaryKey("PK_universities", x => x.UniversityId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "courses",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false)
+                    CourseId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Username = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
-                    Role = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    UniversityId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.UserId);
+                    table.PrimaryKey("PK_courses", x => x.CourseId);
+                    table.ForeignKey(
+                        name: "FK_courses_universities_UniversityId",
+                        column: x => x.UniversityId,
+                        principalTable: "universities",
+                        principalColumn: "UniversityId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Topic",
+                name: "people",
+                columns: table => new
+                {
+                    PersonId = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Semester = table.Column<int>(nullable: false),
+                    UniversityId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_people", x => x.PersonId);
+                    table.ForeignKey(
+                        name: "FK_people_universities_UniversityId",
+                        column: x => x.UniversityId,
+                        principalTable: "universities",
+                        principalColumn: "UniversityId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "topics",
                 columns: table => new
                 {
                     TopicId = table.Column<int>(nullable: false)
@@ -60,77 +90,99 @@ namespace MiTutorBEN.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Topic", x => x.TopicId);
+                    table.PrimaryKey("PK_topics", x => x.TopicId);
                     table.ForeignKey(
-                        name: "FK_Topic_Course_CourseId",
+                        name: "FK_topics_courses_CourseId",
                         column: x => x.CourseId,
-                        principalTable: "Course",
+                        principalTable: "courses",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Person",
-                columns: table => new
-                {
-                    PersonId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Semester = table.Column<int>(nullable: false),
-                    UniversityId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Person", x => x.PersonId);
-                    table.ForeignKey(
-                        name: "FK_Person_University_UniversityId",
-                        column: x => x.UniversityId,
-                        principalTable: "University",
-                        principalColumn: "UniversityId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Person_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Student",
+                name: "students",
                 columns: table => new
                 {
                     StudentId = table.Column<int>(nullable: false),
-                    Points = table.Column<int>(nullable: false)
+                    Points = table.Column<double>(nullable: false),
+                    QualificationCount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Student", x => x.StudentId);
+                    table.PrimaryKey("PK_students", x => x.StudentId);
                     table.ForeignKey(
-                        name: "FK_Student_Person_StudentId",
+                        name: "FK_students_people_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "Person",
+                        principalTable: "people",
                         principalColumn: "PersonId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tutor",
+                name: "suscriptions",
+                columns: table => new
+                {
+                    PersonId = table.Column<int>(nullable: false),
+                    PlanId = table.Column<int>(nullable: false),
+                    SuscriptionId = table.Column<int>(nullable: false),
+                    StartTime = table.Column<DateTime>(nullable: false),
+                    EndTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_suscriptions", x => new { x.PersonId, x.PlanId });
+                    table.UniqueConstraint("AK_suscriptions_SuscriptionId", x => x.SuscriptionId);
+                    table.ForeignKey(
+                        name: "FK_suscriptions_people_PersonId",
+                        column: x => x.PersonId,
+                        principalTable: "people",
+                        principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_suscriptions_plans_PlanId",
+                        column: x => x.PlanId,
+                        principalTable: "plans",
+                        principalColumn: "PlanId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tutors",
                 columns: table => new
                 {
                     TutorId = table.Column<int>(nullable: false),
-                    Points = table.Column<int>(nullable: false),
+                    QualificationCount = table.Column<int>(nullable: false),
+                    Points = table.Column<double>(nullable: false),
                     Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tutor", x => x.TutorId);
+                    table.PrimaryKey("PK_tutors", x => x.TutorId);
                     table.ForeignKey(
-                        name: "FK_Tutor_Person_TutorId",
+                        name: "FK_tutors_people_TutorId",
                         column: x => x.TutorId,
-                        principalTable: "Person",
+                        principalTable: "people",
+                        principalColumn: "PersonId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(nullable: false),
+                    Username = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Role = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_users", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_users_people_UserId",
+                        column: x => x.UserId,
+                        principalTable: "people",
                         principalColumn: "PersonId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -146,34 +198,37 @@ namespace MiTutorBEN.Migrations
                 {
                     table.PrimaryKey("PK_StudentCourse", x => new { x.StudentId, x.CourseId });
                     table.ForeignKey(
-                        name: "FK_StudentCourse_Course_CourseId",
+                        name: "FK_StudentCourse_courses_CourseId",
                         column: x => x.CourseId,
-                        principalTable: "Course",
+                        principalTable: "courses",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentCourse_Student_StudentId",
+                        name: "FK_StudentCourse_students_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "Student",
+                        principalTable: "students",
                         principalColumn: "StudentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Availability",
+                name: "availabilitydays",
                 columns: table => new
                 {
-                    AvailabilityId = table.Column<int>(nullable: false)
+                    AvailabilityDayId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Day = table.Column<string>(nullable: true),
+                    StartTime = table.Column<DateTime>(nullable: false),
+                    EndTime = table.Column<DateTime>(nullable: false),
                     TutorId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Availability", x => x.AvailabilityId);
+                    table.PrimaryKey("PK_availabilitydays", x => x.AvailabilityDayId);
                     table.ForeignKey(
-                        name: "FK_Availability_Tutor_TutorId",
+                        name: "FK_availabilitydays_tutors_TutorId",
                         column: x => x.TutorId,
-                        principalTable: "Tutor",
+                        principalTable: "tutors",
                         principalColumn: "TutorId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -189,21 +244,21 @@ namespace MiTutorBEN.Migrations
                 {
                     table.PrimaryKey("PK_TutorCourse", x => new { x.TutorId, x.CourseId });
                     table.ForeignKey(
-                        name: "FK_TutorCourse_Course_CourseId",
+                        name: "FK_TutorCourse_courses_CourseId",
                         column: x => x.CourseId,
-                        principalTable: "Course",
+                        principalTable: "courses",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TutorCourse_Tutor_TutorId",
+                        name: "FK_TutorCourse_tutors_TutorId",
                         column: x => x.TutorId,
-                        principalTable: "Tutor",
+                        principalTable: "tutors",
                         principalColumn: "TutorId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TutoringOffer",
+                name: "tutoringoffers",
                 columns: table => new
                 {
                     TutoringOfferId = table.Column<int>(nullable: false)
@@ -212,28 +267,35 @@ namespace MiTutorBEN.Migrations
                     Date = table.Column<DateTime>(nullable: false),
                     Capacity = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
+                    UniversityId = table.Column<int>(nullable: true),
                     CourseId = table.Column<int>(nullable: true),
                     TutorId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TutoringOffer", x => x.TutoringOfferId);
+                    table.PrimaryKey("PK_tutoringoffers", x => x.TutoringOfferId);
                     table.ForeignKey(
-                        name: "FK_TutoringOffer_Course_CourseId",
+                        name: "FK_tutoringoffers_courses_CourseId",
                         column: x => x.CourseId,
-                        principalTable: "Course",
+                        principalTable: "courses",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_TutoringOffer_Tutor_TutorId",
+                        name: "FK_tutoringoffers_tutors_TutorId",
                         column: x => x.TutorId,
-                        principalTable: "Tutor",
+                        principalTable: "tutors",
                         principalColumn: "TutorId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_tutoringoffers_universities_UniversityId",
+                        column: x => x.UniversityId,
+                        principalTable: "universities",
+                        principalColumn: "UniversityId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TutoringSession",
+                name: "tutoringsessions",
                 columns: table => new
                 {
                     TutoringSessionId = table.Column<int>(nullable: false)
@@ -247,45 +309,47 @@ namespace MiTutorBEN.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TutoringSession", x => x.TutoringSessionId);
+                    table.PrimaryKey("PK_tutoringsessions", x => x.TutoringSessionId);
                     table.ForeignKey(
-                        name: "FK_TutoringSession_Course_CourseId",
+                        name: "FK_tutoringsessions_courses_CourseId",
                         column: x => x.CourseId,
-                        principalTable: "Course",
+                        principalTable: "courses",
                         principalColumn: "CourseId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_TutoringSession_Tutor_TutorId",
+                        name: "FK_tutoringsessions_tutors_TutorId",
                         column: x => x.TutorId,
-                        principalTable: "Tutor",
+                        principalTable: "tutors",
                         principalColumn: "TutorId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AvailabilityDay",
+                name: "TopicTutoringOffer",
                 columns: table => new
                 {
-                    AvailabilityDayId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Day = table.Column<string>(nullable: true),
-                    StartTime = table.Column<DateTime>(nullable: false),
-                    EndTime = table.Column<DateTime>(nullable: false),
-                    AvailabilityId = table.Column<int>(nullable: false)
+                    TutoringOfferId = table.Column<int>(nullable: false),
+                    TopicId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AvailabilityDay", x => x.AvailabilityDayId);
+                    table.PrimaryKey("PK_TopicTutoringOffer", x => new { x.TopicId, x.TutoringOfferId });
                     table.ForeignKey(
-                        name: "FK_AvailabilityDay_Availability_AvailabilityId",
-                        column: x => x.AvailabilityId,
-                        principalTable: "Availability",
-                        principalColumn: "AvailabilityId",
+                        name: "FK_TopicTutoringOffer_topics_TopicId",
+                        column: x => x.TopicId,
+                        principalTable: "topics",
+                        principalColumn: "TopicId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TopicTutoringOffer_tutoringoffers_TutoringOfferId",
+                        column: x => x.TutoringOfferId,
+                        principalTable: "tutoringoffers",
+                        principalColumn: "TutoringOfferId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Qualification",
+                name: "qualifications",
                 columns: table => new
                 {
                     QualificationId = table.Column<int>(nullable: false)
@@ -299,23 +363,23 @@ namespace MiTutorBEN.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Qualification", x => x.QualificationId);
+                    table.PrimaryKey("PK_qualifications", x => x.QualificationId);
                     table.ForeignKey(
-                        name: "FK_Qualification_Person_AdresseeId",
+                        name: "FK_qualifications_people_AdresseeId",
                         column: x => x.AdresseeId,
-                        principalTable: "Person",
+                        principalTable: "people",
                         principalColumn: "PersonId",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Qualification_Person_AdresserId",
+                        name: "FK_qualifications_people_AdresserId",
                         column: x => x.AdresserId,
-                        principalTable: "Person",
+                        principalTable: "people",
                         principalColumn: "PersonId",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Qualification_TutoringSession_TutoringSessionId",
+                        name: "FK_qualifications_tutoringsessions_TutoringSessionId",
                         column: x => x.TutoringSessionId,
-                        principalTable: "TutoringSession",
+                        principalTable: "tutoringsessions",
                         principalColumn: "TutoringSessionId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -331,109 +395,71 @@ namespace MiTutorBEN.Migrations
                 {
                     table.PrimaryKey("PK_StudentTutoringSession", x => new { x.StudentId, x.TutoringSessionId });
                     table.ForeignKey(
-                        name: "FK_StudentTutoringSession_Student_StudentId",
+                        name: "FK_StudentTutoringSession_students_StudentId",
                         column: x => x.StudentId,
-                        principalTable: "Student",
+                        principalTable: "students",
                         principalColumn: "StudentId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StudentTutoringSession_TutoringSession_TutoringSessionId",
+                        name: "FK_StudentTutoringSession_tutoringsessions_TutoringSessionId",
                         column: x => x.TutoringSessionId,
-                        principalTable: "TutoringSession",
+                        principalTable: "tutoringsessions",
                         principalColumn: "TutoringSessionId",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TopicTutoringOffer",
-                columns: table => new
-                {
-                    TopicId = table.Column<int>(nullable: false),
-                    TutoringOfferId = table.Column<int>(nullable: false),
-                    TutoringSessionId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TopicTutoringOffer", x => new { x.TopicId, x.TutoringOfferId });
-                    table.ForeignKey(
-                        name: "FK_TopicTutoringOffer_Topic_TopicId",
-                        column: x => x.TopicId,
-                        principalTable: "Topic",
-                        principalColumn: "TopicId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TopicTutoringOffer_TutoringOffer_TutoringOfferId",
-                        column: x => x.TutoringOfferId,
-                        principalTable: "TutoringOffer",
-                        principalColumn: "TutoringOfferId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_TopicTutoringOffer_TutoringSession_TutoringSessionId",
-                        column: x => x.TutoringSessionId,
-                        principalTable: "TutoringSession",
-                        principalColumn: "TutoringSessionId",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TopicTutoringSession",
                 columns: table => new
                 {
-                    TopicId = table.Column<int>(nullable: false),
-                    TutoringSessionId = table.Column<int>(nullable: false)
+                    TutoringSessionId = table.Column<int>(nullable: false),
+                    TopicId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TopicTutoringSession", x => new { x.TopicId, x.TutoringSessionId });
                     table.ForeignKey(
-                        name: "FK_TopicTutoringSession_Topic_TopicId",
+                        name: "FK_TopicTutoringSession_topics_TopicId",
                         column: x => x.TopicId,
-                        principalTable: "Topic",
+                        principalTable: "topics",
                         principalColumn: "TopicId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TopicTutoringSession_TutoringSession_TutoringSessionId",
+                        name: "FK_TopicTutoringSession_tutoringsessions_TutoringSessionId",
                         column: x => x.TutoringSessionId,
-                        principalTable: "TutoringSession",
+                        principalTable: "tutoringsessions",
                         principalColumn: "TutoringSessionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Availability_TutorId",
-                table: "Availability",
-                column: "TutorId",
-                unique: true);
+                name: "IX_availabilitydays_TutorId",
+                table: "availabilitydays",
+                column: "TutorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AvailabilityDay_AvailabilityId",
-                table: "AvailabilityDay",
-                column: "AvailabilityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Person_UniversityId",
-                table: "Person",
+                name: "IX_courses_UniversityId",
+                table: "courses",
                 column: "UniversityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_UserId",
-                table: "Person",
-                column: "UserId",
-                unique: true);
+                name: "IX_people_UniversityId",
+                table: "people",
+                column: "UniversityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Qualification_AdresseeId",
-                table: "Qualification",
+                name: "IX_qualifications_AdresseeId",
+                table: "qualifications",
                 column: "AdresseeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Qualification_AdresserId",
-                table: "Qualification",
+                name: "IX_qualifications_AdresserId",
+                table: "qualifications",
                 column: "AdresserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Qualification_TutoringSessionId",
-                table: "Qualification",
+                name: "IX_qualifications_TutoringSessionId",
+                table: "qualifications",
                 column: "TutoringSessionId");
 
             migrationBuilder.CreateIndex(
@@ -447,19 +473,19 @@ namespace MiTutorBEN.Migrations
                 column: "TutoringSessionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Topic_CourseId",
-                table: "Topic",
+                name: "IX_suscriptions_PlanId",
+                table: "suscriptions",
+                column: "PlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_topics_CourseId",
+                table: "topics",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TopicTutoringOffer_TutoringOfferId",
                 table: "TopicTutoringOffer",
                 column: "TutoringOfferId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TopicTutoringOffer_TutoringSessionId",
-                table: "TopicTutoringOffer",
-                column: "TutoringSessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TopicTutoringSession_TutoringSessionId",
@@ -472,39 +498,47 @@ namespace MiTutorBEN.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TutoringOffer_CourseId",
-                table: "TutoringOffer",
+                name: "IX_tutoringoffers_CourseId",
+                table: "tutoringoffers",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TutoringOffer_TutorId",
-                table: "TutoringOffer",
+                name: "IX_tutoringoffers_TutorId",
+                table: "tutoringoffers",
                 column: "TutorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TutoringSession_CourseId",
-                table: "TutoringSession",
+                name: "IX_tutoringoffers_UniversityId",
+                table: "tutoringoffers",
+                column: "UniversityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_tutoringsessions_CourseId",
+                table: "tutoringsessions",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TutoringSession_TutorId",
-                table: "TutoringSession",
+                name: "IX_tutoringsessions_TutorId",
+                table: "tutoringsessions",
                 column: "TutorId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AvailabilityDay");
+                name: "availabilitydays");
 
             migrationBuilder.DropTable(
-                name: "Qualification");
+                name: "qualifications");
 
             migrationBuilder.DropTable(
                 name: "StudentCourse");
 
             migrationBuilder.DropTable(
                 name: "StudentTutoringSession");
+
+            migrationBuilder.DropTable(
+                name: "suscriptions");
 
             migrationBuilder.DropTable(
                 name: "TopicTutoringOffer");
@@ -516,34 +550,34 @@ namespace MiTutorBEN.Migrations
                 name: "TutorCourse");
 
             migrationBuilder.DropTable(
-                name: "Availability");
+                name: "users");
 
             migrationBuilder.DropTable(
-                name: "Student");
+                name: "students");
 
             migrationBuilder.DropTable(
-                name: "TutoringOffer");
+                name: "plans");
 
             migrationBuilder.DropTable(
-                name: "Topic");
+                name: "tutoringoffers");
 
             migrationBuilder.DropTable(
-                name: "TutoringSession");
+                name: "topics");
 
             migrationBuilder.DropTable(
-                name: "Course");
+                name: "tutoringsessions");
 
             migrationBuilder.DropTable(
-                name: "Tutor");
+                name: "courses");
 
             migrationBuilder.DropTable(
-                name: "Person");
+                name: "tutors");
 
             migrationBuilder.DropTable(
-                name: "University");
+                name: "people");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "universities");
         }
     }
 }
