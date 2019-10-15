@@ -5,37 +5,35 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MiTutorBEN.Models
 {
-    public class Tutor
-    {
-        [Key]
-        [ForeignKey("Person")]
-        public int TutorId { get; set; }
+	public class Tutor
+	{
+		[Key]
+		[ForeignKey("Person")]
+		public int TutorId { get; set; }
 
-        public int QualificationCount { get; set; }
+		public int Points { get; set; }
 
-        public double Points { get; set; }
-
-        [DataType(DataType.Text)]
-        public string Description { get; set; }
+		[DataType(DataType.Text)]
+		public string Description { get; set; }
 
 
-        public List<TutoringSession> TutoringSessions { get; set; } = new List<TutoringSession>();
+		public List<TutoringSession> TutoringSessions { get; set; } = new List<TutoringSession>();
 
-        public List<TutoringOffer> TutoringOffers { get; set; } = new List<TutoringOffer>();
+		public List<TutoringOffer> TutoringOffers { get; set; } = new List<TutoringOffer>();
 
-        public List<TutorCourse> TutorCourses { get; set; } = new List<TutorCourse>();
+		public List<TutorCourse> TutorCourses { get; set; } = new List<TutorCourse>();
 
-        public List<AvailabilityDay> AvailabilityDays { get; set; }
+		public Availability Availability { get; set; }
 
-        public Person Person { get; set; }
-
-
-        public Tutor() { }
+		public Person Person { get; set; }
 
 
-        public override string ToString()
-        {
-            return $"Tutor {{ Id: {TutorId}, Points: {Points}, Description: {Description} }}";
-        }
-    }
+		public Tutor() { }
+
+
+		public override string ToString()
+		{
+			return $"Tutor {{ Id: {TutorId}, Points: {Points}, Description: {Description} }}";
+		}
+	}
 }

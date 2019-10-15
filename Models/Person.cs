@@ -5,49 +5,47 @@ using System.ComponentModel.DataAnnotations;
 namespace MiTutorBEN.Models
 
 {
-    public class Person
-    {
-        [Key]
-        public int PersonId { get; set; }
+	public class Person
+	{
+		[Key]
+		public int PersonId { get; set; }
 
-        [DataType(DataType.Text)]
-        public string Name { get; set; }
+		[DataType(DataType.Text)]
+		public string Name { get; set; }
 
-        [DataType(DataType.Text)]
-        public string LastName { get; set; }
+		[DataType(DataType.Text)]
+		public string LastName { get; set; }
 
-        public int Semester { get; set; }
-
-
-
-        public int UniversityId { get; set; }
-        public University University { get; set; }
+		public int Semester { get; set; }
 
 
-        public User User { get; set; }
+
+		public int UniversityId { get; set; }
+		public University University { get; set; }
 
 
-        public Student Student { get; set; }
+		public int UserId { get; set; }
+		public User User { get; set; }
 
 
-        public Tutor Tutor { get; set; }
+		public Student Student { get; set; }
 
 
-        public List<Qualification> QualificationsReceived { get; set; } = new List<Qualification>();
+		public Tutor Tutor { get; set; }
 
 
-        public List<Qualification> QualificationsGiven { get; set; } = new List<Qualification>();
+		public List<Qualification> QualificationsReceived { get; set; } = new List<Qualification>();
 
 
-		public List<Suscription> Suscriptions {get; set;} = new List<Suscription>();
+		public List<Qualification> QualificationsGiven { get; set; } = new List<Qualification>();
 
 
-        public Person() { }
+		public Person() { }
 
 
-        public override string ToString()
-        {
-            return $"Person {{ Id: {PersonId}, Name: {Name}, LastName: {LastName}, Semester: {Semester} }}";
-        }
-    }
+		public override string ToString()
+		{
+			return $"Person {{ Id: {PersonId}, Name: {Name}, LastName: {LastName}, Semester: {Semester} }}";
+		}
+	}
 }

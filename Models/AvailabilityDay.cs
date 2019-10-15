@@ -19,8 +19,9 @@ namespace MiTutorBEN.Models
 		public DateTime EndTime { get; set; }
 
 
-		public int TutorId {get; set;}
-		public Tutor Tutor { get; set; }
+		public int AvailabilityId { get; set; }
+		public Availability Availability { get; set; }
+
 
 		public AvailabilityDay() { }
 	}
