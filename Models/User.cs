@@ -5,8 +5,9 @@ namespace MiTutorBEN.Models
 {
 	public class User
 	{
+		// Entity attributes
 		[Key]
-		[ForeignKey("Person")]	
+		[ForeignKey("Person")]
 		public int UserId { get; set; }
 
 		[DataType(DataType.Text)]
@@ -15,18 +16,18 @@ namespace MiTutorBEN.Models
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
 
-		
 		[DataType(DataType.EmailAddress)]
 		public string Email { get; set; }
-		
 
 		[DataType(DataType.Text)]
 		public string Role { get; set; }
 
 
+		// Navigation attributes
 		public Person Person { get; set; }
 
 
+		// Methods
 		public User() { }
 
 		public override string ToString()

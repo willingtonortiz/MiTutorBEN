@@ -12,12 +12,12 @@ namespace MiTutorBEN.Controllers
 	[ApiController]
 	[AllowAnonymous]
 	[Route("[controller]")]
-	public class UniversityController : ControllerBase
+	public class UniversitiesController : ControllerBase
 	{
 		private readonly IUniversityService _universityService;
 		private readonly UniversityConverter _universityConverter;
 
-		public UniversityController(IUniversityService universityService, UniversityConverter universityConverter)
+		public UniversitiesController(IUniversityService universityService, UniversityConverter universityConverter)
 		{
 			_universityService = universityService;
 			_universityConverter = universityConverter;
