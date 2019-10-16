@@ -1,28 +1,79 @@
 
+using System.Collections.Generic;
 using System.Linq;
-
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using MiTutorBEN.Models;
-using MiTutorBEN.Helpers;
-using MiTutorBEN.Services;
 using MiTutorBEN.Data;
+using MiTutorBEN.Models;
+using MiTutorBEN.Services;
 
 namespace MiTutorBEN.ServicesImpl
 {
     public class UserServiceImpl : IUserService
     {
         private readonly MiTutorContext _context;
-        private readonly ILogger<UserServiceImpl> _logger;
-        private readonly AppSettings _appSettings;
 
-        public UserServiceImpl(MiTutorContext context, IOptions<AppSettings> appSettings, ILogger<UserServiceImpl> logger)
+
+        public UserServiceImpl(MiTutorContext context)
         {
             _context = context;
-            _appSettings = appSettings.Value;
-            _logger = logger;
         }
+
+        public User Create(User t)
+        {
+            _context.Users
+                .Add(t);
+
+            return t;
+        }
+
+        public User DeleteById(int id)
+        {
+            User found = _context.Users
+                .AsNoTracking()
+                .FirstOrDefault(x => x.UserId == id);
+
+            if (found == null)
+            {
+                return null;
+            }
+
+            _context.Users
+                .Remove(found);
+            _context.SaveChanges();
+
+            return found;
+        }
+
+        public IEnumerable<User> FindAll()
+        {
+            return _context.Users
+                .AsNoTracking();
+        }
+
+        public User FindById(int id)
+        {
+            User found = _context.Users
+                .AsNoTracking()
+                .FirstOrDefault(x => x.UserId == id);
+
+            return found;
+        }
+
+        public User Update(int id, User t)
+        {
+            User found = _context.Users
+                .FirstOrDefault(x => x.UserId == id);
+
+            if (found == null)
+            {
+                return null;
+            }
+
+            _context.Users.Update(t);
+
+            return found;
+        }
+
 
         public bool UserNameValid(string username)
         {
@@ -31,32 +82,33 @@ namespace MiTutorBEN.ServicesImpl
             FirstOrDefault(x => x.Username == username);
             if (personWithThisUsername != null)
             {
-                _logger.LogWarning("Si existe");
+
                 return true;
             }
             else
             {
-                _logger.LogWarning("No existe");
+
                 return false;
             }
         }
 
-        public bool EmailValid(string email){
+        public bool EmailValid(string email)
+        {
             User personWithThisEmail = _context.Users.AsNoTracking().
-                                        FirstOrDefault(x=>x.Email == email);
-            
-            if (personWithThisEmail != null){
-                _logger.LogWarning("El correo ya esta registrado");
+                                        FirstOrDefault(x => x.Email == email);
+
+            if (personWithThisEmail != null)
+            {
+
                 return true;
             }
-            else{
-                _logger.LogWarning("El correo no existe");
+            else
+            {
+
                 return false;
             }
 
         }
-
-
-       
     }
+
 }

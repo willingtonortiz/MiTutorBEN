@@ -75,7 +75,7 @@ namespace MiTutorBEN.ServicesImpl
 
         public void Register(Person person, Student student, User user)
         {
-            _context.Persons.Add(person);
+            _context.People.Add(person);
             
 
             _context.Users.Add(user);

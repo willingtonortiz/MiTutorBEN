@@ -7,9 +7,9 @@ namespace MiTutorBEN.Models
 {
     public class TutoringOffer
     {
+        // Entity attributes
         [Key]
         public int TutoringOfferId { get; set; }
-
 
         [DataType(DataType.DateTime)]
         public DateTime StartTime { get; set; }
@@ -23,24 +23,22 @@ namespace MiTutorBEN.Models
         public string Description { get; set; }
 
 
+        // Navegation attributes
         public int UniversityId { get; set; }
         public University University { get; set; }
-
 
         public int CourseId { get; set; }
         public Course Course { get; set; }
 
-
         public int TutorId { get; set; }
         public Tutor Tutor { get; set; }
 
-
         public List<TopicTutoringOffer> TopicTutoringOffers { get; set; } = new List<TopicTutoringOffer>();
-
 
         public List<TutoringSession> TutoringSessions { get; set; } = new List<TutoringSession>();
 
 
+        // Methods
         public TutoringOffer() { }
 
         public override string ToString()

@@ -69,12 +69,10 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
-		public University Update(University t)
+		public University Update(int id, University t)
 		{
-			int universityId = t.UniversityId;
-
 			University found = _context.Universities
-				.FirstOrDefault(x => x.UniversityId == universityId);
+				.FirstOrDefault(x => x.UniversityId == id);
 
 			found.Name = t.Name;
 

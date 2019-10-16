@@ -7,7 +7,7 @@ namespace MiTutorBEN.Services
 		T FindById(int id);
 		IEnumerable<T> FindAll();
 		T Create(T t);
-		T Update(T t);
+		T Update(int id, T t);
 		T DeleteById(int id);
 	}
 }
