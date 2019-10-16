@@ -5,7 +5,9 @@ using MiTutorBEN.DTOs;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 namespace MiTutorBEN.Controllers
+
 {
     [Authorize]
     [ApiController]
@@ -15,12 +17,18 @@ namespace MiTutorBEN.Controllers
         private readonly IAuthService _authService;
         private readonly ILogger<AuthenticationController> _logger;
 
+           private readonly IUserService _userService;
 
-        public AuthenticationController(IAuthService authService, ILogger<AuthenticationController> logger)
+        private readonly IUniversityService _universityService;
+        
+        public AuthenticationController(IAuthService authService, ILogger<AuthenticationController> logger, IUniversityService universityService, IUserService userService)
         {
             _authService = authService;
+            _universityService = universityService;
             _logger = logger;
+            _userService = userService;
         }
+
 
 
         [AllowAnonymous]
@@ -46,42 +54,57 @@ namespace MiTutorBEN.Controllers
         {
             var ob = JObject.Parse(sd.ToString());
 
-            JToken token1 = ob["user"];
-            if (token1 != null)
-            {
-                // _logger.LogWarning("Estas enviando un usuario");
-                User newUser = new User();
-                newUser.Username = ob["user"]["Username"].ToObject<string>();
-                newUser.Password = ob["user"]["Password"].ToObject<string>();
-                newUser.Role = ob["user"]["Role"].ToObject<string>();
-                newUser.Email = ob["user"]["Email"].ToObject<string>();
+            //_userService.GetPerson(3);
 
-                _logger.LogWarning(newUser.Password.ToString());
+            _logger.LogWarning("Estas enviando un usuario");
+            //_logger.LogWarning(ob.ToString());
 
-                _authService.RegisterUser(newUser);
-                return Ok(newUser);
-            }
-            else
-            {
-                _logger.LogWarning(ob.ToString());
-                Student newStudent =  new Student();
-                Person newPerson = new Person();
+            // _logger.LogWarning(newUser.Password.ToString());
 
-                newPerson.Name = ob["person"]["Name"].ToObject<string>();
-                newPerson.LastName = ob["person"]["LastName"].ToObject<string>();
-                newPerson.Semester = ob["person"]["Semester"].ToObject<int>();
-                newPerson.UniversityId = ob["person"]["UniversityId"].ToObject<int>();
-                newPerson.UserId = ob["person"]["UserId"].ToObject<int>();
+            // _authService.RegisterUser(newUser);
+            
+            University university = _universityService.FindById(ob["person"]["UniversityId"].ToObject<int>());
+            
+            university.Persons = new List<Person>();
 
-                newStudent.StudentId =  ob["person"]["UserId"].ToObject<int>();
-                newStudent.Points = 0;
+            _logger.LogWarning(university.UniversityId.ToString());
+            Person newPerson = new Person();
 
-                _authService.RegisterPerson(newPerson,newStudent);
-                return Ok(true);
+            newPerson.Name = ob["person"]["Name"].ToObject<string>();
+            newPerson.LastName = ob["person"]["LastName"].ToObject<string>();
+            newPerson.Semester = ob["person"]["Semester"].ToObject<int>();
 
 
 
-            }
+            Student newStudent = new Student();
+            newStudent.Points = 0;
+            newStudent.QualificationCount = 0;
+            
+            User newUser = new User();
+            newUser.Username = ob["user"]["Username"].ToObject<string>();
+            newUser.Password = ob["user"]["Password"].ToObject<string>();
+            newUser.Role = ob["user"]["Role"].ToObject<string>();
+            newUser.Email = ob["user"]["Email"].ToObject<string>();
+
+
+
+
+            newPerson.User = newUser;
+            newUser.Person = newPerson;
+
+            newPerson.UniversityId = ob["person"]["UniversityId"].ToObject<int>();
+            university.Persons.Add(newPerson);
+
+            newPerson.Student =  newStudent;
+            newStudent.Person =  newPerson;
+
+            _authService.Register(newPerson,newStudent,newUser);
+            return Ok(true);
+
+
+
+
+
         }
 
 

@@ -5,6 +5,8 @@ namespace MiTutorBEN.Services
 	public interface IUserService
 	{
         bool UserNameValid(string username);
+		bool EmailValid(string email);
 
+		
 	}
 }

@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MiTutorBEN.Models
 {
 	public class User
 	{
 		[Key]
+		[ForeignKey("Person")]	
 		public int UserId { get; set; }
 
 		[DataType(DataType.Text)]
@@ -13,10 +15,13 @@ namespace MiTutorBEN.Models
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
 
+		
+		[DataType(DataType.EmailAddress)]
+		public string Email { get; set; }
+		
+
 		[DataType(DataType.Text)]
 		public string Role { get; set; }
-
-		public string Email { get; set; }
 
 		public Person Person { get; set; }
 

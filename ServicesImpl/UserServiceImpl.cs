@@ -26,10 +26,10 @@ namespace MiTutorBEN.ServicesImpl
 
         public bool UserNameValid(string username)
         {
-            User personWithThisEmail = _context.Users.
+            User personWithThisUsername = _context.Users.
             AsNoTracking().
             FirstOrDefault(x => x.Username == username);
-            if (personWithThisEmail != null)
+            if (personWithThisUsername != null)
             {
                 _logger.LogWarning("Si existe");
                 return true;
@@ -40,5 +40,23 @@ namespace MiTutorBEN.ServicesImpl
                 return false;
             }
         }
+
+        public bool EmailValid(string email){
+            User personWithThisEmail = _context.Users.AsNoTracking().
+                                        FirstOrDefault(x=>x.Email == email);
+            
+            if (personWithThisEmail != null){
+                _logger.LogWarning("El correo ya esta registrado");
+                return true;
+            }
+            else{
+                _logger.LogWarning("El correo no existe");
+                return false;
+            }
+
+        }
+
+
+       
     }
 }

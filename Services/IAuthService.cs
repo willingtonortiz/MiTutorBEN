@@ -6,7 +6,7 @@ namespace MiTutorBEN.Services
 	{
 		UserAuthDTO Authenticate(string username, string password);
 		User RegisterUser(User user);
-		void RegisterPerson(Person person, Student student);
+		void Register(Person person, Student student,User user);
 
 	}
 }

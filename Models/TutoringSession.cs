@@ -13,22 +13,25 @@ namespace MiTutorBEN.Models
 		public string Place { get; set; }
 
 		[DataType(DataType.DateTime)]
-		public DateTime Date { get; set; }
+        public DateTime StartTime { get; set; }
 
-		public int Capacity { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime EndTime { get; set; }
+
+		public int StudentCount { get; set; }
 
 		[DataType(DataType.Text)]
 		public string Description { get; set; }
 
-		public Course Course { get; set; }
-
-		public List<TopicTutoringOffer> TopicTutoringOffers { get; set; }
-
-		public int TutorId { get; set; }
-		public Tutor Tutor { get; set; }
+		public double Price {get; set;}
 
 
-		// sdasd
+		public int TutoringOfferId {get; set;}
+		public TutoringOffer TutoringOffer {get; set;}	
+
+		
+
+
 		public List<Qualification> Qualifications { get; set; } = new List<Qualification>();
 		public List<StudentTutoringSession> StudentTutoringSessions { get; set; } = new List<StudentTutoringSession>();
 		public List<TopicTutoringSession> TopicTutoringSessions { get; set; } = new List<TopicTutoringSession>();
@@ -39,7 +42,7 @@ namespace MiTutorBEN.Models
 
 		public override string ToString()
 		{
-			return $"TutorignSession {{ Id: {TutoringSessionId}, Place: {Place}, Date: {Date}, Capacity: {Capacity}, Description: {Description} }}";
+			return $"TutoringSession {{ Id: {TutoringSessionId}, Place: {Place}, StartTime: {StartTime},  EndTime: {EndTime}, StudentCount: {StudentCount}, Description: {Description} }}";
 		}
 	}
 }

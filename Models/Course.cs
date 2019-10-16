@@ -14,6 +14,11 @@ namespace MiTutorBEN.Models
 		public string Name { get; set; }
 
 
+		public int UniversityId { get; set; }
+        public University University { get; set; }
+
+
+
 		public List<Topic> Topics { get; set; } = new List<Topic>();
 		public List<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
 		public List<TutorCourse> TutorCourses { get; set; } = new List<TutorCourse>();
