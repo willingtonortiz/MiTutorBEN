@@ -7,18 +7,18 @@ using MiTutorBEN.Services;
 
 namespace MiTutorBEN.ServicesImpl
 {
-	public class PersonServiceImpl : IPersonService
+	public class CourseServiceImpl : ICourseService
 	{
 		private readonly MiTutorContext _context;
 
-		public PersonServiceImpl(MiTutorContext context)
+		public CourseServiceImpl(MiTutorContext context)
 		{
 			_context = context;
 		}
 
-		public Person Create(Person t)
+		public Course Create(Course t)
 		{
-			_context.People
+			_context.Courses
 				.Add(t);
 
 			_context.SaveChanges();
@@ -27,27 +27,27 @@ namespace MiTutorBEN.ServicesImpl
 
 		public void DeleteAll()
 		{
-			IEnumerable<Person> people = _context.People
+			IEnumerable<Course> courses = _context.Courses
 				.AsNoTracking();
 
-			_context.People
-				.RemoveRange(people);
+			_context.Courses
+				.RemoveRange(courses);
 
 			_context.SaveChanges();
 		}
 
-		public Person DeleteById(int id)
+		public Course DeleteById(int id)
 		{
-			Person found = _context.People
+			Course found = _context.Courses
 				.AsNoTracking()
-				.FirstOrDefault(x => x.PersonId == id);
+				.FirstOrDefault(x => x.CourseId == id);
 
 			if (found == null)
 			{
 				return null;
 			}
 
-			_context.People
+			_context.Courses
 				.Remove(found);
 
 			_context.SaveChanges();
@@ -55,32 +55,32 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
-		public IEnumerable<Person> FindAll()
+		public IEnumerable<Course> FindAll()
 		{
-			return _context.People
+			return _context.Courses
 				.AsNoTracking();
 		}
 
-		public Person FindById(int id)
+		public Course FindById(int id)
 		{
-			Person found = _context.People
+			Course found = _context.Courses
 				.AsNoTracking()
-				.FirstOrDefault(x => x.PersonId == id);
+				.FirstOrDefault(x => x.CourseId == id);
 
 			return found;
 		}
 
-		public Person Update(int id, Person t)
+		public Course Update(int id, Course t)
 		{
-			Person found = _context.People
-				.FirstOrDefault(x => x.PersonId == id);
+			Course found = _context.Courses
+				.FirstOrDefault(x => x.CourseId == id);
 
 			if (found == null)
 			{
 				return null;
 			}
 
-			_context.People
+			_context.Courses
 				.Update(t);
 
 			return found;

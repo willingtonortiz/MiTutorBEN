@@ -36,6 +36,17 @@ namespace MiTutorBEN.ServicesImpl
 			return t;
 		}
 
+		public void DeleteAll()
+		{
+			IEnumerable<University> universities = _context.Universities
+				.AsNoTracking();
+
+			_context.Universities
+				.RemoveRange(universities);
+
+			_context.SaveChanges();
+		}
+
 		public University DeleteById(int id)
 		{
 			University found = _context.Universities
@@ -65,6 +76,15 @@ namespace MiTutorBEN.ServicesImpl
 			University found = _context.Universities
 				.AsNoTracking()
 				.FirstOrDefault(x => x.UniversityId == id);
+
+			return found;
+		}
+
+		public University FindByName(string name)
+		{
+			University found = _context.Universities
+				.AsNoTracking()
+				.FirstOrDefault(x => x.Name == name);
 
 			return found;
 		}

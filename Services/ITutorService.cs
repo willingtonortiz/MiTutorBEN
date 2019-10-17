@@ -2,7 +2,7 @@ using MiTutorBEN.Models;
 
 namespace MiTutorBEN.Services
 {
-	public interface IPersonService : ICrudService<Person>
+	public interface ITutorService : ICrudService<Tutor>
 	{
 		void DeleteAll();
 	}

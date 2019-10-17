@@ -8,107 +8,116 @@ using MiTutorBEN.Services;
 
 namespace MiTutorBEN.ServicesImpl
 {
-    public class UserServiceImpl : IUserService
-    {
-        private readonly MiTutorContext _context;
+	public class UserServiceImpl : IUserService
+	{
+		private readonly MiTutorContext _context;
 
 
-        public UserServiceImpl(MiTutorContext context)
-        {
-            _context = context;
-        }
+		public UserServiceImpl(MiTutorContext context)
+		{
+			_context = context;
+		}
 
-        public User Create(User t)
-        {
-            _context.Users
-                .Add(t);
+		public User Create(User t)
+		{
+			_context.Users
+				.Add(t);
 
-            return t;
-        }
+			return t;
+		}
 
-        public User DeleteById(int id)
-        {
-            User found = _context.Users
-                .AsNoTracking()
-                .FirstOrDefault(x => x.UserId == id);
+		public bool UserNameValid(string username)
+		{
+			User personWithThisUsername = _context.Users.
+			AsNoTracking().
+			FirstOrDefault(x => x.Username == username);
+			if (personWithThisUsername != null)
+			{
 
-            if (found == null)
-            {
-                return null;
-            }
+				return true;
+			}
+			else
+			{
 
-            _context.Users
-                .Remove(found);
-            _context.SaveChanges();
+				return false;
+			}
+		}
 
-            return found;
-        }
+		public bool EmailValid(string email)
+		{
+			User personWithThisEmail = _context.Users.AsNoTracking().
+										FirstOrDefault(x => x.Email == email);
 
-        public IEnumerable<User> FindAll()
-        {
-            return _context.Users
-                .AsNoTracking();
-        }
+			if (personWithThisEmail != null)
+			{
 
-        public User FindById(int id)
-        {
-            User found = _context.Users
-                .AsNoTracking()
-                .FirstOrDefault(x => x.UserId == id);
+				return true;
+			}
+			else
+			{
 
-            return found;
-        }
+				return false;
+			}
 
-        public User Update(int id, User t)
-        {
-            User found = _context.Users
-                .FirstOrDefault(x => x.UserId == id);
+		}
 
-            if (found == null)
-            {
-                return null;
-            }
+		public void DeleteAll()
+		{
+			IEnumerable<User> users = _context.Users
+				.AsNoTracking();
 
-            _context.Users.Update(t);
+			_context.Users
+				.RemoveRange(users);
 
-            return found;
-        }
+			_context.SaveChanges();
+		}
 
+		public User DeleteById(int id)
+		{
+			User found = _context.Users
+				.AsNoTracking()
+				.FirstOrDefault(x => x.UserId == id);
 
-        public bool UserNameValid(string username)
-        {
-            User personWithThisUsername = _context.Users.
-            AsNoTracking().
-            FirstOrDefault(x => x.Username == username);
-            if (personWithThisUsername != null)
-            {
+			if (found == null)
+			{
+				return null;
+			}
 
-                return true;
-            }
-            else
-            {
+			_context.Users
+				.Remove(found);
+			_context.SaveChanges();
 
-                return false;
-            }
-        }
+			return found;
+		}
 
-        public bool EmailValid(string email)
-        {
-            User personWithThisEmail = _context.Users.AsNoTracking().
-                                        FirstOrDefault(x => x.Email == email);
+		public IEnumerable<User> FindAll()
+		{
+			return _context.Users
+				.AsNoTracking();
+		}
 
-            if (personWithThisEmail != null)
-            {
+		public User FindById(int id)
+		{
+			User found = _context.Users
+				.AsNoTracking()
+				.FirstOrDefault(x => x.UserId == id);
 
-                return true;
-            }
-            else
-            {
+			return found;
+		}
 
-                return false;
-            }
+		public User Update(int id, User t)
+		{
+			User found = _context.Users
+				.FirstOrDefault(x => x.UserId == id);
 
-        }
-    }
+			if (found == null)
+			{
+				return null;
+			}
 
+			_context.Users.Update(t);
+
+			return found;
+		}
+	}
 }
