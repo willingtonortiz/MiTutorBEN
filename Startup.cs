@@ -60,6 +60,7 @@ namespace MiTutorBEN
 			services.AddScoped<IUniversityService, UniversityServiceImpl>();
 			services.AddScoped<IPersonService, PersonServiceImpl>();
             services.AddScoped<IUserService,UserServiceImpl>();
+			
 			// Converters
 			services.AddScoped<UniversityConverter>();
 
