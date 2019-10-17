@@ -7,20 +7,24 @@ namespace MiTutorBEN.Converters
 	{
 		public User FromDto(UserAuthDTO dto)
 		{
-			User user = new User();
-            user.UserId = dto.UserId;
-            user.Username = dto.Username;
+			User user = new User
+			{
+				UserId = dto.UserId,
+				Username = dto.Username
+			};
 
-            return user;
+			return user;
 		}
 
 		public UserAuthDTO FromEntity(User entity)
 		{
-			UserAuthDTO userAuth = new UserAuthDTO();
-            userAuth.UserId = entity.UserId;
-            userAuth.Username = entity.Username;
-            
-            return userAuth;
+			UserAuthDTO userAuth = new UserAuthDTO
+			{
+				UserId = entity.UserId,
+				Username = entity.Username
+			};
+
+			return userAuth;
 		}
 	}
 }

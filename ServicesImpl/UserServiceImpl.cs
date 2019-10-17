@@ -25,6 +25,17 @@ namespace MiTutorBEN.ServicesImpl
 			return t;
 		}
 
+		public void DeleteAll()
+		{
+			IEnumerable<User> users = _context.Users
+				.AsNoTracking();
+
+			_context.Users
+				.RemoveRange(users);
+
+			_context.SaveChanges();
+		}
+
 		public User DeleteById(int id)
 		{
 			User found = _context.Users

@@ -7,18 +7,18 @@ using MiTutorBEN.Services;
 
 namespace MiTutorBEN.ServicesImpl
 {
-	public class PersonServiceImpl : IPersonService
+	public class TopicServiceImpl : ITopicService
 	{
 		private readonly MiTutorContext _context;
 
-		public PersonServiceImpl(MiTutorContext context)
+		public TopicServiceImpl(MiTutorContext context)
 		{
 			_context = context;
 		}
 
-		public Person Create(Person t)
+		public Topic Create(Topic t)
 		{
-			_context.People
+			_context.Topics
 				.Add(t);
 
 			_context.SaveChanges();
@@ -27,27 +27,27 @@ namespace MiTutorBEN.ServicesImpl
 
 		public void DeleteAll()
 		{
-			IEnumerable<Person> people = _context.People
+			IEnumerable<Topic> topics = _context.Topics
 				.AsNoTracking();
 
-			_context.People
-				.RemoveRange(people);
+			_context.Topics
+				.RemoveRange(topics);
 
 			_context.SaveChanges();
 		}
 
-		public Person DeleteById(int id)
+		public Topic DeleteById(int id)
 		{
-			Person found = _context.People
+			Topic found = _context.Topics
 				.AsNoTracking()
-				.FirstOrDefault(x => x.PersonId == id);
+				.FirstOrDefault(x => x.TopicId == id);
 
 			if (found == null)
 			{
 				return null;
 			}
 
-			_context.People
+			_context.Topics
 				.Remove(found);
 
 			_context.SaveChanges();
@@ -55,32 +55,32 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
-		public IEnumerable<Person> FindAll()
+		public IEnumerable<Topic> FindAll()
 		{
-			return _context.People
+			return _context.Topics
 				.AsNoTracking();
 		}
 
-		public Person FindById(int id)
+		public Topic FindById(int id)
 		{
-			Person found = _context.People
+			Topic found = _context.Topics
 				.AsNoTracking()
-				.FirstOrDefault(x => x.PersonId == id);
+				.FirstOrDefault(x => x.TopicId == id);
 
 			return found;
 		}
 
-		public Person Update(int id, Person t)
+		public Topic Update(int id, Topic t)
 		{
-			Person found = _context.People
-				.FirstOrDefault(x => x.PersonId == id);
+			Topic found = _context.Topics
+				.FirstOrDefault(x => x.TopicId == id);
 
 			if (found == null)
 			{
 				return null;
 			}
 
-			_context.People
+			_context.Topics
 				.Update(t);
 
 			return found;

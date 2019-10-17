@@ -7,18 +7,18 @@ using MiTutorBEN.Services;
 
 namespace MiTutorBEN.ServicesImpl
 {
-	public class PersonServiceImpl : IPersonService
+	public class TutorServiceImpl : ITutorService
 	{
 		private readonly MiTutorContext _context;
 
-		public PersonServiceImpl(MiTutorContext context)
+		public TutorServiceImpl(MiTutorContext context)
 		{
 			_context = context;
 		}
 
-		public Person Create(Person t)
+		public Tutor Create(Tutor t)
 		{
-			_context.People
+			_context.Tutors
 				.Add(t);
 
 			_context.SaveChanges();
@@ -27,27 +27,27 @@ namespace MiTutorBEN.ServicesImpl
 
 		public void DeleteAll()
 		{
-			IEnumerable<Person> people = _context.People
+			IEnumerable<Tutor> tutors = _context.Tutors
 				.AsNoTracking();
 
-			_context.People
-				.RemoveRange(people);
+			_context.Tutors
+				.RemoveRange(tutors);
 
 			_context.SaveChanges();
 		}
 
-		public Person DeleteById(int id)
+		public Tutor DeleteById(int id)
 		{
-			Person found = _context.People
+			Tutor found = _context.Tutors
 				.AsNoTracking()
-				.FirstOrDefault(x => x.PersonId == id);
+				.FirstOrDefault(x => x.TutorId == id);
 
 			if (found == null)
 			{
 				return null;
 			}
 
-			_context.People
+			_context.Tutors
 				.Remove(found);
 
 			_context.SaveChanges();
@@ -55,32 +55,32 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
-		public IEnumerable<Person> FindAll()
+		public IEnumerable<Tutor> FindAll()
 		{
-			return _context.People
+			return _context.Tutors
 				.AsNoTracking();
 		}
 
-		public Person FindById(int id)
+		public Tutor FindById(int id)
 		{
-			Person found = _context.People
+			Tutor found = _context.Tutors
 				.AsNoTracking()
-				.FirstOrDefault(x => x.PersonId == id);
+				.FirstOrDefault(x => x.TutorId == id);
 
 			return found;
 		}
 
-		public Person Update(int id, Person t)
+		public Tutor Update(int id, Tutor t)
 		{
-			Person found = _context.People
-				.FirstOrDefault(x => x.PersonId == id);
+			Tutor found = _context.Tutors
+				.FirstOrDefault(x => x.TutorId == id);
 
 			if (found == null)
 			{
 				return null;
 			}
 
-			_context.People
+			_context.Tutors
 				.Update(t);
 
 			return found;

@@ -7,6 +7,7 @@ namespace MiTutorBEN.Models
 {
     public class Tutor
     {
+        // Entity attributes
         [Key]
         [ForeignKey("Person")]
         public int TutorId { get; set; }
@@ -19,6 +20,7 @@ namespace MiTutorBEN.Models
         public string Description { get; set; }
 
 
+        // Navigation attributes
         public List<TutoringSession> TutoringSessions { get; set; } = new List<TutoringSession>();
 
         public List<TutoringOffer> TutoringOffers { get; set; } = new List<TutoringOffer>();
@@ -30,8 +32,8 @@ namespace MiTutorBEN.Models
         public Person Person { get; set; }
 
 
+        // Methods
         public Tutor() { }
-
 
         public override string ToString()
         {

@@ -28,6 +28,7 @@ namespace MiTutorBEN
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			// Agregando los controladores
 			services.AddControllers();
 
 			// Configuración de los objetos
@@ -57,11 +58,23 @@ namespace MiTutorBEN
 
 			// Configuración de injección de dependencias
 			services.AddScoped<IAuthService, AuthServiceImpl>();
-			services.AddScoped<IUniversityService, UniversityServiceImpl>();
+			services.AddScoped<ICourseService, CourseServiceImpl>();
 			services.AddScoped<IPersonService, PersonServiceImpl>();
+			services.AddScoped<ITopicService, TopicServiceImpl>();
+			services.AddScoped<ITutoringOfferService, TutoringOfferServiceImpl>();
+			services.AddScoped<ITutorService, TutorServiceImpl>();
+			services.AddScoped<IUniversityService, UniversityServiceImpl>();
+			services.AddScoped<IUserService, UserServiceImpl>();
 
 			// Converters
+			services.AddScoped<AuthUserConverter>();
+			services.AddScoped<CourseConverter>();
+			services.AddScoped<PersonConverter>();
+			services.AddScoped<TopicConverter>();
+			services.AddScoped<TutoringOfferConverter>();
+			services.AddScoped<TutorConverter>();
 			services.AddScoped<UniversityConverter>();
+			services.AddScoped<UserConverter>();
 
 			// Base de datos
 			services.AddDbContext<MiTutorContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection")));
