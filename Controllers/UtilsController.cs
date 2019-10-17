@@ -75,19 +75,19 @@ namespace MiTutorBEN.Controllers
 			// Creando cursos
 			Course course1 = new Course
 			{
-				Name = "Calculo 2",
+				Name = "calculo 2",
 				UniversityId = university1.UniversityId
 			};
 			_courseService.Create(course1);
 			Course course2 = new Course
 			{
-				Name = "Fisica 3",
+				Name = "fisica 3",
 				UniversityId = university1.UniversityId
 			};
 			_courseService.Create(course2);
 			Course course3 = new Course
 			{
-				Name = "Programacion 1",
+				Name = "programacion 1",
 				UniversityId = university1.UniversityId
 			};
 			_courseService.Create(course3);

@@ -91,6 +91,9 @@ namespace MiTutorBEN.ServicesImpl
 		{
 			IEnumerable<TutoringOffer> tutoringOffers = await _context.TutoringOffers
 				.AsNoTracking()
+				.Include(x => x.Course)
+				.Include(x => x.Tutor)
+					.ThenInclude(x => x.Person)
 				.Where(x => x.UniversityId == universityId && x.CourseId == courseId)
 				.ToListAsync();
 

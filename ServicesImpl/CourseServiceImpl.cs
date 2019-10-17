@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MiTutorBEN.Data;
 using MiTutorBEN.Models;
@@ -66,6 +67,14 @@ namespace MiTutorBEN.ServicesImpl
 			Course found = _context.Courses
 				.AsNoTracking()
 				.FirstOrDefault(x => x.CourseId == id);
+
+			return found;
+		}
+
+		public async Task<Course> findCourse(int universityId, string courseName)
+		{
+			Course found = await _context.Courses
+				.FirstOrDefaultAsync(x => x.UniversityId == universityId && x.Name == courseName);
 
 			return found;
 		}

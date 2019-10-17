@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ using MiTutorBEN.Data;
 using MiTutorBEN.Helpers;
 using MiTutorBEN.Services;
 using MiTutorBEN.ServicesImpl;
+using Newtonsoft.Json;
 
 namespace MiTutorBEN
 {
@@ -78,6 +80,11 @@ namespace MiTutorBEN
 
 			// Base de datos
 			services.AddDbContext<MiTutorContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection")));
+
+			// Evitando ciclos en las queries
+			services.AddMvc(options => options.EnableEndpointRouting = false)
+				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+				.AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
 			// Swagger
 			services.AddSwaggerGen(c =>
