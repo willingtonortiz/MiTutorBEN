@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MiTutorBEN.Converters;
 using MiTutorBEN.DTOs;
 using MiTutorBEN.Models;
@@ -16,11 +18,20 @@ namespace MiTutorBEN.Controllers
 	{
 		private readonly IUniversityService _universityService;
 		private readonly UniversityConverter _universityConverter;
+		private readonly ITutoringOfferService _tutoringOfferService;
+		private readonly TutoringOfferConverter _tutoringOfferConverter;
 
-		public UniversitiesController(IUniversityService universityService, UniversityConverter universityConverter)
+		public UniversitiesController(
+			IUniversityService universityService,
+			UniversityConverter universityConverter,
+			ITutoringOfferService tutoringOfferService,
+			TutoringOfferConverter tutoringOfferConverter
+			)
 		{
 			_universityService = universityService;
 			_universityConverter = universityConverter;
+			_tutoringOfferService = tutoringOfferService;
+			_tutoringOfferConverter = tutoringOfferConverter;
 		}
 
 		[HttpGet]
@@ -30,6 +41,18 @@ namespace MiTutorBEN.Controllers
 
 			return universities.Select(x => _universityConverter.FromEntity(x)).ToList();
 		}
+
+
+		[HttpGet("{universityId}/courses/{courseId}/tutoringoffers")]
+		public async Task<ActionResult<List<TutoringOfferDTO>>> FindTutoringOffers(int universityId, int courseId)
+		{
+			IEnumerable<TutoringOffer> tutoringOffers = await _tutoringOfferService.FindByUniversityAndCourse(universityId, courseId);
+
+			return tutoringOffers
+				.Select(x => _tutoringOfferConverter.FromEntity(x))
+				.ToList();
+		}
+
 
 		[HttpGet("{universityId}")]
 		public ActionResult<UniversityDTO> FindById(int universityId)

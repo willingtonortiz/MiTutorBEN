@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MiTutorBEN.Data;
 using MiTutorBEN.Models;
@@ -84,6 +85,16 @@ namespace MiTutorBEN.ServicesImpl
 				.RemoveRange(tutoringOffers);
 
 			_context.SaveChanges();
+		}
+
+		public async Task<IEnumerable<TutoringOffer>> FindByUniversityAndCourse(int universityId, int courseId)
+		{
+			IEnumerable<TutoringOffer> tutoringOffers = await _context.TutoringOffers
+				.AsNoTracking()
+				.Where(x => x.UniversityId == universityId && x.CourseId == courseId)
+				.ToListAsync();
+
+			return tutoringOffers;
 		}
 	}
 }
