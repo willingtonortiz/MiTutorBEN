@@ -11,7 +11,7 @@ namespace MiTutorBEN.Controllers
 {
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	public class AuthenticationController : ControllerBase
 	{
 		private readonly IAuthService _authService;
@@ -61,16 +61,16 @@ namespace MiTutorBEN.Controllers
 
 			// _authService.RegisterUser(newUser);
 
-			University university = _universityService.FindById(ob["person"]["UniversityId"].ToObject<int>());
+			University university = _universityService.FindById(ob["person"]["universityId"].ToObject<int>());
 
 			university.Persons = new List<Person>();
 
 			_logger.LogWarning(university.UniversityId.ToString());
 			Person newPerson = new Person();
 
-			newPerson.Name = ob["person"]["Name"].ToObject<string>();
-			newPerson.LastName = ob["person"]["LastName"].ToObject<string>();
-			newPerson.Semester = ob["person"]["Semester"].ToObject<int>();
+			newPerson.Name = ob["person"]["name"].ToObject<string>();
+			newPerson.LastName = ob["person"]["lastName"].ToObject<string>();
+			newPerson.Semester = ob["person"]["semester"].ToObject<int>();
 
 
 
@@ -79,17 +79,17 @@ namespace MiTutorBEN.Controllers
 			newStudent.QualificationCount = 0;
 
 			User newUser = new User();
-			newUser.Username = ob["user"]["Username"].ToObject<string>();
-			newUser.Password = ob["user"]["Password"].ToObject<string>();
-			newUser.Role = ob["user"]["Role"].ToObject<string>();
-			newUser.Email = ob["user"]["Email"].ToObject<string>();
+			newUser.Username = ob["user"]["username"].ToObject<string>();
+			newUser.Password = ob["user"]["password"].ToObject<string>();
+			newUser.Role = ob["user"]["role"].ToObject<string>();
+			newUser.Email = ob["user"]["email"].ToObject<string>();
 
 
 			newPerson.User = newUser;
 			newUser.Person = newPerson;
 
 
-			newPerson.UniversityId = ob["person"]["UniversityId"].ToObject<int>();
+			newPerson.UniversityId = ob["person"]["universityId"].ToObject<int>();
 			university.Persons.Add(newPerson);
 
 
