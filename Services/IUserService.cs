@@ -6,6 +6,5 @@ namespace MiTutorBEN.Services
 	{
 		bool UserNameValid(string username);
 		bool EmailValid(string email);
-		void DeleteAll();
 	}
 }

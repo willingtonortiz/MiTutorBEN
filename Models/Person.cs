@@ -45,5 +45,13 @@ namespace MiTutorBEN.Models
 		{
 			return $"Person {{ Id: {PersonId}, Name: {Name}, LastName: {LastName}, Semester: {Semester} }}";
 		}
+
+		public string FullName
+		{
+			get
+			{
+				return $"{Name} {LastName}";
+			}
+		}
 	}
 }

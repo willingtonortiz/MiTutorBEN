@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MiTutorBEN.Converters;
 using MiTutorBEN.DTOs;
+using MiTutorBEN.DTOs.Response;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 
@@ -47,57 +48,71 @@ namespace MiTutorBEN.Controllers
 			_courseConverter = courseConverter;
 		}
 
+
 		[HttpGet]
-		public ActionResult<IEnumerable<UniversityDTO>> FindAll()
+		public async Task<ActionResult<IEnumerable<UniversityDTO>>> FindAll()
 		{
-			IEnumerable<University> universities = _universityService.FindAll();
+			IEnumerable<University> universities = await _universityService.FindAll();
 
 			return universities.Select(x => _universityConverter.FromEntity(x)).ToList();
 		}
 
 
 		[HttpGet("{universityId}/courses/{courseId}/tutoringoffers")]
-		public async Task<ActionResult<List<object>>> FindTutoringOffers(int universityId, int courseId)
+		public async Task<ActionResult<List<TutoringOfferInfo>>> FindTutoringOffersByUniversityIdAndCourseId(int universityId, int courseId)
 		{
-			IEnumerable<TutoringOffer> tutoringOffers = await _tutoringOfferService.FindByUniversityAndCourse(universityId, courseId);
 
-			if (tutoringOffers.Count() == 0)
+			University foundUniversity = await _universityService.FindById(universityId);
+			if (foundUniversity == null)
 			{
-				return NotFound(new { message = "No se encontraron tutorías" });
+				return NotFound(new { message = "University not found" });
 			}
 
-			List<object> result = new List<object>();
-
-			foreach (TutoringOffer item in tutoringOffers)
+			Course foundCourse = await _courseService.FindById(courseId);
+			if (foundCourse == null)
 			{
-				result.Add(new
-				{
-					tutoringOffer = _tutoringOfferConverter.FromEntity(item),
-					person = _personConverter.FromEntity(item.Tutor.Person),
-					course = _courseConverter.FromEntity(item.Course)
-				});
+				return NotFound(new { message = "Course not found" });
 			}
+
+			IEnumerable<TutoringOffer> tutoringOffers = await _tutoringOfferService.FindByUniversityIdAndCourseId(universityId, courseId);
+			// if (tutoringOffers == null)
+			// {
+			// 	return NotFound(new { message = "Tutoring Offers not fount" });
+			// }
+
+			List<TutoringOfferInfo> result = tutoringOffers.Select(x => new TutoringOfferInfo
+			{
+				TutoringOfferId = x.TutoringOfferId,
+				CourseName = x.Course.Name,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime,
+				TutorName = x.Tutor.Person.FullName
+			}).ToList<TutoringOfferInfo>();
 
 			return Ok(result);
 		}
 
-		[HttpGet("{universityId}/courses/{courseName}")]
-		public async Task<ActionResult<Course>> FindCourse(int universityId, string courseName)
-		{
-			Course course = await _courseService.findCourse(universityId, courseName);
 
+		[HttpGet("{universityId}/courses")]
+		public async Task<ActionResult<CourseDTO>> FindCourseByUniversityIdAndCourseName(int universityId, string courseName = "")
+		{
+			// _logger.LogError($"{universityId} => {courseName}");
+			Course course = await _courseService.FindByUniversityIdAndCourseName(universityId, courseName);
 			if (course == null)
 			{
-				return NotFound(new { message = "No se encontró el curso" });
+				return NotFound(new { message = "Course not found" });
 			}
 
-			return Ok(course);
+			CourseDTO courseDTO = _courseConverter.FromEntity(course);
+
+			return Ok(courseDTO);
 		}
 
+
 		[HttpGet("{universityId}")]
-		public ActionResult<UniversityDTO> FindById(int universityId)
+		public async Task<ActionResult<UniversityDTO>> FindById(int universityId)
 		{
-			University university = _universityService.FindById(universityId);
+			University university = await _universityService.FindById(universityId);
 
 			if (university == null)
 			{
@@ -107,26 +122,26 @@ namespace MiTutorBEN.Controllers
 			return _universityConverter.FromEntity(university);
 		}
 
+
 		[HttpPost]
-		public ActionResult<UniversityDTO> Create([FromBody] UniversityDTO universityDTO)
+		public async Task<ActionResult<UniversityDTO>> Create([FromBody] UniversityDTO universityDTO)
 		{
 			University university = _universityConverter.FromDto(universityDTO);
 
-			University created = _universityService.Create(university);
+			University created = await _universityService.Create(university);
 
 			if (created == null)
 			{
 				return Created("", new { message = "Ya existe una universidad con ese nombre" });
 			}
 			return Created($"", _universityConverter.FromEntity(created));
-
-			// return _universityConverter.FromEntity(created);
 		}
 
+
 		[HttpDelete("{universityId}")]
-		public ActionResult<UniversityDTO> Delete(int universityId)
+		public async Task<ActionResult<UniversityDTO>> Delete(int universityId)
 		{
-			University deleted = _universityService.DeleteById(universityId);
+			University deleted = await _universityService.DeleteById(universityId);
 
 			if (deleted == null)
 			{

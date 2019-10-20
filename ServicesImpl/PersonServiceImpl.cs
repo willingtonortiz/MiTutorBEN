@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MiTutorBEN.Data;
 using MiTutorBEN.Models;
@@ -16,16 +17,16 @@ namespace MiTutorBEN.ServicesImpl
 			_context = context;
 		}
 
-		public Person Create(Person t)
+		public async Task<Person> Create(Person t)
 		{
-			_context.People
-				.Add(t);
+			await _context.People
+				.AddAsync(t);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 			return t;
 		}
 
-		public void DeleteAll()
+		public async Task<int> DeleteAll()
 		{
 			IEnumerable<Person> people = _context.People
 				.AsNoTracking();
@@ -33,14 +34,14 @@ namespace MiTutorBEN.ServicesImpl
 			_context.People
 				.RemoveRange(people);
 
-			_context.SaveChanges();
+			return await _context.SaveChangesAsync();
 		}
 
-		public Person DeleteById(int id)
+		public async Task<Person> DeleteById(int id)
 		{
-			Person found = _context.People
+			Person found = await _context.People
 				.AsNoTracking()
-				.FirstOrDefault(x => x.PersonId == id);
+				.FirstOrDefaultAsync(x => x.PersonId == id);
 
 			if (found == null)
 			{
@@ -50,30 +51,30 @@ namespace MiTutorBEN.ServicesImpl
 			_context.People
 				.Remove(found);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 
 			return found;
 		}
 
-		public IEnumerable<Person> FindAll()
+		public async Task<IEnumerable<Person>> FindAll()
 		{
-			return _context.People
-				.AsNoTracking();
+			return await _context.People
+				.AsNoTracking().ToListAsync();
 		}
 
-		public Person FindById(int id)
+		public async Task<Person> FindById(int id)
 		{
-			Person found = _context.People
+			Person found = await _context.People
 				.AsNoTracking()
-				.FirstOrDefault(x => x.PersonId == id);
+				.FirstOrDefaultAsync(x => x.PersonId == id);
 
 			return found;
 		}
 
-		public Person Update(int id, Person t)
+		public async Task<Person> Update(int id, Person t)
 		{
-			Person found = _context.People
-				.FirstOrDefault(x => x.PersonId == id);
+			Person found = await _context.People
+				.FirstOrDefaultAsync(x => x.PersonId == id);
 
 			if (found == null)
 			{
@@ -82,6 +83,8 @@ namespace MiTutorBEN.ServicesImpl
 
 			_context.People
 				.Update(t);
+
+			await _context.SaveChangesAsync();
 
 			return found;
 		}

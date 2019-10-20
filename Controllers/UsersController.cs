@@ -10,7 +10,7 @@ namespace MiTutorBEN.Controllers
 {
 	[Authorize]
 	[ApiController]
-	[Route("[controller]")]
+	[Route("api/[controller]")]
 	public class UsersController : ControllerBase
 	{
 		private readonly ILogger<UsersController> _logger;
@@ -18,29 +18,28 @@ namespace MiTutorBEN.Controllers
 		private readonly IUserService _userService;
 
 		public UsersController(
-			IUserService userService,
-			ILogger<UsersController> logger
+			ILogger<UsersController> logger,
+			IUserService userService
 		)
 		{
-			_userService = userService;
 			_logger = logger;
-
+			_userService = userService;
 		}
 
 
 		[AllowAnonymous]
 		[HttpGet]
 		[Route("isUsernameExist")]
-		public ActionResult AuthenticateUsername(string username)
+		public ActionResult<bool> AuthenticateUsername(string username)
 		{
 			if (_userService.UserNameValid(username))
 			{
-				_logger.LogWarning("El usuario existe en la bd");
+				// _logger.LogWarning("El usuario existe en la bd");
 				return Ok(true);
 			}
 			else
 			{
-				_logger.LogWarning("El usuario no existe");
+				// _logger.LogWarning("El usuario no existe");
 				return Ok(false);
 			}
 
@@ -49,22 +48,19 @@ namespace MiTutorBEN.Controllers
 		[AllowAnonymous]
 		[HttpGet]
 		[Route("isEmailExist")]
-		public ActionResult AuthenticateEmail(string email)
+		public ActionResult<bool> AuthenticateEmail(string email)
 		{
 			if (_userService.EmailValid(email))
 			{
-				_logger.LogWarning("El usuario existe en la bd");
+				// _logger.LogWarning("El usuario existe en la bd");
 				return Ok(true);
 			}
 			else
 			{
-				_logger.LogWarning("El usuario no existe");
+				// _logger.LogWarning("El usuario no existe");
 				return Ok(false);
 			}
 
 		}
-
-
-
 	}
 }

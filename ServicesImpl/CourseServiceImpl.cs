@@ -17,16 +17,17 @@ namespace MiTutorBEN.ServicesImpl
 			_context = context;
 		}
 
-		public Course Create(Course t)
+		public async Task<Course> Create(Course t)
 		{
-			_context.Courses
-				.Add(t);
+			await _context.Courses
+				.AddAsync(t);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
+
 			return t;
 		}
 
-		public void DeleteAll()
+		public async Task<int> DeleteAll()
 		{
 			IEnumerable<Course> courses = _context.Courses
 				.AsNoTracking();
@@ -34,14 +35,14 @@ namespace MiTutorBEN.ServicesImpl
 			_context.Courses
 				.RemoveRange(courses);
 
-			_context.SaveChanges();
+			return await _context.SaveChangesAsync();
 		}
 
-		public Course DeleteById(int id)
+		public async Task<Course> DeleteById(int id)
 		{
-			Course found = _context.Courses
+			Course found = await _context.Courses
 				.AsNoTracking()
-				.FirstOrDefault(x => x.CourseId == id);
+				.FirstOrDefaultAsync(x => x.CourseId == id);
 
 			if (found == null)
 			{
@@ -51,27 +52,33 @@ namespace MiTutorBEN.ServicesImpl
 			_context.Courses
 				.Remove(found);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 
 			return found;
 		}
 
-		public IEnumerable<Course> FindAll()
+		public Task<bool> ExistsById(int courseId)
 		{
 			return _context.Courses
-				.AsNoTracking();
+				.AnyAsync(x => x.CourseId == courseId);
 		}
 
-		public Course FindById(int id)
+		public async Task<IEnumerable<Course>> FindAll()
 		{
-			Course found = _context.Courses
+			return await _context.Courses
+				.AsNoTracking().ToListAsync<Course>();
+		}
+
+		public async Task<Course> FindById(int id)
+		{
+			Course found = await _context.Courses
 				.AsNoTracking()
-				.FirstOrDefault(x => x.CourseId == id);
+				.FirstOrDefaultAsync(x => x.CourseId == id);
 
 			return found;
 		}
 
-		public async Task<Course> findCourse(int universityId, string courseName)
+		public async Task<Course> FindByUniversityIdAndCourseName(int universityId, string courseName)
 		{
 			Course found = await _context.Courses
 				.FirstOrDefaultAsync(x => x.UniversityId == universityId && x.Name == courseName);
@@ -79,10 +86,10 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
-		public Course Update(int id, Course t)
+		public async Task<Course> Update(int id, Course t)
 		{
-			Course found = _context.Courses
-				.FirstOrDefault(x => x.CourseId == id);
+			Course found = await _context.Courses
+				.FirstOrDefaultAsync(x => x.CourseId == id);
 
 			if (found == null)
 			{
@@ -91,6 +98,9 @@ namespace MiTutorBEN.ServicesImpl
 
 			_context.Courses
 				.Update(t);
+
+			await _context
+				.SaveChangesAsync();
 
 			return found;
 		}

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MiTutorBEN.Data;
 using MiTutorBEN.Models;
@@ -17,26 +18,26 @@ namespace MiTutorBEN.ServicesImpl
 			_context = context;
 		}
 
-		public University Create(University t)
+		public async Task<University> Create(University t)
 		{
 
-			University found = _context.Universities
+			University found = await _context.Universities
 				.AsNoTracking()
-				.FirstOrDefault(x => x.Name == t.Name);
+				.FirstOrDefaultAsync(x => x.Name == t.Name);
 
 			if (found != null)
 			{
 				return null;
 			}
 
-			_context.Universities
-				.Add(t);
-			_context.SaveChanges();
+			await _context.Universities
+				.AddAsync(t);
+			await _context.SaveChangesAsync();
 
 			return t;
 		}
 
-		public void DeleteAll()
+		public async Task<int> DeleteAll()
 		{
 			IEnumerable<University> universities = _context.Universities
 				.AsNoTracking();
@@ -44,14 +45,14 @@ namespace MiTutorBEN.ServicesImpl
 			_context.Universities
 				.RemoveRange(universities);
 
-			_context.SaveChanges();
+			return await _context.SaveChangesAsync();
 		}
 
-		public University DeleteById(int id)
+		public async Task<University> DeleteById(int id)
 		{
-			University found = _context.Universities
+			University found = await _context.Universities
 				.AsNoTracking()
-				.FirstOrDefault(x => x.UniversityId == id);
+				.FirstOrDefaultAsync(x => x.UniversityId == id);
 
 			if (found == null)
 			{
@@ -60,43 +61,44 @@ namespace MiTutorBEN.ServicesImpl
 
 			_context.Universities
 				.Remove(found);
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 
 			return found;
 		}
 
-		public IEnumerable<University> FindAll()
+		public async Task<IEnumerable<University>> FindAll()
 		{
-			return _context.Universities
-				.AsNoTracking();
+			return await _context.Universities
+				.AsNoTracking().ToListAsync<University>();
 		}
 
-		public University FindById(int id)
+		public async Task<University> FindById(int id)
 		{
-			University found = _context.Universities
+			University found = await _context.Universities
 				.AsNoTracking()
-				.FirstOrDefault(x => x.UniversityId == id);
+				.FirstOrDefaultAsync(x => x.UniversityId == id);
 
 			return found;
 		}
 
-		public University FindByName(string name)
+		public async Task<University> FindByName(string name)
 		{
-			University found = _context.Universities
+			University found = await _context.Universities
 				.AsNoTracking()
-				.FirstOrDefault(x => x.Name == name);
+				.FirstOrDefaultAsync(x => x.Name == name);
 
 			return found;
 		}
 
-		public University Update(int id, University t)
+		public async Task<University> Update(int id, University t)
 		{
-			University found = _context.Universities
-				.FirstOrDefault(x => x.UniversityId == id);
+			University found = await _context.Universities
+				.FirstOrDefaultAsync(x => x.UniversityId == id);
 
-			found.Name = t.Name;
+			_context.Universities
+				.Update(t);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 
 			return found;
 		}

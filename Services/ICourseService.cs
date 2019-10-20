@@ -5,7 +5,7 @@ namespace MiTutorBEN.Services
 {
 	public interface ICourseService : ICrudService<Course>
 	{
-		Task<Course> findCourse(int universityId, string courseName);
-		void DeleteAll();
+		Task<bool> ExistsById(int courseId);
+		Task<Course> FindByUniversityIdAndCourseName(int universityId, string courseName);
 	}
 }
