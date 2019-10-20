@@ -78,7 +78,7 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
-		public async Task<int> DeleteAll()
+		public async Task DeleteAll()
 		{
 			IEnumerable<TutoringOffer> tutoringOffers = _context.TutoringOffers
 				.AsNoTracking();
@@ -86,7 +86,7 @@ namespace MiTutorBEN.ServicesImpl
 			_context.TutoringOffers
 				.RemoveRange(tutoringOffers);
 
-			return await _context.SaveChangesAsync();
+			await _context.SaveChangesAsync();
 		}
 
 		public async Task<IEnumerable<TutoringOffer>> FindByUniversityIdAndCourseId(int universityId, int courseId)

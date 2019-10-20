@@ -10,6 +10,6 @@ namespace MiTutorBEN.Services
 		Task<T> Create(T t);
 		Task<T> Update(int id, T t);
 		Task<T> DeleteById(int id);
-		Task<int> DeleteAll();
+		Task DeleteAll();
 	}
 }

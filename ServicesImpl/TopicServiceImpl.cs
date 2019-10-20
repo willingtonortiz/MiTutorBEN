@@ -26,7 +26,7 @@ namespace MiTutorBEN.ServicesImpl
 			return t;
 		}
 
-		public async Task<int> DeleteAll()
+		public async Task DeleteAll()
 		{
 			IEnumerable<Topic> topics = _context.Topics
 				.AsNoTracking();
@@ -34,7 +34,7 @@ namespace MiTutorBEN.ServicesImpl
 			_context.Topics
 				.RemoveRange(topics);
 
-			return await _context.SaveChangesAsync();
+			await _context.SaveChangesAsync();
 		}
 
 		public async Task<Topic> DeleteById(int id)
