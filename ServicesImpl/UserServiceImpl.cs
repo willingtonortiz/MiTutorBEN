@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MiTutorBEN.Data;
 using MiTutorBEN.Models;
@@ -18,19 +19,24 @@ namespace MiTutorBEN.ServicesImpl
 			_context = context;
 		}
 
-		public User Create(User t)
+		public async Task<User> Create(User t)
 		{
-			_context.Users
-				.Add(t);
+			await _context.Users
+				.AddAsync(t);
+
+			await _context.SaveChangesAsync();
 
 			return t;
 		}
 
-		public bool UserNameValid(string username)
+		public async Task<bool> UserNameValid(string username)
 		{
-			User personWithThisUsername = _context.Users.
+			User personWithThisUsername = await _context.Users.
 			AsNoTracking().
-			FirstOrDefault(x => x.Username == username);
+			FirstOrDefaultAsync(x => x.Username == username);
+
+		
+
 			if (personWithThisUsername != null)
 			{
 
@@ -43,25 +49,23 @@ namespace MiTutorBEN.ServicesImpl
 			}
 		}
 
-		public bool EmailValid(string email)
+		public async Task<bool> EmailValid(string email)
 		{
-			User personWithThisEmail = _context.Users.AsNoTracking().
-										FirstOrDefault(x => x.Email == email);
+			User personWithThisEmail = await _context.Users.AsNoTracking().
+										FirstOrDefaultAsync(x => x.Email == email);
 
 			if (personWithThisEmail != null)
 			{
-
 				return true;
 			}
 			else
 			{
-
 				return false;
 			}
 
 		}
 
-		public void DeleteAll()
+		public async Task DeleteAll()
 		{
 			IEnumerable<User> users = _context.Users
 				.AsNoTracking();
@@ -69,14 +73,14 @@ namespace MiTutorBEN.ServicesImpl
 			_context.Users
 				.RemoveRange(users);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 		}
 
-		public User DeleteById(int id)
+		public async Task<User> DeleteById(int id)
 		{
-			User found = _context.Users
+			User found = await _context.Users
 				.AsNoTracking()
-				.FirstOrDefault(x => x.UserId == id);
+				.FirstOrDefaultAsync(x => x.UserId == id);
 
 			if (found == null)
 			{
@@ -85,30 +89,30 @@ namespace MiTutorBEN.ServicesImpl
 
 			_context.Users
 				.Remove(found);
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 
 			return found;
 		}
 
-		public IEnumerable<User> FindAll()
+		public async Task<IEnumerable<User>> FindAll()
 		{
-			return _context.Users
-				.AsNoTracking();
+			return await _context.Users
+				.AsNoTracking().ToListAsync<User>();
 		}
 
-		public User FindById(int id)
+		public async Task<User> FindById(int id)
 		{
-			User found = _context.Users
+			User found = await _context.Users
 				.AsNoTracking()
-				.FirstOrDefault(x => x.UserId == id);
+				.FirstOrDefaultAsync(x => x.UserId == id);
 
 			return found;
 		}
 
-		public User Update(int id, User t)
+		public async Task<User> Update(int id, User t)
 		{
-			User found = _context.Users
-				.FirstOrDefault(x => x.UserId == id);
+			User found = await _context.Users
+				.FirstOrDefaultAsync(x => x.UserId == id);
 
 			if (found == null)
 			{
@@ -116,6 +120,8 @@ namespace MiTutorBEN.ServicesImpl
 			}
 
 			_context.Users.Update(t);
+
+			await _context.SaveChangesAsync();
 
 			return found;
 		}

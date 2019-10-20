@@ -17,20 +17,20 @@ namespace MiTutorBEN.ServicesImpl
 			_context = context;
 		}
 
-		public TutoringOffer Create(TutoringOffer t)
+		public async Task<TutoringOffer> Create(TutoringOffer t)
 		{
-			_context.TutoringOffers
-				.Add(t);
+			await _context.TutoringOffers
+				.AddAsync(t);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 			return t;
 		}
 
-		public TutoringOffer DeleteById(int id)
+		public async Task<TutoringOffer> DeleteById(int id)
 		{
-			TutoringOffer found = _context.TutoringOffers
+			TutoringOffer found = await _context.TutoringOffers
 				.AsNoTracking()
-				.FirstOrDefault(x => x.TutoringOfferId == id);
+				.FirstOrDefaultAsync(x => x.TutoringOfferId == id);
 
 			if (found == null)
 			{
@@ -40,30 +40,30 @@ namespace MiTutorBEN.ServicesImpl
 			_context.TutoringOffers
 				.Remove(found);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 
 			return found;
 		}
 
-		public IEnumerable<TutoringOffer> FindAll()
+		public async Task<IEnumerable<TutoringOffer>> FindAll()
 		{
-			return _context.TutoringOffers
-				.AsNoTracking();
+			return await _context.TutoringOffers
+				.AsNoTracking().ToListAsync<TutoringOffer>();
 		}
 
-		public TutoringOffer FindById(int id)
+		public async Task<TutoringOffer> FindById(int id)
 		{
-			TutoringOffer found = _context.TutoringOffers
+			TutoringOffer found = await _context.TutoringOffers
 				.AsNoTracking()
-				.FirstOrDefault(x => x.TutoringOfferId == id);
+				.FirstOrDefaultAsync(x => x.TutoringOfferId == id);
 
 			return found;
 		}
 
-		public TutoringOffer Update(int id, TutoringOffer t)
+		public async Task<TutoringOffer> Update(int id, TutoringOffer t)
 		{
-			TutoringOffer found = _context.TutoringOffers
-				.FirstOrDefault(x => x.TutoringOfferId == id);
+			TutoringOffer found = await _context.TutoringOffers
+				.FirstOrDefaultAsync(x => x.TutoringOfferId == id);
 
 			if (found == null)
 			{
@@ -73,10 +73,12 @@ namespace MiTutorBEN.ServicesImpl
 			_context.TutoringOffers
 				.Update(t);
 
+			await _context.SaveChangesAsync();
+
 			return found;
 		}
 
-		public void DeleteAll()
+		public async Task DeleteAll()
 		{
 			IEnumerable<TutoringOffer> tutoringOffers = _context.TutoringOffers
 				.AsNoTracking();
@@ -84,10 +86,10 @@ namespace MiTutorBEN.ServicesImpl
 			_context.TutoringOffers
 				.RemoveRange(tutoringOffers);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 		}
 
-		public async Task<IEnumerable<TutoringOffer>> FindByUniversityAndCourse(int universityId, int courseId)
+		public async Task<IEnumerable<TutoringOffer>> FindByUniversityIdAndCourseId(int universityId, int courseId)
 		{
 			IEnumerable<TutoringOffer> tutoringOffers = await _context.TutoringOffers
 				.AsNoTracking()
@@ -95,7 +97,7 @@ namespace MiTutorBEN.ServicesImpl
 				.Include(x => x.Tutor)
 					.ThenInclude(x => x.Person)
 				.Where(x => x.UniversityId == universityId && x.CourseId == courseId)
-				.ToListAsync();
+				.ToListAsync<TutoringOffer>();
 
 			return tutoringOffers;
 		}

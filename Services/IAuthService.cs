@@ -1,4 +1,6 @@
 using MiTutorBEN.DTOs;
+using System.Threading.Tasks;
+
 using MiTutorBEN.Models;
 namespace MiTutorBEN.Services
 {
@@ -6,7 +8,7 @@ namespace MiTutorBEN.Services
 	{
 		UserAuthDTO Authenticate(string username, string password);
 		User RegisterUser(User user);
-		void Register(Person person, Student student,User user);
+		Task<bool> Register(Person person, Student student,User user);
 
 	}
 }

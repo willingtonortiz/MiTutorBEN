@@ -6,6 +6,8 @@ using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace MiTutorBEN.Controllers
 
 {
@@ -48,29 +50,21 @@ namespace MiTutorBEN.Controllers
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("Register")]
-		public IActionResult Register([FromBody] object sd)
+		public async Task<IActionResult> Register([FromBody] object user)
 		{
-			var ob = JObject.Parse(sd.ToString());
+			var userJson = JObject.Parse(user.ToString());
 
-			//_userService.GetPerson(3);
-
-			_logger.LogWarning("Estas enviando un usuario");
-			//_logger.LogWarning(ob.ToString());
-
-			// _logger.LogWarning(newUser.Password.ToString());
-
-			// _authService.RegisterUser(newUser);
-
-			University university = _universityService.FindById(ob["person"]["universityId"].ToObject<int>());
+	
+			University university = await _universityService.FindById(userJson["person"]["universityId"].ToObject<int>());
 
 			university.Persons = new List<Person>();
 
-			_logger.LogWarning(university.UniversityId.ToString());
+			
 			Person newPerson = new Person();
 
-			newPerson.Name = ob["person"]["name"].ToObject<string>();
-			newPerson.LastName = ob["person"]["lastName"].ToObject<string>();
-			newPerson.Semester = ob["person"]["semester"].ToObject<int>();
+			newPerson.Name = userJson["person"]["name"].ToObject<string>();
+			newPerson.LastName = userJson["person"]["lastName"].ToObject<string>();
+			newPerson.Semester = userJson["person"]["semester"].ToObject<int>();
 
 
 
@@ -79,17 +73,17 @@ namespace MiTutorBEN.Controllers
 			newStudent.QualificationCount = 0;
 
 			User newUser = new User();
-			newUser.Username = ob["user"]["username"].ToObject<string>();
-			newUser.Password = ob["user"]["password"].ToObject<string>();
-			newUser.Role = ob["user"]["role"].ToObject<string>();
-			newUser.Email = ob["user"]["email"].ToObject<string>();
+			newUser.Username = userJson["user"]["username"].ToObject<string>();
+			newUser.Password = userJson["user"]["password"].ToObject<string>();
+			newUser.Role = userJson["user"]["role"].ToObject<string>();
+			newUser.Email = userJson["user"]["email"].ToObject<string>();
 
 
 			newPerson.User = newUser;
 			newUser.Person = newPerson;
 
 
-			newPerson.UniversityId = ob["person"]["universityId"].ToObject<int>();
+			newPerson.UniversityId = userJson["person"]["universityId"].ToObject<int>();
 			university.Persons.Add(newPerson);
 
 
@@ -97,7 +91,7 @@ namespace MiTutorBEN.Controllers
 			newStudent.Person = newPerson;
 
 
-			_authService.Register(newPerson, newStudent, newUser);
+			await _authService.Register(newPerson, newStudent, newUser);
 			return Ok(true);
 		}
 	}

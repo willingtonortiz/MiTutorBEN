@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MiTutorBEN.Data;
 using MiTutorBEN.Models;
@@ -16,16 +17,16 @@ namespace MiTutorBEN.ServicesImpl
 			_context = context;
 		}
 
-		public Topic Create(Topic t)
+		public async Task<Topic> Create(Topic t)
 		{
-			_context.Topics
-				.Add(t);
+			await _context.Topics
+				.AddAsync(t);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 			return t;
 		}
 
-		public void DeleteAll()
+		public async Task DeleteAll()
 		{
 			IEnumerable<Topic> topics = _context.Topics
 				.AsNoTracking();
@@ -33,14 +34,14 @@ namespace MiTutorBEN.ServicesImpl
 			_context.Topics
 				.RemoveRange(topics);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 		}
 
-		public Topic DeleteById(int id)
+		public async Task<Topic> DeleteById(int id)
 		{
-			Topic found = _context.Topics
+			Topic found = await _context.Topics
 				.AsNoTracking()
-				.FirstOrDefault(x => x.TopicId == id);
+				.FirstOrDefaultAsync(x => x.TopicId == id);
 
 			if (found == null)
 			{
@@ -50,30 +51,30 @@ namespace MiTutorBEN.ServicesImpl
 			_context.Topics
 				.Remove(found);
 
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 
 			return found;
 		}
 
-		public IEnumerable<Topic> FindAll()
+		public async Task<IEnumerable<Topic>> FindAll()
 		{
-			return _context.Topics
-				.AsNoTracking();
+			return await _context.Topics
+				.AsNoTracking().ToListAsync<Topic>();
 		}
 
-		public Topic FindById(int id)
+		public async Task<Topic> FindById(int id)
 		{
-			Topic found = _context.Topics
+			Topic found = await _context.Topics
 				.AsNoTracking()
-				.FirstOrDefault(x => x.TopicId == id);
+				.FirstOrDefaultAsync(x => x.TopicId == id);
 
 			return found;
 		}
 
-		public Topic Update(int id, Topic t)
+		public async Task<Topic> Update(int id, Topic t)
 		{
-			Topic found = _context.Topics
-				.FirstOrDefault(x => x.TopicId == id);
+			Topic found = await _context.Topics
+				.FirstOrDefaultAsync(x => x.TopicId == id);
 
 			if (found == null)
 			{
@@ -82,6 +83,8 @@ namespace MiTutorBEN.ServicesImpl
 
 			_context.Topics
 				.Update(t);
+
+			await _context.SaveChangesAsync();
 
 			return found;
 		}
