@@ -49,6 +49,13 @@ namespace MiTutorBEN.Controllers
 		}
 
 
+		[HttpGet("{universityId}/persons")]
+		public ActionResult<string> GetData([FromRoute]int universityId)
+		{
+			return $"UniversitiesController: {universityId}";
+		}
+
+
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<UniversityDTO>>> FindAll()
 		{
@@ -97,7 +104,10 @@ namespace MiTutorBEN.Controllers
 		public async Task<ActionResult<CourseDTO>> FindCourseByUniversityIdAndCourseName(int universityId, string courseName = "")
 		{
 			// _logger.LogError($"{universityId} => {courseName}");
+
 			Course course = await _courseService.FindByUniversityIdAndCourseName(universityId, courseName);
+
+			// _logger.LogWarning("Curso encontrado");
 			if (course == null)
 			{
 				return NotFound(new { message = "Course not found" });
