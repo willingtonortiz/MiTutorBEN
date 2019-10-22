@@ -4,6 +4,5 @@ namespace MiTutorBEN.Services
 {
 	public interface ITopicService : ICrudService<Topic>
 	{
-		void DeleteAll();
 	}
 }

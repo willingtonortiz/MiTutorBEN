@@ -6,6 +6,8 @@ using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace MiTutorBEN.Controllers
 
 {
@@ -48,7 +50,7 @@ namespace MiTutorBEN.Controllers
 		[AllowAnonymous]
 		[HttpPost]
 		[Route("Register")]
-		public IActionResult Register([FromBody] object sd)
+		public async Task<IActionResult> Register([FromBody] object sd)
 		{
 			var ob = JObject.Parse(sd.ToString());
 
@@ -61,7 +63,7 @@ namespace MiTutorBEN.Controllers
 
 			// _authService.RegisterUser(newUser);
 
-			University university = _universityService.FindById(ob["person"]["UniversityId"].ToObject<int>());
+			University university = await _universityService.FindById(ob["person"]["UniversityId"].ToObject<int>());
 
 			university.Persons = new List<Person>();
 
