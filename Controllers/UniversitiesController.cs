@@ -48,14 +48,6 @@ namespace MiTutorBEN.Controllers
 			_courseConverter = courseConverter;
 		}
 
-
-		[HttpGet("{universityId}/persons")]
-		public ActionResult<string> GetData([FromRoute]int universityId)
-		{
-			return $"UniversitiesController: {universityId}";
-		}
-
-
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<UniversityDTO>>> FindAll()
 		{
@@ -82,11 +74,6 @@ namespace MiTutorBEN.Controllers
 			}
 
 			IEnumerable<TutoringOffer> tutoringOffers = await _tutoringOfferService.FindByUniversityIdAndCourseId(universityId, courseId);
-			// if (tutoringOffers == null)
-			// {
-			// 	return NotFound(new { message = "Tutoring Offers not fount" });
-			// }
-
 			List<TutoringOfferResponse> result = tutoringOffers.Select(x => new TutoringOfferResponse
 			{
 				TutoringOfferId = x.TutoringOfferId,
@@ -101,21 +88,32 @@ namespace MiTutorBEN.Controllers
 
 
 		[HttpGet("{universityId}/courses")]
-		public async Task<ActionResult<CourseDTO>> FindCourseByUniversityIdAndCourseName(int universityId, string courseName = "")
+		public async Task<ActionResult<IEnumerable<CourseDTO>>> FindCoursesByUniversityId(int universityId, string courseName = "")
 		{
-			// _logger.LogError($"{universityId} => {courseName}");
-
-			Course course = await _courseService.FindByUniversityIdAndCourseName(universityId, courseName);
-
-			// _logger.LogWarning("Curso encontrado");
-			if (course == null)
+			if (courseName == "")
 			{
-				return NotFound(new { message = "Course not found" });
+
+				IEnumerable<Course> courses = await _courseService.FindAllByUniversityId(universityId);
+
+				IEnumerable<CourseDTO> coursesDTO = courses.Select(item => _courseConverter.FromEntity(item)).ToList();
+
+				return Ok(coursesDTO);
 			}
+			else
+			{
+				Course course = await _courseService.FindByUniversityIdAndCourseName(universityId, courseName);
 
-			CourseDTO courseDTO = _courseConverter.FromEntity(course);
+				if (course == null)
+				{
+					return NotFound(new { message = "Course not found" });
+				}
 
-			return Ok(courseDTO);
+				IEnumerable<CourseDTO> courseDTO = new List<CourseDTO>();
+				courseDTO.Append(_courseConverter.FromEntity(course));
+
+				return Ok(courseDTO);
+
+			}
 		}
 
 
@@ -145,9 +143,9 @@ namespace MiTutorBEN.Controllers
 				return Created("", new { message = "Ya existe una universidad con ese nombre" });
 			}
 
-			
 
-		
+
+
 			return Created($"", _universityConverter.FromEntity(created));
 		}
 

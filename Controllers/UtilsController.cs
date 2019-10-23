@@ -68,7 +68,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("Universities created");
+			// _logger.LogWarning("Universities created");
 
 			#region Course
 
@@ -94,7 +94,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("Courses created");
+			// _logger.LogWarning("Courses created");
 
 			#region Topic
 
@@ -120,7 +120,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("Topics created");
+			// _logger.LogWarning("Topics created");
 
 			#region Person
 
@@ -152,7 +152,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("People created");
+			// _logger.LogWarning("People created");
 
 			#region User
 
@@ -187,7 +187,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("Users created");
+			// _logger.LogWarning("Users created");
 
 			#region Tutor
 
@@ -203,7 +203,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("Tutors created");
+			// _logger.LogWarning("Tutors created");
 
 			#region TutoringOffer
 
@@ -234,7 +234,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("TutoringOffers created");
+			// _logger.LogWarning("TutoringOffers created");
 
 			return "Datos de prueba cargados";
 		}

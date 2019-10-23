@@ -18,12 +18,16 @@ namespace MiTutorBEN.Controllers
 	{
 		private readonly IAuthService _authService;
 		private readonly ILogger<AuthenticationController> _logger;
-
 		private readonly IUserService _userService;
 
 		private readonly IUniversityService _universityService;
 
-		public AuthenticationController(IAuthService authService, ILogger<AuthenticationController> logger, IUniversityService universityService, IUserService userService)
+		public AuthenticationController(
+			IAuthService authService,
+			ILogger<AuthenticationController> logger,
+			IUniversityService universityService,
+			IUserService userService
+			)
 		{
 			_authService = authService;
 			_universityService = universityService;

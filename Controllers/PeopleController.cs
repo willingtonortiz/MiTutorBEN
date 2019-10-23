@@ -13,7 +13,10 @@ namespace MiTutorBEN.Controllers
 		private readonly ILogger<PeopleController> _logger;
 		private readonly IPersonService _personService;
 
-		public PeopleController(ILogger<PeopleController> logger, IPersonService personService)
+		public PeopleController(
+			ILogger<PeopleController> logger,
+			IPersonService personService
+			)
 		{
 			_logger = logger;
 			_personService = personService;

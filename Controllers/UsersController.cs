@@ -14,7 +14,6 @@ namespace MiTutorBEN.Controllers
 	public class UsersController : ControllerBase
 	{
 		private readonly ILogger<UsersController> _logger;
-
 		private readonly IUserService _userService;
 
 		public UsersController(

@@ -78,6 +78,16 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
+		public async Task<IEnumerable<Course>> FindAllByUniversityId(int universityId)
+		{
+			List<Course> courses = await _context.Courses
+				.AsNoTracking()
+				.Where(x => x.UniversityId == universityId)
+				.ToListAsync();
+
+			return courses;
+		}
+
 		public async Task<Course> FindByUniversityIdAndCourseName(int universityId, string courseName)
 		{
 			Course found = await _context.Courses
