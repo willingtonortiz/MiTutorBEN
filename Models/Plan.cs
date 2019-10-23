@@ -21,7 +21,7 @@ namespace MiTutorBEN.Models
         public int Duration { get; set; }
 
 
-        public List<Suscription> Suscriptions {get; set;} = new List<Suscription>();
+        public virtual List<Suscription> Suscriptions {get; set;} = new List<Suscription>();
 
 
         public override string ToString()

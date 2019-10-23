@@ -11,6 +11,6 @@ namespace MiTutorBEN.DTOs.Requests
         public int CourseId { get; set; }
 		public int TutorId {get; set; }
         public List<TutoringSessionRequest> TutoringSessionRequests { get; set; }
-
+        
     }
 }

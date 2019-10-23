@@ -68,8 +68,12 @@ namespace MiTutorBEN
             services.AddScoped<ITutorService, TutorServiceImpl>();
             services.AddScoped<IUniversityService, UniversityServiceImpl>();
             services.AddScoped<IUserService, UserServiceImpl>();
-			 services.AddScoped<ITutoringSessionService, TutoringSessionServiceImpl>();
-
+			services.AddScoped<ITutoringSessionService, TutoringSessionServiceImpl>();
+            services.AddScoped<ITopicTutoringOfferService, TopicTutoringOfferServiceImpl>();
+            services.AddScoped<ITopicTutoringSessionService, TopicTutoringSessionServiceImpl>();
+            
+            
+            
             // Converters
             services.AddScoped<AuthUserConverter>();
             services.AddScoped<CourseConverter>();
@@ -79,9 +83,15 @@ namespace MiTutorBEN
             services.AddScoped<TutorConverter>();
             services.AddScoped<UniversityConverter>();
             services.AddScoped<UserConverter>();
-
+            services.AddScoped<TutoringOfferResponseConverter>();
+            services.AddScoped<TutoringSessionResponseConverter>();
+            services.AddScoped<TutoringOfferRequestConverter>();
             // Base de datos
-            services.AddDbContext<MiTutorContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection")));
+            services.AddDbContext<MiTutorContext>(options =>
+            {
+                options.UseLazyLoadingProxies().
+                UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection"));
+            });
 
             // Evitando ciclos en las queries
             services.AddMvc(options => options.EnableEndpointRouting = false)

@@ -21,15 +21,15 @@ namespace MiTutorBEN.Models
 
 
         // Navigation attributes
-        public List<TutoringSession> TutoringSessions { get; set; } = new List<TutoringSession>();
+        public virtual List<TutoringSession> TutoringSessions { get; set; } = new List<TutoringSession>();
 
-        public List<TutoringOffer> TutoringOffers { get; set; } = new List<TutoringOffer>();
+        public virtual List<TutoringOffer> TutoringOffers { get; set; } = new List<TutoringOffer>();
 
-        public List<TutorCourse> TutorCourses { get; set; } = new List<TutorCourse>();
+        public virtual List<TutorCourse> TutorCourses { get; set; } = new List<TutorCourse>();
 
-        public List<AvailabilityDay> AvailabilityDays { get; set; }
+        public virtual List<AvailabilityDay> AvailabilityDays { get; set; }
 
-        public Person Person { get; set; }
+        public virtual Person Person { get; set; }
 
 
         // Methods

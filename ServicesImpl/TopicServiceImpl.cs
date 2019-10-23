@@ -65,7 +65,7 @@ namespace MiTutorBEN.ServicesImpl
 		public async Task<Topic> FindById(int id)
 		{
 			Topic found = await _context.Topics
-				.AsNoTracking()
+				//.AsNoTracking()
 				.FirstOrDefaultAsync(x => x.TopicId == id);
 
 			return found;

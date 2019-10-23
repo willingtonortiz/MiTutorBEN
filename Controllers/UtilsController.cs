@@ -47,7 +47,7 @@ namespace MiTutorBEN.Controllers
 
 
 		[HttpGet("generateData")]
-		public ActionResult<string> GenerateData()
+		public async Task<ActionResult<string>> GenerateData()
 		{
 			// University isCreated = _universityService.FindByName("Universidad Peruana de Ciencias Aplicadas");
 
@@ -64,7 +64,7 @@ namespace MiTutorBEN.Controllers
 			{
 				Name = "Universidad Peruana de Ciencias Aplicadas"
 			};
-			_universityService.Create(university1);
+			await _universityService.Create(university1);
 
 			#endregion
 
@@ -78,19 +78,19 @@ namespace MiTutorBEN.Controllers
 				Name = "calculo 2",
 				UniversityId = university1.UniversityId
 			};
-			_courseService.Create(course1);
+			await _courseService.Create(course1);
 			Course course2 = new Course
 			{
 				Name = "fisica 3",
 				UniversityId = university1.UniversityId
 			};
-			_courseService.Create(course2);
+			await _courseService.Create(course2);
 			Course course3 = new Course
 			{
 				Name = "programacion 1",
 				UniversityId = university1.UniversityId
 			};
-			_courseService.Create(course3);
+			await _courseService.Create(course3);
 
 			#endregion
 
@@ -104,19 +104,19 @@ namespace MiTutorBEN.Controllers
 				Name = "topic_1_1",
 				CourseId = course1.CourseId
 			};
-			_topicService.Create(topic1);
+			await _topicService.Create(topic1);
 			Topic topic2 = new Topic
 			{
 				Name = "topic_1_2",
 				CourseId = course1.CourseId
 			};
-			_topicService.Create(topic2);
+			await _topicService.Create(topic2);
 			Topic topic3 = new Topic
 			{
 				Name = "topic_1_3",
 				CourseId = course1.CourseId
 			};
-			_topicService.Create(topic3);
+			await _topicService.Create(topic3);
 
 			#endregion
 
@@ -132,7 +132,7 @@ namespace MiTutorBEN.Controllers
 				Semester = 6,
 				UniversityId = university1.UniversityId
 			};
-			_personService.Create(person1);
+			await _personService.Create(person1);
 			Person person2 = new Person
 			{
 				Name = "person_2",
@@ -140,7 +140,7 @@ namespace MiTutorBEN.Controllers
 				Semester = 5,
 				UniversityId = university1.UniversityId
 			};
-			_personService.Create(person2);
+			await _personService.Create(person2);
 			Person person3 = new Person
 			{
 				Name = "person_3",
@@ -148,7 +148,7 @@ namespace MiTutorBEN.Controllers
 				Semester = 4,
 				UniversityId = university1.UniversityId
 			};
-			_personService.Create(person3);
+			await _personService.Create(person3);
 
 			#endregion
 
@@ -165,7 +165,7 @@ namespace MiTutorBEN.Controllers
 				Role = "TUTOR",
 				Person = person1
 			};
-			_userService.Create(user1);
+			await _userService.Create(user1);
 			User user2 = new User
 			{
 				Username = "username_2",
@@ -174,7 +174,7 @@ namespace MiTutorBEN.Controllers
 				Role = "STUDENT",
 				Person = person2
 			};
-			_userService.Create(user2);
+			await _userService.Create(user2);
 			User user3 = new User
 			{
 				Username = "username_3",
@@ -183,7 +183,7 @@ namespace MiTutorBEN.Controllers
 				Role = "STUDENT",
 				Person = person3
 			};
-			_userService.Create(user3);
+			await _userService.Create(user3);
 
 			#endregion
 
@@ -199,7 +199,7 @@ namespace MiTutorBEN.Controllers
 				QualificationCount = 50,
 				Person = person1
 			};
-			_tutorService.Create(tutor1);
+			await _tutorService.Create(tutor1);
 
 			#endregion
 
@@ -230,7 +230,7 @@ namespace MiTutorBEN.Controllers
 					}
 				}
 			};
-			_tutoringOfferService.Create(tutoringOffer1);
+			await _tutoringOfferService.Create(tutoringOffer1);
 
 			#endregion
 

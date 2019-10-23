@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MiTutorBEN.Converters;
 using MiTutorBEN.DTOs;
-using MiTutorBEN.DTOs.Response;
+using MiTutorBEN.DTOs.Responses;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 
@@ -66,7 +66,7 @@ namespace MiTutorBEN.Controllers
 
 
 		[HttpGet("{universityId}/courses/{courseId}/tutoringoffers")]
-		public async Task<ActionResult<List<TutoringOfferInfo>>> FindTutoringOffersByUniversityIdAndCourseId(int universityId, int courseId)
+		public async Task<ActionResult<List<TutoringOfferResponse>>> FindTutoringOffersByUniversityIdAndCourseId(int universityId, int courseId)
 		{
 
 			University foundUniversity = await _universityService.FindById(universityId);
@@ -87,14 +87,14 @@ namespace MiTutorBEN.Controllers
 			// 	return NotFound(new { message = "Tutoring Offers not fount" });
 			// }
 
-			List<TutoringOfferInfo> result = tutoringOffers.Select(x => new TutoringOfferInfo
+			List<TutoringOfferResponse> result = tutoringOffers.Select(x => new TutoringOfferResponse
 			{
 				TutoringOfferId = x.TutoringOfferId,
-				CourseName = x.Course.Name,
+				Course = x.Course.Name,
 				StartTime = x.StartTime,
 				EndTime = x.EndTime,
-				TutorName = x.Tutor.Person.FullName
-			}).ToList<TutoringOfferInfo>();
+				Tutor = x.Tutor.Person.FullName
+			}).ToList<TutoringOfferResponse>();
 
 			return Ok(result);
 		}

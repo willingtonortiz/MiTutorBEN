@@ -24,7 +24,7 @@ namespace MiTutorBEN.Models
 
 
 		// Navigation attributes
-		public Person Person { get; set; }
+		public virtual Person Person { get; set; }
 
 
 		// Methods

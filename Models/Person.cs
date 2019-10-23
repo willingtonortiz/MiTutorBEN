@@ -22,19 +22,19 @@ namespace MiTutorBEN.Models
 
 		// Navigation attributes
 		public int UniversityId { get; set; }
-		public University University { get; set; }
+		public virtual University University { get; set; }
 
-		public User User { get; set; }
+		public virtual User User { get; set; }
 
-		public Student Student { get; set; }
+		public virtual Student Student { get; set; }
 
-		public Tutor Tutor { get; set; }
+		public virtual Tutor Tutor { get; set; }
 
-		public List<Qualification> QualificationsReceived { get; set; } = new List<Qualification>();
+		public virtual List<Qualification> QualificationsReceived { get; set; } = new List<Qualification>();
 
-		public List<Qualification> QualificationsGiven { get; set; } = new List<Qualification>();
+		public virtual List<Qualification> QualificationsGiven { get; set; } = new List<Qualification>();
 
-		public List<Suscription> Suscriptions { get; set; } = new List<Suscription>();
+		public virtual List<Suscription> Suscriptions { get; set; } = new List<Suscription>();
 
 
 		// Methods

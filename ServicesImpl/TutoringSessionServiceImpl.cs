@@ -14,47 +14,59 @@ namespace MiTutorBEN.ServicesImpl
         private readonly MiTutorContext _context;
 
         public TutoringSessionServiceImpl(MiTutorContext context)
-		{
-			_context = context;
-		}
-
-        public TutoringSession Create(TutoringSession t)
         {
-           	_context.TutoringSessions
-				.Add(t);
-
-			_context.SaveChanges();
-			return t;
+            _context = context;
         }
 
-        public TutoringSession DeleteById(int id)
+        public bool Any(Func<TutoringSession, bool> criteria)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public IEnumerable<TutoringSession> FindAll()
+        public async Task<TutoringSession> Create(TutoringSession t)
         {
-           return _context.TutoringSessions
-				.AsNoTracking();
+            await _context.TutoringSessions
+             .AddAsync(t);
+
+            await _context.SaveChangesAsync();
+            return t;
         }
 
-        public TutoringSession FindById(int id)
+        public Task DeleteAll()
         {
-           TutoringSession found = _context.TutoringSessions
-				.AsNoTracking()
-				.FirstOrDefault(x => x.TutoringOfferId == id);
-
-			return found;
+            throw new NotImplementedException();
         }
 
-        public TutoringSession Update(int id, TutoringSession t)
+        public Task<TutoringSession> DeleteById(int id)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public bool Any(Func<TutoringSession,bool> criteria)
+        public Task<IEnumerable<TutoringSession>> FindAll()
         {
-            return _context.TutoringSessions.Any(criteria);
+            throw new NotImplementedException();
+        }
+
+        public Task<TutoringSession> FindById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<TutoringSession> Update(int id, TutoringSession t)
+        {
+
+            if (_context.TutoringSessions.Any(t => t.TutoringSessionId == id))
+            {
+                TutoringSession found = _context.TutoringSessions
+                .Update(t).Entity;
+
+                await _context.SaveChangesAsync();
+                return found;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

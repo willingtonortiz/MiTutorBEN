@@ -7,9 +7,9 @@ namespace MiTutorBEN.Models
     public class StudentTutoringSession
     {
         public int StudentId { get; set; }
-        public Student Student { get; set; }
+        public virtual Student Student { get; set; }
         public int TutoringSessionId { get; set; }
-        public TutoringSession TutoringSession { get; set; }
+        public virtual TutoringSession TutoringSession { get; set; }
 
     }
 }

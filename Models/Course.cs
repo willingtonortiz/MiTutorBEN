@@ -17,13 +17,13 @@ namespace MiTutorBEN.Models
 
 		// Navigation attributes
 		public int UniversityId { get; set; }
-        public University University { get; set; }
+        public virtual University University { get; set; }
 
-		public List<Topic> Topics { get; set; } = new List<Topic>();
+		public virtual List<Topic> Topics { get; set; } = new List<Topic>();
 
-		public List<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
+		public virtual List<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
 
-		public List<TutorCourse> TutorCourses { get; set; } = new List<TutorCourse>();
+		public virtual List<TutorCourse> TutorCourses { get; set; } = new List<TutorCourse>();
 
 
 		// Methods
