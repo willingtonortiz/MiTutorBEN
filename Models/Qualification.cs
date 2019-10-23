@@ -18,15 +18,15 @@ namespace MiTutorBEN.Models
 
 
 		public int AdresserId { get; set; }
-		public Person Adresser { get; set; }
+		public virtual Person Adresser { get; set; }
 
 
 		public int AdresseeId { get; set; }
-		public Person Adressee { get; set; }
+		public virtual Person Adressee { get; set; }
 
 
 		public int TutoringSessionId { get; set; }
-		public TutoringSession TutoringSession { get; set; }
+		public virtual TutoringSession TutoringSession { get; set; }
 
 
 		public Qualification() { }

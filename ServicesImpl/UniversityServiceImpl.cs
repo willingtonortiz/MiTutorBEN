@@ -75,7 +75,7 @@ namespace MiTutorBEN.ServicesImpl
 		public async Task<University> FindById(int id)
 		{
 			University found = await _context.Universities
-				.AsNoTracking()
+				//.AsNoTracking()
 				.FirstOrDefaultAsync(x => x.UniversityId == id);
 
 			return found;

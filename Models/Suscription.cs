@@ -18,11 +18,11 @@ namespace MiTutorBEN.Models
         
         
         public int PersonId { get; set; }
-        public Person Person {get; set;}
+        public virtual Person Person {get; set;}
     
 
         public int PlanId {get; set;}
-        public Plan Plan {get; set;}
+        public virtual Plan Plan {get; set;}
 
 
 

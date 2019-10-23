@@ -14,13 +14,13 @@ namespace MiTutorBEN.Models
         public int QualificationCount { get; set; }
 
 
-        public Person Person { get; set; }
+        public virtual Person Person { get; set; }
 
 
-        public List<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
+        public virtual List<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
 
 
-        public List<StudentTutoringSession> StudentTutoringSessions { get; set; } = new List<StudentTutoringSession>();
+        public virtual List<StudentTutoringSession> StudentTutoringSessions { get; set; } = new List<StudentTutoringSession>();
 
         public Student() { }
 
