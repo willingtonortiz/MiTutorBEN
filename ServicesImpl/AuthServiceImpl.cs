@@ -74,7 +74,7 @@ namespace MiTutorBEN.ServicesImpl
             return user;
         }
 
-        public async Task<bool> Register(Person person, Student student, User user)
+        public async Task<User> Register(Person person, Student student, User user)
         {
             await _context.People.AddAsync(person);
             
@@ -87,8 +87,11 @@ namespace MiTutorBEN.ServicesImpl
 			
 			
 			await _context.SaveChangesAsync();
+            
 
-            return true;
+            _logger.LogWarning(user.ToString());
+            
+            return user;
 
 
          
