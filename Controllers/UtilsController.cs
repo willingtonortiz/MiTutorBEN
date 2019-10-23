@@ -13,7 +13,7 @@ namespace MiTutorBEN.Controllers
 	[ApiController]
 	[AllowAnonymous]
 	[Route("api/[controller]")]
-	public class UtilsController
+	public class UtilsController : ControllerBase
 	{
 		private readonly ILogger<UtilsController> _logger;
 		private readonly IUniversityService _universityService;
@@ -252,6 +252,12 @@ namespace MiTutorBEN.Controllers
 
 
 			return "Los datos han sido eliminados";
+		}
+
+		[HttpGet("heartbeat")]
+		public ActionResult<string> HeartBeat()
+		{
+			return Ok();
 		}
 	}
 }
