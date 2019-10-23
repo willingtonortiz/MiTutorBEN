@@ -58,7 +58,7 @@ namespace MiTutorBEN.Controllers
 			
 			
 			
-			_logger.LogWarning(user.ToString());
+		
 
 			
 
