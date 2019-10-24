@@ -12,9 +12,9 @@ namespace MiTutorBEN.Models
         [DataType(DataType.Text)]
         public string Name { get; set; }
 
-        public List<Person> Persons { get; set; } = new List<Person>();
+        public virtual List<Person> Persons { get; set; } = new List<Person>();
 
-        public List<Course> Courses { get; set; } = new List<Course>();
+        public virtual List<Course> Courses { get; set; } = new List<Course>();
 
 
         public University() { }

@@ -72,10 +72,20 @@ namespace MiTutorBEN.ServicesImpl
 		public async Task<Course> FindById(int id)
 		{
 			Course found = await _context.Courses
-				.AsNoTracking()
+				//.AsNoTracking()
 				.FirstOrDefaultAsync(x => x.CourseId == id);
 
 			return found;
+		}
+
+		public async Task<IEnumerable<Course>> FindAllByUniversityId(int universityId)
+		{
+			List<Course> courses = await _context.Courses
+				.AsNoTracking()
+				.Where(x => x.UniversityId == universityId)
+				.ToListAsync();
+
+			return courses;
 		}
 
 		public async Task<Course> FindByUniversityIdAndCourseName(int universityId, string courseName)

@@ -1,8 +1,11 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MiTutorBEN.DTOs;
-using System.Threading.Tasks;
 using MiTutorBEN.Services;
 using MiTutorBEN.Models;
 using MiTutorBEN.ServicesImpl;
@@ -23,7 +26,11 @@ namespace MiTutorBEN.Controllers
 
         private readonly IUserService _userService;
         private readonly ITutorService _tutorService;
-        public TutorsController(MiTutorContext context, ILogger<TutorsController> logger, IUserService userService, ITutorService tutorService)
+        public TutorsController(
+			MiTutorContext context,
+			ILogger<TutorsController> logger, 
+			IUserService userService, 
+			ITutorService tutorService)
         {
             _logger = logger;
             _userService = userService;
@@ -73,14 +80,14 @@ namespace MiTutorBEN.Controllers
             newTutor.Points = 0.0;
             newTutor.Person = foundUser.Person;
             newTutor.Description = "Un nuevo tutor";
-
+			newTutor.Status = "Avaliable";
 
             TutorDTO tutorResponse = new TutorDTO();
             tutorResponse.TutorId = foundUser.UserId;
             tutorResponse.QualificationCount = 0;
             tutorResponse.Points = 0.0;
             tutorResponse.Description = "Un nuevo tutor";
-
+			tutorResponse.Status ="Avaliable";
 
             await _tutorService.Create(newTutor);
             await _context.SaveChangesAsync();

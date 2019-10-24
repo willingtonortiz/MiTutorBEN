@@ -20,7 +20,7 @@ namespace MiTutorBEN.Models
 
 
 		public int TutorId {get; set;}
-		public Tutor Tutor { get; set; }
+		public virtual Tutor Tutor { get; set; }
 
 
 		public AvailabilityDay() { }

@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using MiTutorBEN.Data;
+using MiTutorBEN.Enums;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 
@@ -11,11 +13,22 @@ namespace MiTutorBEN.ServicesImpl
 	public class TutorServiceImpl : ITutorService
 	{
 		private readonly MiTutorContext _context;
+		private readonly ILogger<TutorServiceImpl> _logger;
 
-		public TutorServiceImpl(MiTutorContext context)
+		#region Constructor
+		public TutorServiceImpl(
+			MiTutorContext context,
+			ILogger<TutorServiceImpl> logger
+			)
 		{
 			_context = context;
+			_logger = logger;
 		}
+
+		#endregion
+
+
+		#region Create
 
 		public async Task<Tutor> Create(Tutor t)
 		{
@@ -25,6 +38,11 @@ namespace MiTutorBEN.ServicesImpl
 			await _context.SaveChangesAsync();
 			return t;
 		}
+
+		#endregion
+
+
+		#region DeleteAll
 
 		public async Task DeleteAll()
 		{
@@ -36,6 +54,11 @@ namespace MiTutorBEN.ServicesImpl
 
 			await _context.SaveChangesAsync();
 		}
+
+		#endregion
+
+
+		#region DeleteById
 
 		public async Task<Tutor> DeleteById(int id)
 		{
@@ -56,20 +79,51 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
+		#endregion
+
+
+		#region FindAll
+
 		public async Task<IEnumerable<Tutor>> FindAll()
 		{
 			return await _context.Tutors
 				.AsNoTracking().ToListAsync<Tutor>();
 		}
 
+		#endregion
+
+
+		#region FindAllByUniversityIdAndCouseId
+
+		public async Task<IEnumerable<Tutor>> FindAllByUniversityIdAndCourseId(int universityId, int courseId)
+		{
+			return await _context.Tutors
+				.AsNoTracking()
+				.Where(x =>
+					x.Person.UniversityId == universityId
+					&& x.TutorCourses.Any(y => y.CourseId == courseId)
+					&& x.Status == TutorStatus.AVAILABLE
+				)
+				.ToListAsync();
+		}
+
+		#endregion
+
+
+		#region FindById
 		public async Task<Tutor> FindById(int id)
 		{
 			Tutor found = await _context.Tutors
-				.AsNoTracking()
+				//.AsNoTracking()
 				.FirstOrDefaultAsync(x => x.TutorId == id);
 
 			return found;
 		}
+
+		#endregion
+
+
+		#region Udpate
 
 		public async Task<Tutor> Update(int id, Tutor t)
 		{
@@ -88,5 +142,7 @@ namespace MiTutorBEN.ServicesImpl
 
 			return found;
 		}
+
+		#endregion
 	}
 }

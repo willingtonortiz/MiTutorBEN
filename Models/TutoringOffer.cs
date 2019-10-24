@@ -25,17 +25,17 @@ namespace MiTutorBEN.Models
 
         // Navegation attributes
         public int UniversityId { get; set; }
-        public University University { get; set; }
+        public  virtual University University { get; set; }
 
         public int CourseId { get; set; }
-        public Course Course { get; set; }
+        public  virtual Course Course { get; set; }
 
         public int TutorId { get; set; }
-        public Tutor Tutor { get; set; }
+        public virtual Tutor Tutor { get; set; }
 
-        public List<TopicTutoringOffer> TopicTutoringOffers { get; set; } = new List<TopicTutoringOffer>();
+        public virtual List<TopicTutoringOffer> TopicTutoringOffers { get; set; } = new List<TopicTutoringOffer>();
 
-        public List<TutoringSession> TutoringSessions { get; set; } = new List<TutoringSession>();
+        public virtual List<TutoringSession> TutoringSessions { get; set; } = new List<TutoringSession>();
 
 
         // Methods
