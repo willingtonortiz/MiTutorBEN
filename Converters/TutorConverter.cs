@@ -12,7 +12,8 @@ namespace MiTutorBEN.Converters
 				TutorId = dto.TutorId,
 				QualificationCount = dto.QualificationCount,
 				Points = dto.Points,
-				Description = dto.Description
+				Description = dto.Description,
+				Status = dto.Status
 			};
 
 			return tutor;
@@ -25,7 +26,8 @@ namespace MiTutorBEN.Converters
                 TutorId = entity.TutorId,
 				QualificationCount = entity.QualificationCount,
 				Points = entity.Points,
-				Description = entity.Description
+				Description = entity.Description,
+				Status = entity.Status
 			};
 
 			return tutorDTO;

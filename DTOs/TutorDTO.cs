@@ -6,5 +6,6 @@ namespace MiTutorBEN.DTOs
 		public int QualificationCount { get; set; }
 		public double Points { get; set; }
 		public string Description { get; set; }
+		public string Status { get; set; }
 	}
 }

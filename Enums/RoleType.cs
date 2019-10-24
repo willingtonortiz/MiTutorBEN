@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiTutorBEN.Models
+namespace MiTutorBEN.Enums
 {
 	public static class RoleType
 	{

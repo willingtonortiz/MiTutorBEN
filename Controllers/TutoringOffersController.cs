@@ -18,6 +18,8 @@ namespace MiTutorBEN.Controllers
 	[Route("api/[controller]")]
 	public class TutoringOffersController : ControllerBase
 	{
+		#region Attributes
+
 		private readonly ILogger<TutoringOffersController> _logger;
 		private readonly IUniversityService _universityService;
 		private readonly ITutorService _tutorService;
@@ -30,6 +32,10 @@ namespace MiTutorBEN.Controllers
 		private readonly TutoringOfferResponseConverter _tutoringOfferResponseConverter;
 		private readonly TutoringOfferRequestConverter _tutoringOfferRequestConverter;
 
+		#endregion
+
+
+		#region Constructor
 
 		public TutoringOffersController(
 			ILogger<TutoringOffersController> logger,
@@ -58,7 +64,10 @@ namespace MiTutorBEN.Controllers
 			_tutoringOfferRequestConverter = tutoringOfferRequestConverter;
 		}
 
+		#endregion
 
+
+		#region Create
 
 		[HttpPost("{tutorId}")]
 		public async System.Threading.Tasks.Task<ActionResult<TutoringOfferRequest>> Create([FromBody] TutoringOfferRequest tutoringOfferRequest, int tutorId)
@@ -152,6 +161,10 @@ namespace MiTutorBEN.Controllers
 			return Created($"", _tutoringOfferRequestConverter.FromEntity(TutoringOffer));
 		}
 
+		#endregion
+
+
+		#region FindById
 
 		[HttpGet("{tutoringId}")]
 		public async System.Threading.Tasks.Task<ActionResult<TutoringOfferResponse>> GetTutoring(int tutoringId)
@@ -161,5 +174,8 @@ namespace MiTutorBEN.Controllers
 			TutoringOfferResponse TutoringOfferResponse = _tutoringOfferResponseConverter.FromEntity(TutoringOffer);
 			return TutoringOfferResponse;
 		}
+
+		#endregion
+
 	}
 }
