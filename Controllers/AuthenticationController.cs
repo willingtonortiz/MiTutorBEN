@@ -56,12 +56,6 @@ namespace MiTutorBEN.Controllers
 		public async Task<ActionResult<UserRegisterDTO>> Register([FromBody] UserRegisterDTO user)
 		{
 			
-			
-			
-		
-
-			
-
 			// var userJson = JObject.Parse(user.ToString());
 
 			University university = await _universityService.FindById(user.UniversityId);
@@ -75,9 +69,6 @@ namespace MiTutorBEN.Controllers
 			newPerson.Semester = user.Semester;
 
 
-			
-
-
 			Student newStudent = new Student();
 			newStudent.Points = 0;
 			newStudent.QualificationCount = 0;
@@ -88,20 +79,16 @@ namespace MiTutorBEN.Controllers
 			newUser.Role = "student";
 			newUser.Email = user.Password;
 
-
 			newPerson.User = newUser;
 			newUser.Person = newPerson;
 
-
 			newPerson.UniversityId = user.UniversityId;
 			university.Persons.Add(newPerson);
-
 
 			newPerson.Student = newStudent;
 			newStudent.Person = newPerson;
 
 			User userCreated = await _authService.Register(newPerson, newStudent, newUser);
-
 			
 			return Created($"",_userConverter.FromEntity(userCreated));
 		}
