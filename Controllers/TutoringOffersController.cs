@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using MiTutorBEN.DTOs.Requests;
 using MiTutorBEN.DTOs.Responses;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MiTutorBEN.Controllers
 {
@@ -31,6 +33,7 @@ namespace MiTutorBEN.Controllers
 		private readonly ITopicTutoringOfferService _topicTutoringOfferService;
 		private readonly TutoringOfferResponseConverter _tutoringOfferResponseConverter;
 		private readonly TutoringOfferRequestConverter _tutoringOfferRequestConverter;
+		private readonly TutoringSessionRequestConverter _tutoringSessionRequestConverter;
 
 		#endregion
 
@@ -48,7 +51,8 @@ namespace MiTutorBEN.Controllers
 			ITopicTutoringSessionService topicTutoringSessionService,
 			ITopicTutoringOfferService topicTutoringOfferService,
 			TutoringOfferResponseConverter tutoringOfferResponseConverter,
-			TutoringOfferRequestConverter tutoringOfferRequestConverter
+			TutoringOfferRequestConverter tutoringOfferRequestConverter,
+			TutoringSessionRequestConverter tutoringSessionRequestConverter
 			)
 		{
 			_logger = logger;
@@ -62,26 +66,36 @@ namespace MiTutorBEN.Controllers
 			_topicTutoringOfferService = topicTutoringOfferService;
 			_tutoringOfferResponseConverter = tutoringOfferResponseConverter;
 			_tutoringOfferRequestConverter = tutoringOfferRequestConverter;
+			_tutoringSessionRequestConverter = tutoringSessionRequestConverter;
 		}
 
 		#endregion
 
 
 		#region Create
-
-		[HttpPost("{tutorId}")]
-		public async System.Threading.Tasks.Task<ActionResult<TutoringOfferRequest>> Create([FromBody] TutoringOfferRequest tutoringOfferRequest, int tutorId)
+		/// <summary>
+		/// Create a tutoring offer 
+		/// </summary>
+		/// <remarks>
+		/// Create a tutoring from a request object
+		/// </remarks>
+	
+		/// <response code="201">Tutoring offers created.</response>
+		/// <response code="400">Invalid request</response>
+		/// <response code="500">Internal application error</response>
+		[SwaggerResponse((int)HttpStatusCode.Created, Type = typeof(TutoringOfferRequest))]
+		[SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(TutoringSessionRequest))]
+		[SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(string))]
+		[HttpPost]
+		public async System.Threading.Tasks.Task<ActionResult<TutoringOfferRequest>> Create([FromBody] TutoringOfferRequest tutoringOfferRequest)
 		{
 			var TutoringOffer = _tutoringOfferRequestConverter.FromDto(tutoringOfferRequest);
 
 			DateTime StartTime = tutoringOfferRequest.TutoringSessionRequests.Min(x => x.StartTime);
 			DateTime EndTime = tutoringOfferRequest.TutoringSessionRequests.Max(x => x.EndTime);
 
-			TutoringOffer.TutorId = tutorId;
-
 			TutoringOffer.StartTime = StartTime;
 			TutoringOffer.EndTime = EndTime;
-
 
 			TutoringOffer = _tutoringOfferService.Create(TutoringOffer).Result;
 
@@ -95,14 +109,8 @@ namespace MiTutorBEN.Controllers
 			//CREATE THE SESSIONS FOR THE OFFER
 			foreach (var t in tutoringOfferRequest.TutoringSessionRequests)
 			{
-				TutoringSession = new TutoringSession();
-				TutoringSession.Description = t.Description;
-				TutoringSession.EndTime = t.EndTime;
-				TutoringSession.Place = t.Place;
-				TutoringSession.Price = t.Price;
-				TutoringSession.StartTime = t.StartTime;
+				TutoringSession = _tutoringSessionRequestConverter.FromDto(t);
 				TutoringSession.TutoringOfferId = TutoringOffer.TutoringOfferId;
-
 
 				TutoringSession = _tutoringSessionService.Create(TutoringSession).Result;
 
@@ -160,19 +168,34 @@ namespace MiTutorBEN.Controllers
 
 			return Created($"", _tutoringOfferRequestConverter.FromEntity(TutoringOffer));
 		}
-
 		#endregion
 
 
 		#region FindById
-
+		/// <summary>
+		/// Find tutorings sessions by id
+		/// </summary>
+		/// <remarks>
+		/// Find tutorings sessions by id 
+		/// </remarks>
+		/// <param name="tutoringId">The id of the tutoring offer</param>
+		/// <response code="200">Tutoring offers found.</response>
+		/// <response code="404">ITutoring offer not found</response>
+		/// <response code="500">Internal application error</response>
+		[SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(TutoringOfferRequest))]
+		[SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(string))]
+		[SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(string))]
 		[HttpGet("{tutoringId}")]
 		public async System.Threading.Tasks.Task<ActionResult<TutoringOfferResponse>> GetTutoring(int tutoringId)
 		{
 			TutoringOffer TutoringOffer = await _tutoringOfferService.FindById(tutoringId);
-			Tutor t = TutoringOffer.Tutor;
+
+			if(TutoringOffer!=null){
 			TutoringOfferResponse TutoringOfferResponse = _tutoringOfferResponseConverter.FromEntity(TutoringOffer);
-			return TutoringOfferResponse;
+			return Ok(TutoringOfferResponse);
+			} else{
+				return NotFound("Not found");
+			}
 		}
 
 		#endregion

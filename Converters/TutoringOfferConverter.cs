@@ -9,11 +9,11 @@ namespace MiTutorBEN.Converters
 		{
 			TutoringOffer tutoringOffer = new TutoringOffer
 			{
-				TutoringOfferId = dto.TutoringOfferId,
 				StartTime = dto.StartTime,
 				EndTime = dto.EndTime,
 				Capacity = dto.Capacity,
-				Description = dto.Description
+				Description = dto.Description,
+				TutorId = dto.TutorId
 			};
 
 			return tutoringOffer;
