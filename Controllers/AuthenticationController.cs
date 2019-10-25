@@ -13,7 +13,6 @@ using System;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace MiTutorBEN.Controllers
-
 {
 	[Authorize]
 	[ApiController]
@@ -64,22 +63,38 @@ namespace MiTutorBEN.Controllers
 		}
 
 
-		[AllowAnonymous]
+		/// <summary>
+		/// Register user
+		/// </summary>
+		/// <param name="user">The user for register</param>  
+		/// <response code="201">Returns the new created user</response>
+		/// <response code="400">The request was invalid</response>
+		/// <response code="500">Internet application error</response>
 		[HttpPost]
 		[Route("Register")]
-		public async Task<ActionResult<UserRegisterDTO>> Register([FromBody] UserRegisterDTO user)
+		[ProducesResponseType(201)]
+		[ProducesResponseType(400)]
+		[ProducesResponseType(500)]
+		[Produces("application/json")]
+
+		public async Task<ActionResult<UserDTO>> Register(
+			[FromBody] UserRegisterDTO user
+			)
 		{
-			/* ===== VALIDAR QUE LA UNIVERSIDAD EXISTA ===== */
+			/* SE DEBE VERIFICAR QUE LA UNIVERSIDAD EXISTA, ARREGLAR */
 			University university = await _universityService.FindById(user.UniversityId);
+
 
 			Person newPerson = new Person();
 			newPerson.Name = user.Name;
 			newPerson.LastName = user.LastName;
 			newPerson.Semester = user.Semester;
 
+
 			Student newStudent = new Student();
 			newStudent.Points = 0;
 			newStudent.QualificationCount = 0;
+
 
 			User newUser = new User();
 			newUser.Username = user.Username;
@@ -98,9 +113,10 @@ namespace MiTutorBEN.Controllers
 
 			User userCreated = await _authService.Register(newPerson, newStudent, newUser);
 
-			/* ===== SE DEBE ENVIAR UN URI CORRECTO, O NO ENVIARLO ===== */
+			/* NO SE DEBE ENVIAR UNA URI VACIA, ARREGLAR */
 			return Created("", _userConverter.FromEntity(userCreated));
 		}
+
 
 		public string CypherText(string text)
 		{
@@ -119,7 +135,7 @@ namespace MiTutorBEN.Controllers
 				numBytesRequested: 256 / 5
 			));
 
-            return hashedText;
+			return hashedText;
 		}
 	}
 }

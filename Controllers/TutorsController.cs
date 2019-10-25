@@ -27,16 +27,21 @@ namespace MiTutorBEN.Controllers
         private readonly IUserService _userService;
         private readonly ITutorService _tutorService;
         public TutorsController(
-			MiTutorContext context,
-			ILogger<TutorsController> logger, 
-			IUserService userService, 
-			ITutorService tutorService)
+            MiTutorContext context,
+            ILogger<TutorsController> logger,
+            IUserService userService,
+            ITutorService tutorService)
         {
             _logger = logger;
             _userService = userService;
             _tutorService = tutorService;
             _context = context;
         }
+
+        /// <summary>
+        /// Tutor Subscription
+        /// </summary>
+        /// <param name="id">The id of tutor</param>  
 
         [AllowAnonymous]
         [HttpGet("{id}")]
@@ -54,11 +59,19 @@ namespace MiTutorBEN.Controllers
 
 
 
-
+        /// <summary>
+        /// Tutor Subscription
+        /// </summary>
+        /// <param name="membershipDTO">The credentials for subscription</param>  
+        /// <response code="201">Returns the new created tutor</response>
+        /// <response code="500">Internet application error</response>
+        /// <response code="404">The user not found</response>
         [AllowAnonymous]
         [HttpPost]
         [Route("Subscription")]
-
+        [ProducesResponseType(201)]
+        
+        [Produces("application/json")]
         public async Task<ActionResult<TutorDTO>> Subscription([FromBody] MembershipDTO membershipDTO)
         {
 
@@ -80,21 +93,21 @@ namespace MiTutorBEN.Controllers
             newTutor.Points = 0.0;
             newTutor.Person = foundUser.Person;
             newTutor.Description = "Un nuevo tutor";
-			newTutor.Status = "Avaliable";
+            newTutor.Status = "Avaliable";
 
             TutorDTO tutorResponse = new TutorDTO();
             tutorResponse.TutorId = foundUser.UserId;
             tutorResponse.QualificationCount = 0;
             tutorResponse.Points = 0.0;
             tutorResponse.Description = "Un nuevo tutor";
-			tutorResponse.Status ="Avaliable";
+            tutorResponse.Status = "Avaliable";
 
             await _tutorService.Create(newTutor);
             await _context.SaveChangesAsync();
 
 
 
-            return CreatedAtAction("GetTutor", new { id = tutorResponse.TutorId }, tutorResponse);
+            return Created($"", tutorResponse);
 
 
         }
