@@ -29,11 +29,14 @@ namespace MiTutorBEN.ServicesImpl
 			return t;
 		}
 
-		public bool UserNameValid(string username)
+		public async Task<bool> UserNameValid(string username)
 		{
-			User personWithThisUsername = _context.Users.
+			User personWithThisUsername = await _context.Users.
 			AsNoTracking().
-			FirstOrDefault(x => x.Username == username);
+			FirstOrDefaultAsync(x => x.Username == username);
+
+		
+
 			if (personWithThisUsername != null)
 			{
 
@@ -46,10 +49,10 @@ namespace MiTutorBEN.ServicesImpl
 			}
 		}
 
-		public bool EmailValid(string email)
+		public async Task<bool> EmailValid(string email)
 		{
-			User personWithThisEmail = _context.Users.AsNoTracking().
-										FirstOrDefault(x => x.Email == email);
+			User personWithThisEmail = await _context.Users.AsNoTracking().
+										FirstOrDefaultAsync(x => x.Email == email);
 
 			if (personWithThisEmail != null)
 			{

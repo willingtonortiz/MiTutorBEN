@@ -9,7 +9,7 @@ namespace MiTutorBEN.Converters
 		{
 			Topic topic = new Topic
 			{
-				TopicId = dto.TopicId,
+				TopicId = dto.Id,
 				Name = dto.Name
 			};
 
@@ -20,7 +20,7 @@ namespace MiTutorBEN.Converters
 		{
 			TopicDTO topicDTO = new TopicDTO
 			{
-				TopicId = entity.TopicId,
+				Id = entity.TopicId,
 				Name = entity.Name
 			};
 

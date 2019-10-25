@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MiTutorBEN.Data;
+using MiTutorBEN.Enums;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 
@@ -13,8 +14,10 @@ namespace MiTutorBEN.Controllers
 	[ApiController]
 	[AllowAnonymous]
 	[Route("api/[controller]")]
-	public class UtilsController
+	public class UtilsController : ControllerBase
 	{
+		#region Attributes
+
 		private readonly ILogger<UtilsController> _logger;
 		private readonly IUniversityService _universityService;
 		private readonly IPersonService _personService;
@@ -23,6 +26,11 @@ namespace MiTutorBEN.Controllers
 		private readonly ICourseService _courseService;
 		private readonly ITopicService _topicService;
 		private readonly ITutorService _tutorService;
+
+		#endregion
+
+
+		#region Constructor
 
 		public UtilsController(
 			ILogger<UtilsController> logger,
@@ -45,6 +53,10 @@ namespace MiTutorBEN.Controllers
 			_topicService = topicService;
 		}
 
+		#endregion
+
+
+		#region GenerateData
 
 		[HttpGet("generateData")]
 		public async Task<ActionResult<string>> GenerateData()
@@ -68,7 +80,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("Universities created");
+			// _logger.LogWarning("Universities created");
 
 			#region Course
 
@@ -94,7 +106,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("Courses created");
+			// _logger.LogWarning("Courses created");
 
 			#region Topic
 
@@ -120,7 +132,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("Topics created");
+			// _logger.LogWarning("Topics created");
 
 			#region Person
 
@@ -152,7 +164,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("People created");
+			// _logger.LogWarning("People created");
 
 			#region User
 
@@ -187,7 +199,7 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("Users created");
+			// _logger.LogWarning("Users created");
 
 			#region Tutor
 
@@ -197,13 +209,18 @@ namespace MiTutorBEN.Controllers
 				Description = "Tutor de calculo",
 				Points = 3.06,
 				QualificationCount = 50,
-				Person = person1
+				Person = person1,
+				Status = TutorStatus.AVAILABLE,
 			};
+			tutor1.TutorCourses.Add(new TutorCourse
+			{
+				CourseId = course1.CourseId
+			});
 			await _tutorService.Create(tutor1);
 
 			#endregion
 
-			_logger.LogWarning("Tutors created");
+			// _logger.LogWarning("Tutors created");
 
 			#region TutoringOffer
 
@@ -234,24 +251,41 @@ namespace MiTutorBEN.Controllers
 
 			#endregion
 
-			_logger.LogWarning("TutoringOffers created");
+			// _logger.LogWarning("TutoringOffers created");
 
 			return "Datos de prueba cargados";
 		}
 
-		[HttpGet("deleteData")]
-		public ActionResult<string> DeleteData()
-		{
-			_tutoringOfferService.DeleteAll();
-			_tutorService.DeleteAll();
-			_userService.DeleteAll();
-			_personService.DeleteAll();
-			_topicService.DeleteAll();
-			_courseService.DeleteAll();
-			_universityService.DeleteAll();
+		#endregion
 
+
+		#region DeleteData
+
+		[HttpGet("deleteData")]
+		public async Task<ActionResult<string>> DeleteData()
+		{
+			await _tutoringOfferService.DeleteAll();
+			await _tutorService.DeleteAll();
+			await _userService.DeleteAll();
+			await _personService.DeleteAll();
+			await _topicService.DeleteAll();
+			await _courseService.DeleteAll();
+			await _universityService.DeleteAll();
 
 			return "Los datos han sido eliminados";
 		}
+
+		#endregion
+
+
+		#region HeartBeat
+
+		[HttpGet("heartbeat")]
+		public ActionResult<string> HeartBeat()
+		{
+			return Ok();
+		}
+
+		#endregion
 	}
 }

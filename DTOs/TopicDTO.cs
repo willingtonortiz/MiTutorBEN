@@ -2,7 +2,7 @@ namespace MiTutorBEN.DTOs
 {
     public class TopicDTO
     {
-        public int TopicId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
     }
 }

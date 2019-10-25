@@ -8,6 +8,7 @@ namespace MiTutorBEN.Models
     public class Tutor
     {
         // Entity attributes
+        #region Entity Attributes
         [Key]
         [ForeignKey("Person")]
         public int TutorId { get; set; }
@@ -18,6 +19,10 @@ namespace MiTutorBEN.Models
 
         [DataType(DataType.Text)]
         public string Description { get; set; }
+
+        public string Status { get; set; }
+            
+        #endregion
 
 
         // Navigation attributes

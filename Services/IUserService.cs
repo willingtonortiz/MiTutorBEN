@@ -1,10 +1,12 @@
 using MiTutorBEN.DTOs;
 using MiTutorBEN.Models;
+using System.Threading.Tasks;
+
 namespace MiTutorBEN.Services
 {
 	public interface IUserService : ICrudService<User>
 	{
-		bool UserNameValid(string username);
-		bool EmailValid(string email);
+		Task<bool> UserNameValid(string username);
+		Task<bool> EmailValid(string email);
 	}
 }

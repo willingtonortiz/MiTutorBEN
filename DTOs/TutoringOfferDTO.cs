@@ -9,6 +9,7 @@ namespace MiTutorBEN.DTOs
         public DateTime EndTime { get; set; }
         public int Capacity { get; set; }
         public string Description { get; set; }
+        public int TutorId { get; set; }
         
     }
 }
