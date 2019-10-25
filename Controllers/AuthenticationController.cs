@@ -7,104 +7,94 @@ using MiTutorBEN.Services;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MiTutorBEN.Converters;
 
 namespace MiTutorBEN.Controllers
 
 {
-	[Authorize]
-	[ApiController]
-	[Route("[controller]")]
-	public class AuthenticationController : ControllerBase
-	{
-		private readonly IAuthService _authService;
-		private readonly ILogger<AuthenticationController> _logger;
-		private readonly IUserService _userService;
+    [Authorize]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AuthenticationController : ControllerBase
+    {
+        private readonly IAuthService _authService;
+        private readonly ILogger<AuthenticationController> _logger;
+        private readonly IUserService _userService;
 
-		private readonly IUniversityService _universityService;
+        private readonly IUniversityService _universityService;
 
-		public AuthenticationController(
-			IAuthService authService,
-			ILogger<AuthenticationController> logger,
-			IUniversityService universityService,
-			IUserService userService
-			)
-		{
-			_authService = authService;
-			_universityService = universityService;
-			_logger = logger;
-			_userService = userService;
-		}
-
-
-		[AllowAnonymous]
-		[HttpPost]
-		public IActionResult Authenticate([FromBody] User userParam)
-		{
-			UserAuthDTO user = _authService.Authenticate(userParam.Username, userParam.Password);
-
-			if (user == null)
-			{
-				return BadRequest(new { message = "Nombre de usuario o contraseña incorrectos" });
-			}
-
-			return Ok(user);
-		}
+        private readonly UserConverter _userConverter;
+        public AuthenticationController(
+            UserConverter userConverter,
+            IAuthService authService,
+            ILogger<AuthenticationController> logger,
+            IUniversityService universityService,
+        	IUserService userService)
+        {
+            _authService = authService;
+            _universityService = universityService;
+            _logger = logger;
+            _userService = userService;
+            _userConverter = userConverter;
+        }
 
 
-		[AllowAnonymous]
-		[HttpPost]
-		[Route("Register")]
-		public async Task<IActionResult> Register([FromBody] object sd)
-		{
-			var ob = JObject.Parse(sd.ToString());
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Authenticate([FromBody] User userParam)
+        {
+            UserAuthDTO user = _authService.Authenticate(userParam.Username, userParam.Password);
 
-			//_userService.GetPerson(3);
+            if (user == null)
+            {
+                return BadRequest(new { message = "Nombre de usuario o contraseña incorrectos" });
+            }
 
-			_logger.LogWarning("Estas enviando un usuario");
-			//_logger.LogWarning(ob.ToString());
-
-			// _logger.LogWarning(newUser.Password.ToString());
-
-			// _authService.RegisterUser(newUser);
-
-			University university = await _universityService.FindById(ob["person"]["UniversityId"].ToObject<int>());
-
-			university.Persons = new List<Person>();
-
-			_logger.LogWarning(university.UniversityId.ToString());
-			Person newPerson = new Person();
-
-			newPerson.Name = ob["person"]["Name"].ToObject<string>();
-			newPerson.LastName = ob["person"]["LastName"].ToObject<string>();
-			newPerson.Semester = ob["person"]["Semester"].ToObject<int>();
+            return Ok(user);
+        }
 
 
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("Register")]
+        public async Task<ActionResult<UserRegisterDTO>> Register([FromBody] UserRegisterDTO user)
+        {
 
-			Student newStudent = new Student();
-			newStudent.Points = 0;
-			newStudent.QualificationCount = 0;
+            // var userJson = JObject.Parse(user.ToString());
 
-			User newUser = new User();
-			newUser.Username = ob["user"]["Username"].ToObject<string>();
-			newUser.Password = ob["user"]["Password"].ToObject<string>();
-			newUser.Role = ob["user"]["Role"].ToObject<string>();
-			newUser.Email = ob["user"]["Email"].ToObject<string>();
-
-
-			newPerson.User = newUser;
-			newUser.Person = newPerson;
+            University university = await _universityService.FindById(user.UniversityId);
 
 
-			newPerson.UniversityId = ob["person"]["UniversityId"].ToObject<int>();
-			university.Persons.Add(newPerson);
+            Person newPerson = new Person();
 
 
-			newPerson.Student = newStudent;
-			newStudent.Person = newPerson;
+            newPerson.Name = user.Name;
+            newPerson.LastName = user.LastName;
+            newPerson.Semester = user.Semester;
 
 
-			_authService.Register(newPerson, newStudent, newUser);
-			return Ok(true);
-		}
-	}
+            Student newStudent = new Student();
+            newStudent.Points = 0;
+            newStudent.QualificationCount = 0;
+
+            User newUser = new User();
+            newUser.Username = user.Username;
+            newUser.Password = user.Password;
+            newUser.Role = "student";
+            newUser.Email = user.Password;
+
+            newPerson.User = newUser;
+            newUser.Person = newPerson;
+
+            newPerson.UniversityId = user.UniversityId;
+            university.Persons.Add(newPerson);
+
+            newPerson.Student = newStudent;
+            newStudent.Person = newPerson;
+
+            User userCreated = await _authService.Register(newPerson, newStudent, newUser);
+
+            return Created($"", _userConverter.FromEntity(userCreated));
+        }
+    }
 }

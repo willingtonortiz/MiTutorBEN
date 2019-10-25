@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -73,19 +74,24 @@ namespace MiTutorBEN.ServicesImpl
             return user;
         }
 
-        public void Register(Person person, Student student, User user)
+        public async Task<User> Register(Person person, Student student, User user)
         {
-            _context.People.Add(person);
+            await _context.People.AddAsync(person);
             
 
-            _context.Users.Add(user);
+            await _context.Users.AddAsync(user);
             
 			
-            _context.Students.Add(student);
+            await _context.Students.AddAsync(student);
             
 			
 			
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
+            
+
+            _logger.LogWarning(user.ToString());
+            
+            return user;
 
 
          
