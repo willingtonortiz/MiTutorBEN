@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +12,11 @@ using MiTutorBEN.DTOs;
 using MiTutorBEN.DTOs.Responses;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MiTutorBEN.Controllers
 {
+	[Produces("application/json")]
 	[ApiController]
 	[AllowAnonymous]
 	[Route("api/[controller]")]
@@ -135,8 +139,25 @@ namespace MiTutorBEN.Controllers
 
 		#region FindTutoringOffersByUniversityIdAndCourseId
 
+		/// <summary>
+		/// Finds all tutoring offers by university id and course id
+		/// </summary>
+		/// <remarks>
+		/// Finds all tutoring offers related to an university and course
+		/// </remarks>
+		/// <param name="universityId">The id of the university</param>
+		/// <param name="courseId">The id of the course</param>
+		/// <response code="200">Tutoring offers found.</response>
+		/// <response code="404">University or course not found</response>
+		/// <response code="500">Internal application error</response>
+		[SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<CourseDTO>))]
+		[SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(string))]
+		[SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(string))]
 		[HttpGet("{universityId}/courses/{courseId}/tutoringoffers")]
-		public async Task<ActionResult<List<TutoringOfferResponse>>> FindTutoringOffersByUniversityIdAndCourseId(int universityId, int courseId)
+		public async Task<ActionResult<List<TutoringOfferResponse>>> FindTutoringOffersByUniversityIdAndCourseId(
+			[FromRoute] int universityId, 
+			[FromRoute] int courseId
+			)
 		{
 
 			University foundUniversity = await _universityService.FindById(universityId);
@@ -169,6 +190,20 @@ namespace MiTutorBEN.Controllers
 
 		#region FindCoursesByUniversityId
 
+		/// <summary>
+		/// Finds all courses in an university
+		/// </summary>
+		/// <remarks>
+		/// Finds all courses in an university specified by an id 
+		/// </remarks>
+		/// <param name="universityId">The id of the university</param>
+		/// <param name="courseName">The name of the course</param>
+		/// <response code="200">Courses found.</response>
+		/// <response code="404">If the course name is provided. The course with that name is not found</response>
+		/// <response code="500">Internal application error</response>
+		[SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(IEnumerable<CourseDTO>))]
+		[SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(string))]
+		[SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(string))]
 		[HttpGet("{universityId}/courses")]
 		public async Task<ActionResult<IEnumerable<CourseDTO>>> FindCoursesByUniversityId(
 			[FromRoute] int universityId,
@@ -177,7 +212,6 @@ namespace MiTutorBEN.Controllers
 		{
 			if (courseName == null)
 			{
-
 				IEnumerable<Course> courses = await _courseService.FindAllByUniversityId(universityId);
 
 				IEnumerable<CourseDTO> coursesDTO = courses
@@ -192,14 +226,13 @@ namespace MiTutorBEN.Controllers
 
 				if (course == null)
 				{
-					return NotFound(new { message = "Course not found" });
+					return NotFound("Course not found");
 				}
 
 				List<CourseDTO> coursesDTO = new List<CourseDTO>();
 				coursesDTO.Add(_courseConverter.FromEntity(course));
 
 				return Ok(coursesDTO);
-
 			}
 		}
 
@@ -208,14 +241,23 @@ namespace MiTutorBEN.Controllers
 
 		#region FindTutorsByUniversityIdAndCourseId
 
+
 		/// <summary>
-		/// Finds all tutors by an university id and course id
+		/// Finds tutors by an university id and course id
 		/// </summary>
+		/// <remarks>
+		/// Finds all tutors who teaches in a specific university an a specific course
+		/// </remarks>
+		/// <param name="universityId">The id of the university where tutors teaches</param>
+		/// <param name="courseId">The id of the course which is taught by the tutor</param>
+		/// <response code="200">Tutors found.</response>
+		/// <response code="404">University id or course id not found</response>
+		/// <response code="500">Internal application error</response>
+		[SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(List<TutorDTO>))]
+		[SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(string))]
+		[SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(string))]
 		[HttpGet("{universityId}/courses/{courseId}/tutors")]
-		[ProducesResponseType(200)]
-		[ProducesResponseType(404)]
-		[Produces("application/json")]
-		public async Task<ActionResult<List<Tutor>>> FindTutorsByUniversityIdAndCourseId(
+		public async Task<ActionResult<List<TutorDTO>>> FindTutorsByUniversityIdAndCourseId(
 			[FromRoute] int universityId,
 			[FromRoute] int courseId
 		)
@@ -223,13 +265,13 @@ namespace MiTutorBEN.Controllers
 			University foundUniversity = await _universityService.FindById(universityId);
 			if (foundUniversity == null)
 			{
-				return NotFound(new { message = "University not found" });
+				return NotFound("University not found");
 			}
 
 			Course foundCourse = await _courseService.FindById(courseId);
 			if (foundCourse == null)
 			{
-				return NotFound(new { message = "Course not found" });
+				return NotFound("Course not found");
 			}
 
 			IEnumerable<Tutor> tutors = await _tutorService.FindAllByUniversityIdAndCourseId(universityId, courseId);
