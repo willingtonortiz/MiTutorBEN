@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -72,15 +73,14 @@ namespace MiTutorBEN.Controllers
 
 
 
-        [HttpPost("{tutorId}")]
-        public async System.Threading.Tasks.Task<ActionResult<TutoringOfferRequest>> Create([FromBody] TutoringOfferRequest tutoringOfferRequest, int tutorId)
+        [HttpPost]
+        public async Task<ActionResult<TutoringOfferRequest>> Create([FromBody] TutoringOfferRequest tutoringOfferRequest, int tutorId)
         {
             var TutoringOffer =  _tutoringOfferRequestConverter.FromDto(tutoringOfferRequest);
 
             DateTime StartTime = tutoringOfferRequest.TutoringSessionRequests.Min(x => x.StartTime);
             DateTime EndTime = tutoringOfferRequest.TutoringSessionRequests.Max(x => x.EndTime);
 
-            TutoringOffer.TutorId = tutorId;
 
             TutoringOffer.StartTime = StartTime;
             TutoringOffer.EndTime = EndTime;
@@ -166,7 +166,7 @@ namespace MiTutorBEN.Controllers
 
 
          [HttpGet("{tutoringId}")]
-          public async System.Threading.Tasks.Task<ActionResult<TutoringOfferResponse>> GetTutoring(int tutoringId)
+          public async Task<ActionResult<TutoringOfferResponse>> GetTutoring(int tutoringId)
           {
             TutoringOffer TutoringOffer =  await _tutoringOfferService.FindById(tutoringId);
             Tutor t =TutoringOffer.Tutor;

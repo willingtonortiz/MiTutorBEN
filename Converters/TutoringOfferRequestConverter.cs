@@ -10,17 +10,10 @@ namespace MiTutorBEN.Converters
 
     public class TutoringOfferRequestConverter : IConverter<TutoringOffer, TutoringOfferRequest>
     {
-        public TutoringOfferRequestConverter(
-           
-        )
-        {
-        
-        }
+        public TutoringOfferRequestConverter() {}
 
         public TutoringOffer FromDto(TutoringOfferRequest dto)
         {
-           
-
             TutoringOffer TutoringOffer = new TutoringOffer
 			{
 				Capacity = dto.Capacity,
