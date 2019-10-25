@@ -29,7 +29,7 @@ namespace MiTutorBEN.Controllers
             IAuthService authService,
             ILogger<AuthenticationController> logger,
             IUniversityService universityService,
-        	IUserService userService)
+            IUserService userService)
         {
             _authService = authService;
             _universityService = universityService;
@@ -54,16 +54,29 @@ namespace MiTutorBEN.Controllers
         }
 
 
+
+
+        /// <summary>
+        /// Register user
+        /// </summary>
+        /// <param name="user">The user for register</param>  
+        /// <response code="201">Returns the new created user</response>
+        /// <response code="500">Internet application error</response>
+        /// <response code="400">The request was invalid</response>
         [AllowAnonymous]
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult<UserRegisterDTO>> Register([FromBody] UserRegisterDTO user)
+        [ProducesResponseType(201)]
+        [Produces("application/json")]
+        
+        public async Task<ActionResult<UserDTO>> Register([FromBody] UserRegisterDTO user)
         {
 
             // var userJson = JObject.Parse(user.ToString());
 
             University university = await _universityService.FindById(user.UniversityId);
 
+            
 
             Person newPerson = new Person();
 

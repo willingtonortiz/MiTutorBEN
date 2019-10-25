@@ -16,6 +16,10 @@ using MiTutorBEN.Helpers;
 using MiTutorBEN.Services;
 using MiTutorBEN.ServicesImpl;
 using Newtonsoft.Json;
+using System;
+using System.Reflection;
+using System.IO;
+
 
 namespace MiTutorBEN
 {
@@ -68,12 +72,12 @@ namespace MiTutorBEN
             services.AddScoped<ITutorService, TutorServiceImpl>();
             services.AddScoped<IUniversityService, UniversityServiceImpl>();
             services.AddScoped<IUserService, UserServiceImpl>();
-			services.AddScoped<ITutoringSessionService, TutoringSessionServiceImpl>();
+            services.AddScoped<ITutoringSessionService, TutoringSessionServiceImpl>();
             services.AddScoped<ITopicTutoringOfferService, TopicTutoringOfferServiceImpl>();
             services.AddScoped<ITopicTutoringSessionService, TopicTutoringSessionServiceImpl>();
-            
-            
-            
+
+
+
             // Converters
             services.AddScoped<AuthUserConverter>();
             services.AddScoped<CourseConverter>();
@@ -99,11 +103,11 @@ namespace MiTutorBEN
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
 
-			// Configuracion del automapper
+            // Configuracion del automapper
             var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
-			
+
             // Swagger
             services.AddSwaggerGen(c =>
             {
@@ -112,6 +116,10 @@ namespace MiTutorBEN
                     Version = "v1",
                     Title = "MiTutor",
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
         }
