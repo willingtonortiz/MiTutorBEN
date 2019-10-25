@@ -5,5 +5,6 @@ namespace MiTutorBEN.DTOs
 		public int CourseId { get; set; }
 		public string Name { get; set; }
 
+		public CourseDTO() { }
 	}
 }
