@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -153,10 +152,10 @@ namespace MiTutorBEN.Controllers
 
 		#region FindById
 		/// <summary>
-		/// Find tutorings sessions by id
+		/// Find tutorings offers by id
 		/// </summary>
 		/// <remarks>
-		/// Find tutorings sessions by id 
+		/// Find tutorings offers by id as a param variable 
 		/// </remarks>
 		/// <param name="tutoringId">The id of the tutoring offer</param>
 		/// <response code="200">Tutoring offers found.</response>

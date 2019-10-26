@@ -10,7 +10,7 @@ namespace MiTutorBEN.DTOs.Requests
         public int UniversityId { get; set; }
         public int CourseId { get; set; }
 		public int TutorId {get; set; }
-        public List<TutoringSessionRequest> TutoringSessionRequests { get; set; }
+        public List<TutoringSessionRequest> TutoringSessionRequests { get; set; } = new List<TutoringSessionRequest>();
         
     }
 }

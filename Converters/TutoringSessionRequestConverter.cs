@@ -22,7 +22,21 @@ namespace MiTutorBEN.Converters
 
         public TutoringSessionRequest FromEntity(TutoringSession entity)
         {
-            throw new System.NotImplementedException();
+            TutoringSessionRequest tutoringSessionRequest = new TutoringSessionRequest
+            {
+                Place = entity.Place,
+                StartTime = entity.StartTime,
+                EndTime = entity.EndTime,
+                Description = entity.Description,
+                Price = entity.Price
+            };
+
+            foreach(var i in entity.TopicTutoringSessions)
+            {
+                tutoringSessionRequest.Topics.Add(i.TopicId);
+            }
+
+            return tutoringSessionRequest;
         }
     }
 
