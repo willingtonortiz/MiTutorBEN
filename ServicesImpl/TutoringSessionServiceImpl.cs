@@ -52,21 +52,31 @@ namespace MiTutorBEN.ServicesImpl
             throw new NotImplementedException();
         }
 
+        public async void SaveAsync()
+        {
+           await _context.SaveChangesAsync();
+        }
+
         public async Task<TutoringSession> Update(int id, TutoringSession t)
         {
 
-            if (_context.TutoringSessions.Any(t => t.TutoringSessionId == id))
-            {
-                TutoringSession found = _context.TutoringSessions
-                .Update(t).Entity;
+          TutoringSession found = await _context.TutoringSessions
+			
+				.FirstOrDefaultAsync(x => x.TutoringSessionId == id);
 
-                await _context.SaveChangesAsync();
-                return found;
-            }
-            else
-            {
-                return null;
-            }
+			if (found == null)
+			{
+				return null;
+			}
+
+			_context.TutoringSessions
+				.Update(t);
+
+			await _context.SaveChangesAsync();
+
+			return found;
         }
+
+    
     }
 }

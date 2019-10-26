@@ -8,5 +8,6 @@ namespace MiTutorBEN.Services
 	public interface ITutoringSessionService : ICrudService<TutoringSession>
 	{
         bool Any(Func<TutoringSession,bool> criteria);
+		void SaveAsync();
 	}
 }

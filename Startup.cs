@@ -95,20 +95,15 @@ namespace MiTutorBEN
 			// Base de datos
 			services.AddDbContext<MiTutorContext>(options =>
 			{
-				options.UseLazyLoadingProxies().
+				options/*.UseLazyLoadingProxies().*/.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking).
 				UseNpgsql(Configuration.GetConnectionString("PostgresqlConnection"));
+				
 			});
 
 			// Evitando ciclos en las queries
 			services.AddMvc(options => options.EnableEndpointRouting = false)
 				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
 				.AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-
-
-			// Configuracion del automapper
-			var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
-			IMapper mapper = mappingConfig.CreateMapper();
-			services.AddSingleton(mapper);
 
 			// Swagger
 			services.AddSwaggerGen(c =>

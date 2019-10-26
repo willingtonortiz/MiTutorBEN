@@ -6,5 +6,6 @@ namespace MiTutorBEN.Services
 {
 	public interface ITopicTutoringOfferService: ICrudService<TopicTutoringOffer>
 	{
+		
 	}
 }

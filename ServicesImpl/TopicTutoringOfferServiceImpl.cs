@@ -23,7 +23,9 @@ namespace MiTutorBEN.ServicesImpl
 				.AddAsync(t);
 
 			await _context.SaveChangesAsync();
+
 			return t;
+             
         }
 
         public Task DeleteAll()
@@ -45,6 +47,7 @@ namespace MiTutorBEN.ServicesImpl
         {
             throw new System.NotImplementedException();
         }
+
 
         public Task<TopicTutoringOffer> Update(int id, TopicTutoringOffer t)
         {

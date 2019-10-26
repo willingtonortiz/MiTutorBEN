@@ -117,7 +117,7 @@ namespace MiTutorBEN.Controllers
 			return Created("", _userConverter.FromEntity(userCreated));
 		}
 
-
+		/* 
 		public string CypherText(string text)
 		{
 			byte[] salt = new byte[128 / 8];
@@ -137,5 +137,6 @@ namespace MiTutorBEN.Controllers
 
 			return hashedText;
 		}
+		*/
 	}
 }

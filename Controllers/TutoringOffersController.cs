@@ -97,12 +97,11 @@ namespace MiTutorBEN.Controllers
 			TutoringOffer.StartTime = StartTime;
 			TutoringOffer.EndTime = EndTime;
 
-			TutoringOffer = _tutoringOfferService.Create(TutoringOffer).Result;
+			await _tutoringOfferService.Create(TutoringOffer);
 
 			TutoringSession TutoringSession = null;
 			TopicTutoringSession TopicTutoringSession = null;
 			TopicTutoringOffer TopicTutoringOffer = null;
-			Topic Topic = null;
 			HashSet<int> Topics = new HashSet<int>();
 
 
@@ -112,43 +111,30 @@ namespace MiTutorBEN.Controllers
 				TutoringSession = _tutoringSessionRequestConverter.FromDto(t);
 				TutoringSession.TutoringOfferId = TutoringOffer.TutoringOfferId;
 
-				TutoringSession = _tutoringSessionService.Create(TutoringSession).Result;
+				await _tutoringSessionService.Create(TutoringSession);
 
 				foreach (var id in t.Topics)
 				{
 					//SAVE TOPIC TUTORING SESSION WITH HIS SERVICE 
-					Topic = _topicService.FindById(id).Result;
 					TopicTutoringSession = new TopicTutoringSession();
 
 					TopicTutoringSession.TopicId = id;
 					TopicTutoringSession.TutoringSessionId = TutoringSession.TutoringSessionId;
 
-					await _topicTutoringSessionService.Create(TopicTutoringSession);
+					TopicTutoringSession = await _topicTutoringSessionService.Create(TopicTutoringSession);
 
-
-					//Save TTS IN TUTORING SESSION AND TOPIC
-
-					TutoringSession.TopicTutoringSessions.Add(TopicTutoringSession);
-					Topic.TopicTutoringSessions.Add(TopicTutoringSession);
-
-					await _topicService.Update(Topic.TopicId, Topic);
-
-					//SAVE TOPIC IN SET
-					Topics.Add(Topic.TopicId);
+					Topics.Add(id);
 				}
 
-				await _tutoringSessionService.Update(TutoringSession.TutoringSessionId, TutoringSession);
-
-				TutoringOffer.TutoringSessions.Add(TutoringSession);
+				_tutoringSessionService.SaveAsync();
 			}
 
-			TutoringOffer = await _tutoringOfferService.Update(TutoringOffer.TutoringOfferId, TutoringOffer);
+			_tutoringOfferService.Save();
 
 
 			//OFFER SESSIONS
 			foreach (var t in Topics)
 			{
-				Topic = _topicService.FindById(t).Result;
 				TopicTutoringOffer = new TopicTutoringOffer();
 
 				TopicTutoringOffer.TopicId = t;
@@ -156,15 +142,9 @@ namespace MiTutorBEN.Controllers
 
 				await _topicTutoringOfferService.Create(TopicTutoringOffer);
 
-
-				TutoringOffer.TopicTutoringOffers.Add(TopicTutoringOffer);
-				Topic.TopicTutoringOffers.Add(TopicTutoringOffer);
-
-				await _topicService.Update(Topic.TopicId, Topic);
-
 			}
 
-			await _tutoringOfferService.Update(TutoringOffer.TutoringOfferId, TutoringOffer);
+			_tutoringOfferService.Save();
 
 			return Created($"", _tutoringOfferRequestConverter.FromEntity(TutoringOffer));
 		}

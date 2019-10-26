@@ -101,5 +101,10 @@ namespace MiTutorBEN.ServicesImpl
 
 			return tutoringOffers;
 		}
+
+		public async void Save()
+        {
+           await _context.SaveChangesAsync();
+        }
 	}
 }

@@ -74,6 +74,7 @@ namespace MiTutorBEN.ServicesImpl
 		public async Task<Topic> Update(int id, Topic t)
 		{
 			Topic found = await _context.Topics
+				
 				.FirstOrDefaultAsync(x => x.TopicId == id);
 
 			if (found == null)
