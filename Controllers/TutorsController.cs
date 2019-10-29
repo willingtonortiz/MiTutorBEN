@@ -59,57 +59,6 @@ namespace MiTutorBEN.Controllers
 
 
 
-        /// <summary>
-        /// Tutor Subscription
-        /// </summary>
-        /// <param name="membershipDTO">The credentials for subscription</param>  
-        /// <response code="201">Returns the new created tutor</response>
-        /// <response code="500">Internet application error</response>
-        /// <response code="404">The user not found</response>
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("Subscription")]
-        [ProducesResponseType(201)]
-        
-        [Produces("application/json")]
-        public async Task<ActionResult<TutorDTO>> Subscription([FromBody] MembershipDTO membershipDTO)
-        {
-
-            User foundUser = await _userService.FindById(membershipDTO.UserId);
-
-            _logger.LogWarning(membershipDTO.CreditCard);
-
-            if (foundUser == null)
-            {
-                return NotFound(new { message = "User not found" });
-            }
-            foundUser.Role = "tutor";
-
-            _context.Entry(foundUser).State = EntityState.Modified;
-
-            Tutor newTutor = new Tutor();
-            newTutor.TutorId = foundUser.UserId;
-            newTutor.QualificationCount = 0;
-            newTutor.Points = 0.0;
-            newTutor.Person = foundUser.Person;
-            newTutor.Description = "Un nuevo tutor";
-            newTutor.Status = "Avaliable";
-
-            TutorDTO tutorResponse = new TutorDTO();
-            tutorResponse.TutorId = foundUser.UserId;
-            tutorResponse.QualificationCount = 0;
-            tutorResponse.Points = 0.0;
-            tutorResponse.Description = "Un nuevo tutor";
-            tutorResponse.Status = "Avaliable";
-
-            await _tutorService.Create(newTutor);
-            await _context.SaveChangesAsync();
-
-
-
-            return Created($"", tutorResponse);
-
-
-        }
+       
     }
 }

@@ -8,5 +8,7 @@ namespace MiTutorBEN.Services
 	{
 		Task<bool> UserNameValid(string username);
 		Task<bool> EmailValid(string email);
+
+		Task<Tutor> Subscription(MembershipDTO membershipDTO);
 	}
 }
