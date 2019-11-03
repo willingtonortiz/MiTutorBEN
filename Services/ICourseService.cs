@@ -9,5 +9,7 @@ namespace MiTutorBEN.Services
 		Task<bool> ExistsById(int courseId);
 		Task<Course> FindByUniversityIdAndCourseName(int universityId, string courseName);
 		Task<IEnumerable<Course>> FindAllByUniversityId(int universityId);
+		Task<List<Topic>> FindTopics(int courseId);
+
 	}
 }

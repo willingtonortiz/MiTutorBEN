@@ -23,18 +23,21 @@ namespace MiTutorBEN.Controllers
 		private readonly ICourseService _courseService;
 		private readonly IUniversityService _universityService;
 		private readonly CourseConverter _courseConverter;
+		private readonly TopicConverter _topicConverter;
 
 		public CoursesController(
 			ILogger<CoursesController> logger,
 			ICourseService courseService,
 			CourseConverter courseConverter,
-			IUniversityService universityService
+			IUniversityService universityService,
+			TopicConverter topicConverter
 			)
 		{
 			_logger = logger;
 			_courseService = courseService;
 			_courseConverter = courseConverter;
 			_universityService = universityService;
+			_topicConverter = topicConverter;
 		}
 
 
@@ -65,6 +68,28 @@ namespace MiTutorBEN.Controllers
 			CourseDTO courseDTO = _courseConverter.FromEntity(course);
 
 			return Ok(courseDTO);
+		}
+
+		[HttpGet("{id}/topics")]
+		public async Task<ActionResult<IEnumerable<TopicDTO>>> FindTopics(
+			[FromRoute] int id
+		)
+		{
+			List<Topic> topics = await _courseService.FindTopics(id);
+
+			if (topics == null)
+			{
+				return NotFound();
+			}
+
+			List<TopicDTO> topicsDtos = new List<TopicDTO>();
+
+			foreach(var t in topics)
+			{
+				topicsDtos.Add(_topicConverter.FromEntity(t));
+			}
+
+			return Ok(topicsDtos);
 		}
 
 
