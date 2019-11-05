@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -86,7 +87,7 @@ namespace MiTutorBEN.Controllers
 		[SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(TutoringSessionRequest))]
 		[SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(string))]
 		[HttpPost]
-		public async System.Threading.Tasks.Task<ActionResult<TutoringOfferRequest>> Create([FromBody] TutoringOfferRequest tutoringOfferRequest)
+		public async Task<ActionResult<TutoringOfferRequest>> Create([FromBody] TutoringOfferRequest tutoringOfferRequest)
 		{
 			var TutoringOffer = _tutoringOfferRequestConverter.FromDto(tutoringOfferRequest);
 
@@ -165,7 +166,7 @@ namespace MiTutorBEN.Controllers
 		[SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(string))]
 		[SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(string))]
 		[HttpGet("{tutoringId}")]
-		public async System.Threading.Tasks.Task<ActionResult<TutoringOfferResponse>> GetTutoring(int tutoringId)
+		public async Task<ActionResult<TutoringOfferResponse>> GetTutoring(int tutoringId)
 		{
 			TutoringOffer TutoringOffer = await _tutoringOfferService.FindById(tutoringId);
 

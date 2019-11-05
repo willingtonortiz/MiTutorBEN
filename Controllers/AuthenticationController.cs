@@ -71,6 +71,7 @@ namespace MiTutorBEN.Controllers
 		/// <response code="400">The request was invalid</response>
 		/// <response code="500">Internet application error</response>
 		[HttpPost]
+		[AllowAnonymous]
 		[Route("Register")]
 		[ProducesResponseType(201)]
 		[ProducesResponseType(400)]
@@ -84,6 +85,9 @@ namespace MiTutorBEN.Controllers
 			/* SE DEBE VERIFICAR QUE LA UNIVERSIDAD EXISTA, ARREGLAR */
 			University university = await _universityService.FindById(user.UniversityId);
 
+			if(university == null){
+				return NotFound();
+			}
 
 			Person newPerson = new Person();
 			newPerson.Name = user.Name;
@@ -113,8 +117,8 @@ namespace MiTutorBEN.Controllers
 
 			User userCreated = await _authService.Register(newPerson, newStudent, newUser);
 
-			/* NO SE DEBE ENVIAR UNA URI VACIA, ARREGLAR */
-			return Created("", _userConverter.FromEntity(userCreated));
+			
+			return Ok(_userConverter.FromEntity(userCreated));
 		}
 
 		/* 

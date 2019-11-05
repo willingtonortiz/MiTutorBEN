@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MiTutorBEN.Data;
+using MiTutorBEN.DTOs;
 using MiTutorBEN.Enums;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
@@ -120,12 +121,22 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
-		#endregion
+        public async Task<University> FindUniversity(long id)
+        {
+            Person person = await _context.People
+				.Include(x => x.University)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(x => x.PersonId == id);
+			
+			return person.University;
+        }
+
+        #endregion
 
 
-		#region Udpate
+        #region Udpate
 
-		public async Task<Tutor> Update(int id, Tutor t)
+        public async Task<Tutor> Update(int id, Tutor t)
 		{
 			Tutor found = await _context.Tutors
 				.FirstOrDefaultAsync(x => x.TutorId == id);

@@ -11,6 +11,7 @@ using MiTutorBEN.Models;
 using MiTutorBEN.ServicesImpl;
 using MiTutorBEN.Data;
 using Microsoft.EntityFrameworkCore;
+using MiTutorBEN.Converters;
 
 namespace MiTutorBEN.Controllers
 {
@@ -20,22 +21,25 @@ namespace MiTutorBEN.Controllers
     public class TutorsController : ControllerBase
     {
         private readonly ILogger<TutorsController> _logger;
-
-
         private readonly MiTutorContext _context;
 
         private readonly IUserService _userService;
         private readonly ITutorService _tutorService;
+
+        private readonly UniversityConverter _universityConverter;
         public TutorsController(
             MiTutorContext context,
             ILogger<TutorsController> logger,
             IUserService userService,
-            ITutorService tutorService)
+            ITutorService tutorService,
+            UniversityConverter universityConverter
+        )
         {
             _logger = logger;
             _userService = userService;
             _tutorService = tutorService;
             _context = context;
+            _universityConverter = universityConverter;
         }
 
         /// <summary>
@@ -58,58 +62,23 @@ namespace MiTutorBEN.Controllers
         }
 
 
-
-        /// <summary>
-        /// Tutor Subscription
-        /// </summary>
-        /// <param name="membershipDTO">The credentials for subscription</param>  
-        /// <response code="201">Returns the new created tutor</response>
-        /// <response code="500">Internet application error</response>
-        /// <response code="404">The user not found</response>
         [AllowAnonymous]
-        [HttpPost]
-        [Route("Subscription")]
-        [ProducesResponseType(201)]
-        
-        [Produces("application/json")]
-        public async Task<ActionResult<TutorDTO>> Subscription([FromBody] MembershipDTO membershipDTO)
+        [HttpGet("{id}/university")]
+        public async Task<ActionResult<UniversityDTO>> GetTutorUniversity(long id)
         {
-
-            User foundUser = await _userService.FindById(membershipDTO.UserId);
-
-            _logger.LogWarning(membershipDTO.CreditCard);
-
-            if (foundUser == null)
+            var university = await _tutorService.FindUniversity(id);
+            if (university == null)
             {
-                return NotFound(new { message = "User not found" });
+                return NotFound();
             }
-            foundUser.Role = "tutor";
-
-            _context.Entry(foundUser).State = EntityState.Modified;
-
-            Tutor newTutor = new Tutor();
-            newTutor.TutorId = foundUser.UserId;
-            newTutor.QualificationCount = 0;
-            newTutor.Points = 0.0;
-            newTutor.Person = foundUser.Person;
-            newTutor.Description = "Un nuevo tutor";
-            newTutor.Status = "Avaliable";
-
-            TutorDTO tutorResponse = new TutorDTO();
-            tutorResponse.TutorId = foundUser.UserId;
-            tutorResponse.QualificationCount = 0;
-            tutorResponse.Points = 0.0;
-            tutorResponse.Description = "Un nuevo tutor";
-            tutorResponse.Status = "Avaliable";
-
-            await _tutorService.Create(newTutor);
-            await _context.SaveChangesAsync();
-
-
-
-            return Created($"", tutorResponse);
-
-
+            return _universityConverter.FromEntity(university);
         }
+
+
+
+
+
+
+       
     }
 }

@@ -114,5 +114,20 @@ namespace MiTutorBEN.ServicesImpl
 
 			return found;
 		}
-	}
+
+        public async Task<List<Topic>> FindTopics(int courseId)
+        {
+			List<Topic> topics = new List<Topic>();
+
+			Course found = await _context.Courses.Include(c => c.Topics)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(x => x.CourseId == courseId);
+
+			foreach(var t in found.Topics){
+				topics.Add(t);
+			}
+
+			return topics;
+        }
+    }
 }

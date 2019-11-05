@@ -83,7 +83,6 @@ namespace MiTutorBEN.ServicesImpl
 
 			await _context.SaveChangesAsync();
 
-			// _logger.LogWarning(user.ToString());
 
 			return user;
 		}
