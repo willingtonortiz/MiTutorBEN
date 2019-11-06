@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace MiTutorBEN.Controllers
 {
-    [AllowAnonymous]
+	[AllowAnonymous]
     [ApiController]
     [Route("api/[controller]")]
     public class AuthenticationController : ControllerBase
@@ -29,6 +29,7 @@ namespace MiTutorBEN.Controllers
 
         #endregion
 
+        
         #region Constructor
 
         public AuthenticationController(
@@ -46,8 +47,8 @@ namespace MiTutorBEN.Controllers
         }
 
         #endregion
-
-
+        
+        
         #region Login
 
         [HttpPost("login")]

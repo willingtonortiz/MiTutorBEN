@@ -20,6 +20,7 @@ namespace MiTutorBEN.Data
         public DbSet<TopicTutoringSession> TopicTutoringSessions { get; set; }
         public DbSet<TopicTutoringOffer> TopicTutoringOffers { get; set; }
         
+        public DbSet<StudentTutoringSession> StudentTutoringSession{get;set;}
 
         public MiTutorContext(DbContextOptions<MiTutorContext> options) : base(options)
         {

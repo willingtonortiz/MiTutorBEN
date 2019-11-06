@@ -22,7 +22,6 @@ namespace MiTutorBEN.Controllers
     [Route("api/[controller]")]
     public class TutorsController : ControllerBase
     {
-        private readonly MiTutorContext _context;
         private readonly ILogger<TutorsController> _logger;
         private readonly IUserService _userService;
         private readonly ITutorService _tutorService;
@@ -34,7 +33,6 @@ namespace MiTutorBEN.Controllers
         #region Constructor
 
         public TutorsController(
-            MiTutorContext context,
             ILogger<TutorsController> logger,
             IUserService userService,
             ITutorService tutorService,
@@ -47,7 +45,6 @@ namespace MiTutorBEN.Controllers
             _logger = logger;
             _userService = userService;
             _tutorService = tutorService;
-            _context = context;
             _tutoringOfferService = tutoringOfferService;
             _tutoringOfferConverter = tutoringOfferConverter;
             _tutorConverter = tutorConverter;
@@ -57,13 +54,13 @@ namespace MiTutorBEN.Controllers
         #endregion
 
         /// <summary>
-        /// Tutor Subscription
+        /// Find tutor by id
         /// </summary>
         /// <param name="id">The id of tutor</param>  
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tutor>> GetTutor(long id)
+        public async Task<ActionResult<Tutor>> GetTutor(int id)
         {
-            var tutor = await _context.Tutors.FindAsync(id);
+            var tutor = await _tutorService.FindById(id);
 
             if (tutor == null)
             {

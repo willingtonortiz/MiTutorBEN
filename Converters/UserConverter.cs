@@ -11,7 +11,6 @@ namespace MiTutorBEN.Converters
 			{
 				UserId = dto.UserId,
 				Username = dto.Username,
-				Password = dto.Password,
 				Email = dto.Email,
 				Role = dto.Role
 			};
@@ -25,7 +24,6 @@ namespace MiTutorBEN.Converters
 			{
 				UserId = entity.UserId,
 				Username = entity.Username,
-				Password = entity.Password,
 				Email = entity.Email,
 				Role = entity.Role
 			};
