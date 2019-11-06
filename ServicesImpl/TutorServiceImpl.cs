@@ -88,7 +88,8 @@ namespace MiTutorBEN.ServicesImpl
 		public async Task<IEnumerable<Tutor>> FindAll()
 		{
 			return await _context.Tutors
-				.AsNoTracking().ToListAsync<Tutor>();
+				.AsNoTracking()
+				.ToListAsync<Tutor>();
 		}
 
 		#endregion
@@ -100,6 +101,7 @@ namespace MiTutorBEN.ServicesImpl
 		{
 			return await _context.Tutors
 				.AsNoTracking()
+				.Include(x => x.Person)
 				.Where(x =>
 					x.Person.UniversityId == universityId
 					&& x.TutorCourses.Any(y => y.CourseId == courseId)

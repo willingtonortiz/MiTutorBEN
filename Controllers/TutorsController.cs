@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using DefaultNamespace;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,23 +17,30 @@ using MiTutorBEN.Converters;
 
 namespace MiTutorBEN.Controllers
 {
-    [ApiController]
     [AllowAnonymous]
+    [ApiController]
     [Route("api/[controller]")]
     public class TutorsController : ControllerBase
     {
-        private readonly ILogger<TutorsController> _logger;
         private readonly MiTutorContext _context;
-
+        private readonly ILogger<TutorsController> _logger;
         private readonly IUserService _userService;
         private readonly ITutorService _tutorService;
-
+        private readonly ITutoringOfferService _tutoringOfferService;
+        private readonly TutoringOfferConverter _tutoringOfferConverter;
         private readonly UniversityConverter _universityConverter;
+        private readonly TutorConverter _tutorConverter;
+
+        #region Constructor
+
         public TutorsController(
             MiTutorContext context,
             ILogger<TutorsController> logger,
             IUserService userService,
             ITutorService tutorService,
+            ITutoringOfferService tutoringOfferService,
+            TutoringOfferConverter tutoringOfferConverter,
+            TutorConverter tutorConverter,
             UniversityConverter universityConverter
         )
         {
@@ -39,15 +48,18 @@ namespace MiTutorBEN.Controllers
             _userService = userService;
             _tutorService = tutorService;
             _context = context;
+            _tutoringOfferService = tutoringOfferService;
+            _tutoringOfferConverter = tutoringOfferConverter;
+            _tutorConverter = tutorConverter;
             _universityConverter = universityConverter;
         }
+
+        #endregion
 
         /// <summary>
         /// Tutor Subscription
         /// </summary>
         /// <param name="id">The id of tutor</param>  
-
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Tutor>> GetTutor(long id)
         {
@@ -62,7 +74,6 @@ namespace MiTutorBEN.Controllers
         }
 
 
-        [AllowAnonymous]
         [HttpGet("{id}/university")]
         public async Task<ActionResult<UniversityDTO>> GetTutorUniversity(long id)
         {
@@ -71,14 +82,49 @@ namespace MiTutorBEN.Controllers
             {
                 return NotFound();
             }
+
             return _universityConverter.FromEntity(university);
         }
 
+        #region FindAll
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TutorDTO>>> FindAll()
+        {
+            IEnumerable<Tutor> tutors = await _tutorService.FindAll();
+
+            _logger.LogError(tutors.Count().ToString());
+
+            IEnumerable<TutorDTO> tutorDtos = tutors.Select(x => _tutorConverter.FromEntity(x));
+
+            return Ok(tutorDtos);
+        }
+
+        #endregion
 
 
+        #region FindTutoringOffersByTutorId
 
+        [HttpGet("{tutorId}/tutoringoffers")]
+        public async Task<ActionResult<IEnumerable<TutoringOfferInfo>>> FindTutoringOffersByTutorId(
+            [FromRoute] int tutorId
+        )
+        {
+            Tutor foundTutor = await _tutorService.FindById(tutorId);
+            if (foundTutor == null)
+            {
+                return NotFound();
+            }
 
+            IEnumerable<TutoringOffer> tutoringOffers = await _tutoringOfferService
+                .FindAllByTutorIdAsync(tutorId);
 
-       
+            IEnumerable<TutoringOfferInfo> tutoringOffersInfo = tutoringOffers
+                .Select(x => _tutoringOfferConverter.TutoringOfferToTutoringOfferInfo(x));
+
+            return Ok(tutoringOffersInfo);
+        }
+
+        #endregion
     }
 }

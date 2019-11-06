@@ -41,7 +41,6 @@ namespace MiTutorBEN.Controllers
             {
                 return Ok(false);
             }
-
         }
 
         [AllowAnonymous]
@@ -57,7 +56,6 @@ namespace MiTutorBEN.Controllers
             {
                 return Ok(false);
             }
-
         }
 
 
@@ -75,18 +73,16 @@ namespace MiTutorBEN.Controllers
         [Produces("application/json")]
         public async Task<ActionResult<TutorDTO>> Subscription([FromBody] MembershipDTO membershipDTO)
         {
-
             Tutor newTutor = await _userService.Subscription(membershipDTO);
 
             TutorDTO tutorResponse = new TutorDTO();
-            tutorResponse.TutorId = newTutor.TutorId;
+            tutorResponse.Id = newTutor.TutorId;
             tutorResponse.QualificationCount = 0;
             tutorResponse.Points = 0.0;
             tutorResponse.Description = "Un nuevo tutor";
             tutorResponse.Status = "Available";
 
             return Ok(tutorResponse);
-
         }
     }
 }

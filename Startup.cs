@@ -79,7 +79,6 @@ namespace MiTutorBEN
 
 
 			// Converters
-			services.AddScoped<AuthUserConverter>();
 			services.AddScoped<CourseConverter>();
 			services.AddScoped<PersonConverter>();
 			services.AddScoped<TopicConverter>();
