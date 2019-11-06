@@ -92,7 +92,7 @@ namespace MiTutorBEN.Controllers
 			newPerson.Name = user.Name;
 			newPerson.LastName = user.LastName;
 			newPerson.Semester = user.Semester;
-
+			newPerson.Career =  user.Career;
 
 			Student newStudent = new Student();
 			newStudent.Points = 0;
