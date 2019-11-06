@@ -21,14 +21,12 @@ namespace MiTutorBEN.Controllers
     public class TutorsController : ControllerBase
     {
         private readonly ILogger<TutorsController> _logger;
-        private readonly MiTutorContext _context;
 
         private readonly IUserService _userService;
         private readonly ITutorService _tutorService;
 
         private readonly UniversityConverter _universityConverter;
         public TutorsController(
-            MiTutorContext context,
             ILogger<TutorsController> logger,
             IUserService userService,
             ITutorService tutorService,
@@ -38,20 +36,19 @@ namespace MiTutorBEN.Controllers
             _logger = logger;
             _userService = userService;
             _tutorService = tutorService;
-            _context = context;
             _universityConverter = universityConverter;
         }
 
         /// <summary>
-        /// Tutor Subscription
+        /// Find tutor by id
         /// </summary>
         /// <param name="id">The id of tutor</param>  
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tutor>> GetTutor(long id)
+        public async Task<ActionResult<Tutor>> GetTutor(int id)
         {
-            var tutor = await _context.Tutors.FindAsync(id);
+            var tutor = await _tutorService.FindById(id);
 
             if (tutor == null)
             {

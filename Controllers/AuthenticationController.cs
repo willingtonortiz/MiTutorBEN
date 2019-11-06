@@ -82,7 +82,6 @@ namespace MiTutorBEN.Controllers
 			[FromBody] UserRegisterDTO user
 			)
 		{
-			/* SE DEBE VERIFICAR QUE LA UNIVERSIDAD EXISTA, ARREGLAR */
 			University university = await _universityService.FindById(user.UniversityId);
 
 			if(university == null){
@@ -93,7 +92,7 @@ namespace MiTutorBEN.Controllers
 			newPerson.Name = user.Name;
 			newPerson.LastName = user.LastName;
 			newPerson.Semester = user.Semester;
-
+			newPerson.Career =  user.Career;
 
 			Student newStudent = new Student();
 			newStudent.Points = 0;

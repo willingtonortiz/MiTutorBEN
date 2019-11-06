@@ -47,36 +47,44 @@ namespace MiTutorBEN.ServicesImpl
             throw new NotImplementedException();
         }
 
-        public Task<TutoringSession> FindById(int id)
+        public async Task<TutoringSession> FindById(int id)
         {
-            throw new NotImplementedException();
+            TutoringSession found = await _context.TutoringSessions
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.TutoringSessionId == id);
+
+            return found;
+
+
         }
+
+            
 
         public async void SaveAsync()
         {
-           await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<TutoringSession> Update(int id, TutoringSession t)
         {
 
-          TutoringSession found = await _context.TutoringSessions
-			
-				.FirstOrDefaultAsync(x => x.TutoringSessionId == id);
+            TutoringSession found = await _context.TutoringSessions
 
-			if (found == null)
-			{
-				return null;
-			}
+                  .FirstOrDefaultAsync(x => x.TutoringSessionId == id);
 
-			_context.TutoringSessions
-				.Update(t);
+            if (found == null)
+            {
+                return null;
+            }
 
-			await _context.SaveChangesAsync();
+            _context.TutoringSessions
+                .Update(t);
 
-			return found;
+            await _context.SaveChangesAsync();
+
+            return found;
         }
 
-    
+
     }
 }
