@@ -82,7 +82,6 @@ namespace MiTutorBEN.Controllers
 			[FromBody] UserRegisterDTO user
 			)
 		{
-			/* SE DEBE VERIFICAR QUE LA UNIVERSIDAD EXISTA, ARREGLAR */
 			University university = await _universityService.FindById(user.UniversityId);
 
 			if(university == null){
