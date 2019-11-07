@@ -14,6 +14,7 @@ using MiTutorBEN.ServicesImpl;
 using MiTutorBEN.Data;
 using Microsoft.EntityFrameworkCore;
 using MiTutorBEN.Converters;
+using MiTutorBEN.DTOs.Input;
 
 namespace MiTutorBEN.Controllers
 {
@@ -22,13 +23,21 @@ namespace MiTutorBEN.Controllers
     [Route("api/[controller]")]
     public class TutorsController : ControllerBase
     {
+        #region Attributes
+
         private readonly ILogger<TutorsController> _logger;
         private readonly IUserService _userService;
         private readonly ITutorService _tutorService;
         private readonly ITutoringOfferService _tutoringOfferService;
+        private readonly ICourseService _courseService;
         private readonly TutoringOfferConverter _tutoringOfferConverter;
         private readonly UniversityConverter _universityConverter;
         private readonly TutorConverter _tutorConverter;
+        private readonly TutorCourseConverter _tutorCourseConverter;
+        private readonly CourseConverter _courseConverter;
+
+        #endregion
+
 
         #region Constructor
 
@@ -37,21 +46,28 @@ namespace MiTutorBEN.Controllers
             IUserService userService,
             ITutorService tutorService,
             ITutoringOfferService tutoringOfferService,
+            ICourseService courseService,
             TutoringOfferConverter tutoringOfferConverter,
             TutorConverter tutorConverter,
-            UniversityConverter universityConverter
+            UniversityConverter universityConverter,
+            TutorCourseConverter tutorCourseConverter,
+            CourseConverter courseConverter
         )
         {
             _logger = logger;
             _userService = userService;
             _tutorService = tutorService;
             _tutoringOfferService = tutoringOfferService;
+            _courseService = courseService;
             _tutoringOfferConverter = tutoringOfferConverter;
             _tutorConverter = tutorConverter;
             _universityConverter = universityConverter;
+            _tutorCourseConverter = tutorCourseConverter;
+            _courseConverter = courseConverter;
         }
 
         #endregion
+
 
         /// <summary>
         /// Find tutor by id
@@ -120,6 +136,65 @@ namespace MiTutorBEN.Controllers
                 .Select(x => _tutoringOfferConverter.TutoringOfferToTutoringOfferInfo(x));
 
             return Ok(tutoringOffersInfo);
+        }
+
+        #endregion
+
+
+        #region AddCourseToTutorByTutorIdAndCourseId
+
+        [HttpPost("{tutorId}/courses")]
+        public async Task<ActionResult<TutorCourseDTO>> AddCourseToTutorByTutorIdAndCourseId(
+            [FromRoute] int tutorId,
+            [FromBody] CourseIdInput courseInput
+        )
+        {
+            Course course = await _courseService.FindById(courseInput.CourseId);
+            if (course == null)
+            {
+                return NotFound("COURSE_NOT_FOUND");
+            }
+
+            Tutor tutor = await _tutorService.FindById(tutorId);
+            if (tutor == null)
+            {
+                return NotFound("TUTOR_NOT_FOUND");
+            }
+
+            IEnumerable<Course> courses = await _courseService.FindAllByTutorIdAsync(tutor.TutorId);
+            foreach (Course item in courses)
+            {
+                if (item.CourseId == course.CourseId)
+                {
+                    return BadRequest("COURSE_ALREADY_ADDED");
+                }
+            }
+
+            var tutorCourse = await _tutorService.AddCourseAsync(tutorId, course);
+
+            return Ok(_tutorCourseConverter.FromEntity(tutorCourse));
+        }
+
+        #endregion
+
+        #region FindAllCoursesByTutorId
+
+        [HttpGet("{tutorId}/courses")]
+        public async Task<ActionResult<IEnumerable<CourseDTO>>> FindAllCoursesByTutorId(
+            [FromRoute] int tutorId
+        )
+        {
+            Tutor foundTutor = await _tutorService.FindById(tutorId);
+            if (foundTutor == null)
+            {
+                return NotFound("TUTOR_NOT_FOUND");
+            }
+
+            IEnumerable<Course> courses = await _courseService.FindAllByTutorIdAsync(tutorId);
+
+            IEnumerable<CourseDTO> courseDtos = courses.Select(x => _courseConverter.FromEntity(x));
+
+            return Ok(courseDtos);
         }
 
         #endregion

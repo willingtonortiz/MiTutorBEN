@@ -222,7 +222,7 @@ namespace MiTutorBEN.Controllers
 
                 if (course == null)
                 {
-                    return NotFound("Course not found");
+                    return NotFound("COURSE_NOT_FOUND");
                 }
 
                 List<CourseDTO> coursesDTO = new List<CourseDTO>();

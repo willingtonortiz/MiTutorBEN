@@ -17,10 +17,11 @@ namespace MiTutorBEN.ServicesImpl
 		private readonly ILogger<TutorServiceImpl> _logger;
 
 		#region Constructor
+
 		public TutorServiceImpl(
 			MiTutorContext context,
 			ILogger<TutorServiceImpl> logger
-			)
+		)
 		{
 			_context = context;
 			_logger = logger;
@@ -114,6 +115,7 @@ namespace MiTutorBEN.ServicesImpl
 
 
 		#region FindById
+
 		public async Task<Tutor> FindById(int id)
 		{
 			Tutor found = await _context.Tutors
@@ -123,22 +125,47 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
-        public async Task<University> FindUniversity(long id)
-        {
-            Person person = await _context.People
+		#endregion
+
+		public async Task<University> FindUniversity(long id)
+		{
+			Person person = await _context.People
 				.Include(x => x.University)
 				.AsNoTracking()
 				.FirstOrDefaultAsync(x => x.PersonId == id);
-			
+
 			return person.University;
-        }
+		}
 
-        #endregion
+		public async Task<TutorCourse> AddCourseAsync(int tutorId, Course course)
+		{
+			Tutor tutor = await _context.Tutors
+				.AsNoTracking()
+				.FirstOrDefaultAsync(x => x.TutorId == tutorId);
 
+			if (tutor == null)
+			{
+				return null;
+			}
 
-        #region Udpate
+			TutorCourse tutorCourse = new TutorCourse
+			{
+				CourseId = course.CourseId
+			};
 
-        public async Task<Tutor> Update(int id, Tutor t)
+			tutor.TutorCourses.Add(tutorCourse);
+			_context.Tutors.Update(tutor);
+
+            // _logger.LogError("actualizando");
+
+			await _context.SaveChangesAsync();
+
+			return tutorCourse;
+		}
+
+		#region Udpate
+
+		public async Task<Tutor> Update(int id, Tutor t)
 		{
 			Tutor found = await _context.Tutors
 				.FirstOrDefaultAsync(x => x.TutorId == id);

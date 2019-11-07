@@ -91,6 +91,8 @@ namespace MiTutorBEN
 			services.AddScoped<TutoringSessionResponseConverter>();
 			services.AddScoped<TutoringOfferRequestConverter>();
 			services.AddScoped<TutoringSessionRequestConverter>();
+			services.AddScoped<TutorCourseConverter>();
+				
 			// Base de datos
 			services.AddDbContext<MiTutorContext>(options =>
 			{
