@@ -22,6 +22,7 @@ namespace MiTutorBEN.Converters
 				EndTime = dto.EndTime,
 				Capacity = dto.Capacity,
 				Description = dto.Description
+				
 			};
 
 			return tutoringOffer;
@@ -40,6 +41,7 @@ namespace MiTutorBEN.Converters
                 Course = entity.Course.Name,
                 Tutor = entity.Tutor.Person.FullName,
                 University = entity.University.Name,
+				TutorId = entity.TutorId
 			};
 
             foreach(var topic in entity.TopicTutoringOffers)

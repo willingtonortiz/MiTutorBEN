@@ -8,6 +8,7 @@ namespace MiTutorBEN.DTOs.Responses
 		public int TutoringOfferId { get; set; }
 		public string Course { get; set; }
 		public string Tutor { get; set; }
+		public int TutorId {get; set; }
 		public string Description { get; set; }
 		public string University { get; set; }
 		public DateTime StartTime { get; set; }
