@@ -75,11 +75,11 @@ namespace MiTutorBEN
 			services.AddScoped<ITutoringSessionService, TutoringSessionServiceImpl>();
 			services.AddScoped<ITopicTutoringOfferService, TopicTutoringOfferServiceImpl>();
 			services.AddScoped<ITopicTutoringSessionService, TopicTutoringSessionServiceImpl>();
-
-
+			services.AddScoped<IStudentService,StudentServiceImpl>();
+			services.AddScoped<ITutoringSessionStudentService,TutoringSessionStudentServiceImpl>();
+			services.AddScoped<IQualificationService,QualificationServiceImpl>();
 
 			// Converters
-			services.AddScoped<AuthUserConverter>();
 			services.AddScoped<CourseConverter>();
 			services.AddScoped<PersonConverter>();
 			services.AddScoped<TopicConverter>();
@@ -91,6 +91,8 @@ namespace MiTutorBEN
 			services.AddScoped<TutoringSessionResponseConverter>();
 			services.AddScoped<TutoringOfferRequestConverter>();
 			services.AddScoped<TutoringSessionRequestConverter>();
+			services.AddScoped<TutorCourseConverter>();
+				
 			// Base de datos
 			services.AddDbContext<MiTutorContext>(options =>
 			{

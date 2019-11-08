@@ -13,130 +13,130 @@ using MiTutorBEN.Services;
 
 namespace MiTutorBEN.Controllers
 {
-	[Consumes("application/json")]
-	[AllowAnonymous]
-	[ApiController]
-	[Route("api/[controller]")]
-	public class CoursesController : ControllerBase
-	{
-		private readonly ILogger<CoursesController> _logger;
-		private readonly ICourseService _courseService;
-		private readonly IUniversityService _universityService;
-		private readonly CourseConverter _courseConverter;
-		private readonly TopicConverter _topicConverter;
+    [Consumes("application/json")]
+    [AllowAnonymous]
+    [ApiController]
+    [Route("api/[controller]")]
+    public class CoursesController : ControllerBase
+    {
+        private readonly ILogger<CoursesController> _logger;
+        private readonly ICourseService _courseService;
+        private readonly IUniversityService _universityService;
+        private readonly CourseConverter _courseConverter;
+        private readonly TopicConverter _topicConverter;
 
-		public CoursesController(
-			ILogger<CoursesController> logger,
-			ICourseService courseService,
-			CourseConverter courseConverter,
-			IUniversityService universityService,
-			TopicConverter topicConverter
-			)
-		{
-			_logger = logger;
-			_courseService = courseService;
-			_courseConverter = courseConverter;
-			_universityService = universityService;
-			_topicConverter = topicConverter;
-		}
-
-
-		[HttpGet]
-		public async Task<ActionResult<IEnumerable<CourseDTO>>> FindAll()
-		{
-			IEnumerable<Course> courses = await _courseService.FindAll();
-
-			IEnumerable<CourseDTO> coursesDTO = courses
-				.Select(x => _courseConverter.FromEntity(x));
-
-			return Ok(coursesDTO);
-		}
+        public CoursesController(
+            ILogger<CoursesController> logger,
+            ICourseService courseService,
+            CourseConverter courseConverter,
+            IUniversityService universityService,
+            TopicConverter topicConverter
+        )
+        {
+            _logger = logger;
+            _courseService = courseService;
+            _courseConverter = courseConverter;
+            _universityService = universityService;
+            _topicConverter = topicConverter;
+        }
 
 
-		[HttpGet("{id}")]
-		public async Task<ActionResult<CourseDTO>> FindById(
-			[FromRoute] int id
-		)
-		{
-			Course course = await _courseService.FindById(id);
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CourseDTO>>> FindAll()
+        {
+            IEnumerable<Course> courses = await _courseService.FindAll();
 
-			if (course == null)
-			{
-				return NotFound();
-			}
+            IEnumerable<CourseDTO> coursesDTO = courses
+                .Select(x => _courseConverter.FromEntity(x));
 
-			CourseDTO courseDTO = _courseConverter.FromEntity(course);
-
-			return Ok(courseDTO);
-		}
-
-		[HttpGet("{id}/topics")]
-		public async Task<ActionResult<IEnumerable<TopicDTO>>> FindTopics(
-			[FromRoute] int id
-		)
-		{
-			List<Topic> topics = await _courseService.FindTopics(id);
-
-			if (topics == null)
-			{
-				return NotFound();
-			}
-
-			List<TopicDTO> topicsDtos = new List<TopicDTO>();
-
-			foreach(var t in topics)
-			{
-				topicsDtos.Add(_topicConverter.FromEntity(t));
-			}
-
-			return Ok(topicsDtos);
-		}
+            return Ok(coursesDTO);
+        }
 
 
-		[HttpPost]
-		public async Task<ActionResult<CourseDTO>> Create(
-			[FromBody] CreateCourseInput createCourse
-		)
-		{
-			University university = await _universityService
-				.FindById(createCourse.UniversityId);
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CourseDTO>> FindById(
+            [FromRoute] int id
+        )
+        {
+            Course course = await _courseService.FindById(id);
 
-			if (university == null)
-			{
-				return NotFound();
-			}
+            if (course == null)
+            {
+                return NotFound();
+            }
 
-			Course course = new Course
-			{
-				Name = createCourse.Name,
-				UniversityId = university.UniversityId
-			};
+            CourseDTO courseDTO = _courseConverter.FromEntity(course);
 
-			course = await _courseService.Create(course);
+            return Ok(courseDTO);
+        }
 
-			CourseDTO courseDTO = _courseConverter.FromEntity(course);
+        [HttpGet("{id}/topics")]
+        public async Task<ActionResult<IEnumerable<TopicDTO>>> FindTopics(
+            [FromRoute] int id
+        )
+        {
+            List<Topic> topics = await _courseService.FindTopics(id);
 
-			return CreatedAtAction(nameof(FindById), new { id = courseDTO.CourseId }, courseDTO);
-		}
+            if (topics == null)
+            {
+                return NotFound();
+            }
+
+            List<TopicDTO> topicsDtos = new List<TopicDTO>();
+
+            foreach (var t in topics)
+            {
+                topicsDtos.Add(_topicConverter.FromEntity(t));
+            }
+
+            return Ok(topicsDtos);
+        }
 
 
-		[HttpDelete("{id}")]
-		public async Task<ActionResult<CourseDTO>> Delete(
-			[FromRoute] int id
-		)
-		{
-			Course course = await _courseService.FindById(id);
+        [HttpPost]
+        public async Task<ActionResult<CourseDTO>> Create(
+            [FromBody] CreateCourseInput createCourse
+        )
+        {
+            University university = await _universityService
+                .FindById(createCourse.UniversityId);
 
-			if (course == null)
-			{
-				return NotFound();
-			}
+            if (university == null)
+            {
+                return NotFound();
+            }
 
-			course = await _courseService.DeleteById(id);
+            Course course = new Course
+            {
+                Name = createCourse.Name,
+                UniversityId = university.UniversityId
+            };
 
-			CourseDTO courseDTO = _courseConverter.FromEntity(course);
+            course = await _courseService.Create(course);
 
-			return Ok(courseDTO);
-		}
-	}
+            CourseDTO courseDTO = _courseConverter.FromEntity(course);
+
+            return CreatedAtAction(nameof(FindById), new {id = courseDTO.Id}, courseDTO);
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<CourseDTO>> Delete(
+            [FromRoute] int id
+        )
+        {
+            Course course = await _courseService.FindById(id);
+
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            course = await _courseService.DeleteById(id);
+
+            CourseDTO courseDTO = _courseConverter.FromEntity(course);
+
+            return Ok(courseDTO);
+        }
+    }
 }

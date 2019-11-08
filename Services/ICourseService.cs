@@ -11,5 +11,6 @@ namespace MiTutorBEN.Services
 		Task<IEnumerable<Course>> FindAllByUniversityId(int universityId);
 		Task<List<Topic>> FindTopics(int courseId);
 
+		Task<IEnumerable<Course>> FindAllByTutorIdAsync(int tutorId);
 	}
 }

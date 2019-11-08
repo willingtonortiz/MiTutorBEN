@@ -6,8 +6,8 @@ namespace MiTutorBEN.Services
 {
 	public interface IAuthService
 	{
-		UserAuthDTO Authenticate(string username, string password);
-		User RegisterUser(User user);
+		AuthenticatedUser Login(string username, string password);
+		// User RegisterUser(User user);
 		Task<User> Register(Person person, Student student,User user);
 
 	}

@@ -8,6 +8,8 @@ namespace MiTutorBEN.Services
 	{
 		Task<IEnumerable<TutoringOffer>> FindByUniversityIdAndCourseId(int universityId, int courseId);
 		Task<TutoringOffer> FindWithSessions(int tutoringOfferId);
+        Task<IEnumerable<TutoringOffer>> FindAllByTutorIdAsync(int tutorId);
 		void Save();
 	}
+
 }

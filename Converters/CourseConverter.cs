@@ -9,7 +9,7 @@ namespace MiTutorBEN.Converters
 		{
 			Course course = new Course
 			{
-				CourseId = dto.CourseId,
+				CourseId = dto.Id,
 				Name = dto.Name
 			};
 
@@ -20,7 +20,7 @@ namespace MiTutorBEN.Converters
 		{
 			CourseDTO courseDTO = new CourseDTO
 			{
-				CourseId = entity.CourseId,
+				Id = entity.CourseId,
 				Name = entity.Name
 			};
 

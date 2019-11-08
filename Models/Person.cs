@@ -20,6 +20,7 @@ namespace MiTutorBEN.Models
 		public int Semester { get; set; }
 
 
+		public string Career{get;set;}
 		// Navigation attributes
 		public int UniversityId { get; set; }
 		public virtual University University { get; set; }
