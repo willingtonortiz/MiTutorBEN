@@ -168,7 +168,7 @@ namespace MiTutorBEN.Controllers
 		[HttpGet("{tutoringId}")]
 		public async Task<ActionResult<TutoringOfferResponse>> GetTutoring(int tutoringId)
 		{
-			TutoringOffer TutoringOffer = await _tutoringOfferService.FindById(tutoringId);
+			TutoringOffer TutoringOffer = await _tutoringOfferService.FindWithSessions(tutoringId);
 
 			if(TutoringOffer!=null){
 			TutoringOfferResponse TutoringOfferResponse = _tutoringOfferResponseConverter.FromEntity(TutoringOffer);

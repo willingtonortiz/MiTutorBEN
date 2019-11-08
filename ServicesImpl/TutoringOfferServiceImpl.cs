@@ -106,5 +106,19 @@ namespace MiTutorBEN.ServicesImpl
         {
            await _context.SaveChangesAsync();
         }
-	}
+
+        public async Task<TutoringOffer> FindWithSessions(int tutoringOfferId)
+        {
+            TutoringOffer found = await _context.TutoringOffers
+				.Include(x=>x.TutoringSessions).ThenInclude(ts => ts.TopicTutoringSessions).ThenInclude(tts => tts.Topic)
+				.Include(x=>x.Tutor).ThenInclude(t =>t.Person)
+				.Include(x=>x.Course)
+				.Include(x=>x.University)
+				.Include(x=>x.TopicTutoringOffers).ThenInclude(tto => tto.Topic)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(x => x.TutoringOfferId == tutoringOfferId);
+
+			return found;
+        }
+    }
 }

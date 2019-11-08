@@ -27,7 +27,8 @@ namespace MiTutorBEN.Converters
                 EndTime = entity.EndTime,
                 StudentCount = entity.StudentCount,
                 Description = entity.Description,
-                Price = entity.Price
+                Price = entity.Price,
+                Place = entity.Place
         
             };
 
