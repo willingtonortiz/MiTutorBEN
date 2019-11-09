@@ -1,19 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using DefaultNamespace;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using MiTutorBEN.Converters;
-using MiTutorBEN.DTOs;
 using MiTutorBEN.DTOs.Responses;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace MiTutorBEN.Controllers
 {
