@@ -46,7 +46,19 @@ namespace MiTutorBEN.Controllers
             _logger = logger;
         }
 
-
+        /// <summary>
+        /// Create a register of user in a tutoring session
+        /// </summary>
+        /// <remarks>
+        /// Create a register of user in a tutoring session
+        /// </remarks>
+        /// <param name="createTutoringSessionStudent">The student id and tutoring session id</param>
+        /// <response code="200">Create register successfully</response>
+        /// <response code="404">Student or tutoring session not found</response>
+        /// <response code="500">Internal application error</response>
+        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(TutoringSessionStudentResponse))]
+        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(string))]
+        [SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(string))]
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(201)]
@@ -58,29 +70,30 @@ namespace MiTutorBEN.Controllers
             Student studentFound = await _studentService.FindById(createTutoringSessionStudent.StudentId);
             TutoringSession tutoringSessionFound = await _tutoringSessionService.FindById(createTutoringSessionStudent.TutoringSessionId);
 
-            if(studentFound == null)
+            if (studentFound == null)
             {
-                return NotFound(new { messsage="No se ha encontrado el estudiante"});
+                return NotFound(new { messsage = "No se ha encontrado el estudiante" });
             }
-            if(tutoringSessionFound == null){
-                return NotFound(new { messsage="No se ha encontrado el tutoring Session"});
+            if (tutoringSessionFound == null)
+            {
+                return NotFound(new { messsage = "No se ha encontrado el tutoring Session" });
             }
 
 
 
             StudentTutoringSession newTutoringSessionStudent = new StudentTutoringSession();
 
-            newTutoringSessionStudent.StudentId =  createTutoringSessionStudent.StudentId;
-            newTutoringSessionStudent.TutoringSessionId =  createTutoringSessionStudent.TutoringSessionId;
-            
-            
-            
-            
+            newTutoringSessionStudent.StudentId = createTutoringSessionStudent.StudentId;
+            newTutoringSessionStudent.TutoringSessionId = createTutoringSessionStudent.TutoringSessionId;
+
+
+
+
 
             StudentTutoringSession created = await _tutoringSessionStudentService.Create(newTutoringSessionStudent);
-            TutoringSessionStudentResponse response =  new TutoringSessionStudentResponse();
-            response.StudentId =  created.StudentId;
-            response.TutoringSessionId=  created.TutoringSessionId;
+            TutoringSessionStudentResponse response = new TutoringSessionStudentResponse();
+            response.StudentId = created.StudentId;
+            response.TutoringSessionId = created.TutoringSessionId;
 
             return Ok(response);
 

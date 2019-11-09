@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using MiTutorBEN.DTOs.Responses;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 
 namespace MiTutorBEN.Controllers
 {
@@ -28,7 +30,21 @@ namespace MiTutorBEN.Controllers
             _personService = personService;
         }
 
-
+        
+        /// <summary>
+        /// Finds all comments by tutor id
+        /// </summary>
+        /// <remarks>
+        /// Finds all comments by tutor id
+        /// </remarks>
+        /// <param name="tutorId">The id of the tutor</param>
+        /// <response code="200">Comments found.</response>
+        /// <response code="404">Tutor not found</response>
+        /// <response code="500">Internal application error</response>
+        [SwaggerResponse((int) HttpStatusCode.OK, Type = typeof(IEnumerable<QualificationsResponse>))]
+        [SwaggerResponse((int) HttpStatusCode.NotFound, Type = typeof(string))]
+        [SwaggerResponse((int) HttpStatusCode.InternalServerError, Type = typeof(string))]
+             
         [HttpGet("tutors/{tutorId}")]
 
         public async Task<ActionResult<List<QualificationsResponse>>> FindAllQualificationsByTutor(
