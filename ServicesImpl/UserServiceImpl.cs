@@ -139,7 +139,7 @@ namespace MiTutorBEN.ServicesImpl
                 return null;
             }
 
-            foundUser.Role = "tutor";
+            foundUser.Role = "TUTOR";
             _context.Entry(foundUser).State = EntityState.Modified;
             Tutor newTutor = new Tutor();
             newTutor.TutorId = foundUser.UserId;

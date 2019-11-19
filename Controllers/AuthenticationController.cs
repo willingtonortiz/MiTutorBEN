@@ -107,6 +107,7 @@ namespace MiTutorBEN.Controllers
 
 			if (university == null)
 			{
+				_logger.LogWarning(user.Name.ToString());
 				return NotFound();
 			}
 
@@ -124,7 +125,7 @@ namespace MiTutorBEN.Controllers
 			User newUser = new User();
 			newUser.Username = user.Username;
 			newUser.Password = user.Password;
-			newUser.Role = "student";
+			newUser.Role = "STUDENT";
 			newUser.Email = user.Password;
 
 			newPerson.User = newUser;
