@@ -325,7 +325,8 @@ namespace MiTutorBEN.Controllers
 					{
 						TopicId = topic_1_1.TopicId
 					}
-				}
+				},
+				TutorId = tutor1.TutorId
 			};
 			await _tutoringSessionService.Create(tutoringSession_1_1);
 
@@ -343,7 +344,8 @@ namespace MiTutorBEN.Controllers
 					{
 						TopicId = topic_1_2.TopicId
 					}
-				}
+				},
+				TutorId = tutor1.TutorId
 			};
 			await _tutoringSessionService.Create(tutoringSession_1_2);
 
@@ -361,7 +363,8 @@ namespace MiTutorBEN.Controllers
 					{
 						TopicId = topic_1_3.TopicId
 					}
-				}
+				},
+				TutorId = tutor1.TutorId
 			};
 			await _tutoringSessionService.Create(tutoringSession_1_3);
 
@@ -407,7 +410,8 @@ namespace MiTutorBEN.Controllers
 					{
 						TopicId = topic_1_1.TopicId
 					}
-				}
+				},
+				TutorId = tutor2.TutorId,
 			};
 			await _tutoringSessionService.Create(tutoringSession_2_1);
 
@@ -429,7 +433,8 @@ namespace MiTutorBEN.Controllers
 					{
 						TopicId = topic_1_3.TopicId
 					}
-				}
+				},
+				TutorId = tutor2.TutorId,
 			};
 			await _tutoringSessionService.Create(tutoringSession_2_2);
 
@@ -475,7 +480,8 @@ namespace MiTutorBEN.Controllers
 					{
 						TopicId = topic_3_1.TopicId
 					}
-				}
+				},
+				TutorId = tutor3.TutorId,
 			};
 			await _tutoringSessionService.Create(tutoringSession_3_1);
 
@@ -493,7 +499,8 @@ namespace MiTutorBEN.Controllers
 					{
 						TopicId = topic_3_2.TopicId
 					}
-				}
+				},
+				TutorId = tutor3.TutorId,
 			};
 			await _tutoringSessionService.Create(tutoringSession_3_2);
 
@@ -511,7 +518,8 @@ namespace MiTutorBEN.Controllers
 					{
 						TopicId = topic_3_3.TopicId
 					}
-				}
+				},
+				TutorId = tutor3.TutorId,
 			};
 			await _tutoringSessionService.Create(tutoringSession_3_3);
 			// _logger.LogWarning("TutoringOffers created");

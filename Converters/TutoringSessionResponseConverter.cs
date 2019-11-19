@@ -28,7 +28,8 @@ namespace MiTutorBEN.Converters
                 StudentCount = entity.StudentCount,
                 Description = entity.Description,
                 Price = entity.Price,
-                Place = entity.Place
+                Place = entity.Place,
+                TutorId = entity.TutorId
         
             };
 

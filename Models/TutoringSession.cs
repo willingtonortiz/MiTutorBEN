@@ -25,12 +25,14 @@ namespace MiTutorBEN.Models
 
 		public double Price {get; set;}
 
+		public int TutorId { get; set; }
+        public virtual Tutor Tutor { get; set; }
+
 
 		public int TutoringOfferId {get; set;}
 		public virtual TutoringOffer TutoringOffer {get; set;}	
 
-		
-
+	
 
 		public virtual List<Qualification> Qualifications { get; set; } = new List<Qualification>();
 		public virtual List<StudentTutoringSession> StudentTutoringSessions { get; set; } = new List<StudentTutoringSession>();
