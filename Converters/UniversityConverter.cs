@@ -9,7 +9,7 @@ namespace MiTutorBEN.Converters
 		{
 			University university = new University
 			{
-				UniversityId = dto.UniversityId,
+				UniversityId = dto.Id,
 				Name = dto.Name
 			};
 
@@ -20,7 +20,7 @@ namespace MiTutorBEN.Converters
 		{
 			UniversityDTO universityDTO = new UniversityDTO
 			{
-				UniversityId = entity.UniversityId,
+				Id = entity.UniversityId,
 				Name = entity.Name
 			};
 

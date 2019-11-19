@@ -90,6 +90,15 @@ namespace MiTutorBEN.ServicesImpl
 			return found;
 		}
 
+		public async Task<University> FindByUserId(int userId)
+		{
+			University university = await _context.Universities
+				.AsNoTracking()
+				.FirstOrDefaultAsync(x => x.Persons.Any(y => y.PersonId == userId));
+
+			return university;
+		}
+
 		public async Task<University> Update(int id, University t)
 		{
 			University found = await _context.Universities

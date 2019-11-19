@@ -80,7 +80,7 @@ namespace MiTutorBEN.Controllers
 		/// <remarks>
 		/// Create a tutoring from a request object
 		/// </remarks>
-	
+
 		/// <response code="201">Tutoring offers created.</response>
 		/// <response code="400">Invalid request</response>
 		/// <response code="500">Internal application error</response>
@@ -171,10 +171,13 @@ namespace MiTutorBEN.Controllers
 		{
 			TutoringOffer TutoringOffer = await _tutoringOfferService.FindWithSessions(tutoringId);
 
-			if(TutoringOffer!=null){
-			TutoringOfferResponse TutoringOfferResponse = _tutoringOfferResponseConverter.FromEntity(TutoringOffer);
-			return Ok(TutoringOfferResponse);
-			} else{
+			if (TutoringOffer != null)
+			{
+				TutoringOfferResponse TutoringOfferResponse = _tutoringOfferResponseConverter.FromEntity(TutoringOffer);
+				return Ok(TutoringOfferResponse);
+			}
+			else
+			{
 				return NotFound("Not found");
 			}
 		}
