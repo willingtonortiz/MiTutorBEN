@@ -98,5 +98,25 @@ namespace MiTutorBEN.Controllers
             return Ok(response);
 
         }
+
+
+        [AllowAnonymous]
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<List<TutoringSession>>> getTutoringSessionByUser(
+            [FromRoute] int userId
+        ){
+            _logger.LogWarning("Entrando");
+            List<TutoringSession> allTutoringSession  = new List<TutoringSession>();
+            IEnumerable<StudentTutoringSession> listResponse =  await _tutoringSessionStudentService.findSessionsByUserId(userId);
+
+            foreach(var tutoringSession in listResponse){
+
+                TutoringSession foundTutoring = await  _tutoringSessionService.FindById(tutoringSession.TutoringSessionId);
+                allTutoringSession.Add(foundTutoring);
+            }
+
+
+            return Ok(allTutoringSession);
+        }
     }
 }

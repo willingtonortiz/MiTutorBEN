@@ -29,6 +29,12 @@ namespace MiTutorBEN.ServicesImpl
 
             return t;
         }
+
+        public async Task <IEnumerable<StudentTutoringSession>> findSessionsByUserId(int userId){
+
+            return await _context.StudentTutoringSession.AsNoTracking().Where(x=>x.StudentId == userId).ToListAsync();
+            
+        }
         public Task<StudentTutoringSession> FindById(int id)
         {
             return null;
