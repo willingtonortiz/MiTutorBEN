@@ -12,6 +12,7 @@ namespace MiTutorBEN.DTOs.Responses
         public int StudentCount {get; set;}
         public string Description {get; set;}
         public double Price {get; set;}
+        public int TutorId {get; set;}
        
 
         public List<String> Topics {get; set;} = new List<string>();

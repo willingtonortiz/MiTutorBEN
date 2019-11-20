@@ -111,6 +111,7 @@ namespace MiTutorBEN.Controllers
 			{
 				TutoringSession = _tutoringSessionRequestConverter.FromDto(t);
 				TutoringSession.TutoringOfferId = TutoringOffer.TutoringOfferId;
+				TutoringSession.TutorId = TutoringOffer.TutorId;
 
 				await _tutoringSessionService.Create(TutoringSession);
 
@@ -183,6 +184,7 @@ namespace MiTutorBEN.Controllers
 		}
 
 		#endregion
+
 
 	}
 }

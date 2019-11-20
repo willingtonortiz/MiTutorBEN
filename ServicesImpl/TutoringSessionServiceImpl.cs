@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using MiTutorBEN.Data;
+using MiTutorBEN.DTOs.Responses;
 using MiTutorBEN.Models;
 using MiTutorBEN.Services;
 
@@ -18,11 +19,7 @@ namespace MiTutorBEN.ServicesImpl
 			_context = context;
 		}
 
-		public bool Any(Func<TutoringSession, bool> criteria)
-		{
-			throw new NotImplementedException();
-		}
-
+	
 		public async Task<TutoringSession> Create(TutoringSession t)
 		{
 			await _context.TutoringSessions
@@ -58,13 +55,13 @@ namespace MiTutorBEN.ServicesImpl
 		public async Task<TutoringSession> FindById(int id)
 		{
 			TutoringSession found = await _context.TutoringSessions
-			.AsNoTracking()
+			.AsNoTracking().Include(ts => ts.TopicTutoringSessions).ThenInclude(tts => tts.Topic)
 			.FirstOrDefaultAsync(x => x.TutoringSessionId == id);
-
 			return found;
 		}
 
-		public async void SaveAsync()
+
+        public async void SaveAsync()
 		{
 			await _context.SaveChangesAsync();
 		}
