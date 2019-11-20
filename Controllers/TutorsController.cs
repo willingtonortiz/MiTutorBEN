@@ -32,6 +32,7 @@ namespace MiTutorBEN.Controllers
 		private readonly ITutorService _tutorService;
 		private readonly ITutoringOfferService _tutoringOfferService;
 		private readonly ICourseService _courseService;
+		private readonly ITutorCourseService _tutorCourseService;
 		private readonly TutoringOfferConverter _tutoringOfferConverter;
 		private readonly UniversityConverter _universityConverter;
 		private readonly TutorConverter _tutorConverter;
@@ -53,7 +54,8 @@ namespace MiTutorBEN.Controllers
 			TutorConverter tutorConverter,
 			UniversityConverter universityConverter,
 			TutorCourseConverter tutorCourseConverter,
-			CourseConverter courseConverter
+			CourseConverter courseConverter,
+			ITutorCourseService tutorCourseService
 		)
 		{
 			_logger = logger;
@@ -66,10 +68,13 @@ namespace MiTutorBEN.Controllers
 			_universityConverter = universityConverter;
 			_tutorCourseConverter = tutorCourseConverter;
 			_courseConverter = courseConverter;
+			_tutorCourseService = tutorCourseService;
 		}
 
 		#endregion
 
+
+		#region Name
 
 		/// <summary>
 		/// Find tutor by id
@@ -88,6 +93,10 @@ namespace MiTutorBEN.Controllers
 			return tutor;
 		}
 
+		#endregion
+
+
+		#region GetTutorUniversity
 
 		[HttpGet("{id}/university")]
 		public async Task<ActionResult<UniversityDTO>> GetTutorUniversity(long id)
@@ -100,6 +109,8 @@ namespace MiTutorBEN.Controllers
 
 			return _universityConverter.FromEntity(university);
 		}
+
+		#endregion
 
 
 		#region FindAll
@@ -182,8 +193,10 @@ namespace MiTutorBEN.Controllers
 			}
 
 			IEnumerable<Course> courses = await _courseService.FindAllByTutorIdAsync(tutor.TutorId);
+
 			foreach (Course item in courses)
 			{
+				_logger.LogError($"{item.CourseId.ToString()} => {item.Name}");
 				if (item.CourseId == course.CourseId)
 				{
 					return BadRequest("COURSE_ALREADY_ADDED");
@@ -196,6 +209,57 @@ namespace MiTutorBEN.Controllers
 		}
 
 		#endregion
+
+
+		#region DeleteCourseFromTutorByTutorIdAndCourseId
+
+		/// <summary>
+		/// Removes a course to a tutor
+		/// </summary>
+		/// <remarks>
+		/// Removes a new course to the tutors list courses
+		/// </remarks>
+		/// <param name="tutorId">Tutor id</param>
+		/// <param name="courseId">Course id</param>
+		/// <response code="200">Course deleted successfully.</response>
+		/// <response code="400">Course already deleted</response>
+		/// <response code="404">Course not found</response>
+		/// <response code="404">Tutor not found</response>
+		/// <response code="500">Internal application error</response>
+		[SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(TutorCourseDTO))]
+		[SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(string))]
+		[SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(string))]
+		[HttpDelete("{tutorId}/courses/{courseId}")]
+		public async Task<ActionResult<TutorCourseDTO>> AddCourseToTutorByTutorIdAndCourseId(
+			[FromRoute] int tutorId,
+			[FromRoute] int courseId
+		)
+		{
+			Course course = await _courseService.FindById(courseId);
+			if (course == null)
+			{
+				return NotFound("COURSE_NOT_FOUND");
+			}
+
+			Tutor tutor = await _tutorService.FindById(tutorId);
+			if (tutor == null)
+			{
+				return NotFound("TUTOR_NOT_FOUND");
+			}
+
+			TutorCourse tutorCourse = await _tutorCourseService.FindByTutorIdAndCourseIdAsync(tutor.TutorId, course.CourseId);
+			if (tutorCourse == null)
+			{
+				return BadRequest("RELATIONSHIP_NOT_FOUND");
+			}
+
+			await _tutorCourseService.DeleteByTutorIdAndCourseIdAsync(tutorCourse);
+
+			return Ok(tutorCourse);
+		}
+
+		#endregion
+
 
 		#region FindAllCoursesByTutorId
 

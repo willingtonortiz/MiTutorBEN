@@ -408,7 +408,7 @@ namespace MiTutorBEN.Controllers
 				TopicTutoringSessions = new List<TopicTutoringSession>{
 					new TopicTutoringSession
 					{
-						TopicId = topic_1_1.TopicId
+						TopicId = topic_2_1.TopicId
 					}
 				},
 				TutorId = tutor2.TutorId,
@@ -427,11 +427,11 @@ namespace MiTutorBEN.Controllers
 				TopicTutoringSessions = new List<TopicTutoringSession>{
 					new TopicTutoringSession
 					{
-						TopicId = topic_1_2.TopicId
+						TopicId = topic_2_2.TopicId
 					},
 					new TopicTutoringSession
 					{
-						TopicId = topic_1_3.TopicId
+						TopicId = topic_2_3.TopicId
 					}
 				},
 				TutorId = tutor2.TutorId,

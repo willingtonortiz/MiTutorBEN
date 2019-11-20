@@ -78,6 +78,7 @@ namespace MiTutorBEN
 			services.AddScoped<IStudentService,StudentServiceImpl>();
 			services.AddScoped<ITutoringSessionStudentService,TutoringSessionStudentServiceImpl>();
 			services.AddScoped<IQualificationService,QualificationServiceImpl>();
+			services.AddScoped<ITutorCourseService, TutorCourseServiceImpl>();
 
 			// Converters
 			services.AddScoped<CourseConverter>();
