@@ -100,13 +100,14 @@ namespace MiTutorBEN.ServicesImpl
 
 		public async Task<IEnumerable<Tutor>> FindAllByUniversityIdAndCourseId(int universityId, int courseId)
 		{
+			// && x.Status == TutorStatus.AVAILABLE
+			// Implementar esta funcionalidad en el futuro
 			return await _context.Tutors
 				.AsNoTracking()
 				.Include(x => x.Person)
 				.Where(x =>
 					x.Person.UniversityId == universityId
 					&& x.TutorCourses.Any(y => y.CourseId == courseId)
-					&& x.Status == TutorStatus.AVAILABLE
 				)
 				.ToListAsync();
 		}
@@ -156,7 +157,7 @@ namespace MiTutorBEN.ServicesImpl
 			tutor.TutorCourses.Add(tutorCourse);
 			_context.Tutors.Update(tutor);
 
-            // _logger.LogError("actualizando");
+			// _logger.LogError("actualizando");
 
 			await _context.SaveChangesAsync();
 
