@@ -126,19 +126,19 @@ namespace MiTutorBEN.Controllers
 			Topic topic_2_1 = new Topic
 			{
 				Name = "punteros",
-				CourseId = course1.CourseId
+				CourseId = course2.CourseId
 			};
 			await _topicService.Create(topic_2_1);
 			Topic topic_2_2 = new Topic
 			{
 				Name = "matrices",
-				CourseId = course1.CourseId
+				CourseId = course2.CourseId
 			};
 			await _topicService.Create(topic_2_2);
 			Topic topic_2_3 = new Topic
 			{
 				Name = "sentencias condicionales",
-				CourseId = course1.CourseId
+				CourseId = course2.CourseId
 			};
 			await _topicService.Create(topic_2_3);
 
@@ -146,19 +146,19 @@ namespace MiTutorBEN.Controllers
 			Topic topic_3_1 = new Topic
 			{
 				Name = "topic_3_1",
-				CourseId = course1.CourseId
+				CourseId = course3.CourseId
 			};
 			await _topicService.Create(topic_3_1);
 			Topic topic_3_2 = new Topic
 			{
 				Name = "topic_3_2",
-				CourseId = course1.CourseId
+				CourseId = course3.CourseId
 			};
 			await _topicService.Create(topic_3_2);
 			Topic topic_3_3 = new Topic
 			{
 				Name = "topic_3_3",
-				CourseId = course1.CourseId
+				CourseId = course3.CourseId
 			};
 			await _topicService.Create(topic_3_3);
 			// _logger.LogWarning("Topics created");
